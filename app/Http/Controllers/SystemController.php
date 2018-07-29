@@ -173,6 +173,13 @@ class SystemController extends Controller
 
         return @$programme[0]->DURATION;
     }
+
+    public function getProgramResult($code) {
+
+        $programme = \DB::table('tpoly_programme')->where('PROGRAMMECODE', $code)->get();
+
+        return @$programme[0]->RESULT;
+    }
     public function getCreditBySem($indexno,$sem,$level) {
 
         $total = \DB::table('tpoly_academic_record')->where('indexno', $indexno)
@@ -199,7 +206,7 @@ class SystemController extends Controller
         if($totalCR<=0 ||  $totalGP<=0){
             return 0;
         }
-        return round( $totalGP/$totalCR,2);
+        return round( $totalGP/$totalCR,3);
     }
     public function getCGPAPerSem($indexno,$sem,$levels) {
 
@@ -212,7 +219,7 @@ class SystemController extends Controller
         if($totalCR<=0 ||  $totalGP<=0){
             return 0;
         }
-        return round( $totalGP/$totalCR,5);
+        return round( $totalGP/$totalCR,3);
     }
     public function getCGPA($indexno) {
 
@@ -223,7 +230,7 @@ class SystemController extends Controller
         if($totalCR<=0 ||  $totalGP<=0){
             return 0;
         }
-        return round( $totalGP/$totalCR,5);
+        return round( $totalGP/$totalCR,3);
     }
     public function age($birthdate, $pattern = 'eu')
     {
@@ -560,7 +567,7 @@ class SystemController extends Controller
         //$query="SELECT count($table_field)  from questionnaire_table where lecturer='$lecturer' AND programmecode='$programmecode'";
         //$query="SELECT COUNT($table_field) from questionnaire_table as total WHERE  $table_field='$Yes_or_No' and lecturer='$lecturer' and coursecode='$coursecode'";
         $total=Models\QAquestionModel::
-            where("$table_field","$Yes_or_No")
+        where("$table_field","$Yes_or_No")
             ->where("lecturer",$lecturer)
             ->where("coursecode",$coursecode)
             ->where("academic_year",$year)
@@ -570,12 +577,12 @@ class SystemController extends Controller
 
         return $total;
     }
-/*//counting the lecturer involved
-$queryc="SELECT COUNT(lecturer) from questionnaire_table as total2 WHERE coursecode='$coursecode' and lecturer='$lecturer'";
-echo  $queryc;
-$query_resultc=mysql_query($queryc) or die("error in counting lecturer1");
-$datac =mysql_fetch_row($query_resultc) or die('Error here too');
-$total_course_assessed= $datac[0];*/
+    /*//counting the lecturer involved
+    $queryc="SELECT COUNT(lecturer) from questionnaire_table as total2 WHERE coursecode='$coursecode' and lecturer='$lecturer'";
+    echo  $queryc;
+    $query_resultc=mysql_query($queryc) or die("error in counting lecturer1");
+    $datac =mysql_fetch_row($query_resultc) or die('Error here too');
+    $total_course_assessed= $datac[0];*/
 
 
     function remark($percentage_score)
@@ -816,9 +823,27 @@ $total_course_assessed= $datac[0];*/
         }
         elseif( @\Auth::user()->role=='Registrar' ){
             $user_school= @\Auth::user()->department;
-            $program = \DB::table('tpoly_programme')->join('tpoly_department','tpoly_department.DEPTCODE', '=', 'tpoly_programme.DEPTCODE')->where('tpoly_department.FACCODE',$user_school)->orderby("tpoly_programme.PROGRAMME")->lists('tpoly_programme.PROGRAMME', 'tpoly_programme.PROGRAMMECODE');
-            return $program;
+            $programCase=Models\ProgrammeModel::where("DEPTCODE",$user_school)->first();
+            $departmentCase=Models\DepartmentModel::where("DEPTCODE",$programCase->DEPTCODE)->first();
+            $faculty=$departmentCase->FACCODE;
 
+            $programStruct=Models\ProgrammeModel::query()->orderBy("TYPE");
+            $data=$programStruct->whereHas('departments', function($q)use ($user_school, $faculty) {
+
+
+
+                    $q->whereHas("school", function($q)use ($user_school, $faculty){
+                        $q->where('FACCODE',  $faculty);
+
+
+                });}) ->select('PROGRAMME', 'PROGRAMMECODE')->get();
+
+
+
+
+
+            return $data;
+ 
 
         }
         else{
@@ -927,7 +952,7 @@ $total_course_assessed= $datac[0];*/
         }
     }
 
-     public function getMountedCourseList2() {
+    public function getMountedCourseList2() {
 
         if(@\Auth::user()->role=='Lecturer'){
             $course=@\DB::table('tpoly_mounted_courses')
@@ -1995,7 +2020,7 @@ $total_course_assessed= $datac[0];*/
 
     }
 
-public function getCourseMountedInfo2($courseCode,$sem,$level,$year,$program){
+    public function getCourseMountedInfo2($courseCode,$sem,$level,$year,$program){
 
         $course = \DB::table('tpoly_mounted_courses')->where('COURSE_CODE',$courseCode)->where('COURSE_SEMESTER',$sem)->where('COURSE_LEVEL',$level)->where('COURSE_YEAR',$year)
             ->where("PROGRAMME",$program)

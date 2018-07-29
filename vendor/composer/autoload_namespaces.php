@@ -19,6 +19,6 @@ return array(
     'Dropbox' => array($vendorDir . '/dropbox/dropbox-sdk/lib'),
     'Doctrine\\DBAL\\' => array($vendorDir . '/doctrine/dbal/lib'),
     'Doctrine\\Common\\Lexer\\' => array($vendorDir . '/doctrine/lexer/lib'),
-    'Doctrine\\Common\\Collections\\' => array($vendorDir . '/doctrine/collections/lib'),
+    'Detection' => array($vendorDir . '/mobiledetect/mobiledetectlib/namespaced'),
     'BaconQrCode' => array($vendorDir . '/bacon/bacon-qr-code/src'),
 );

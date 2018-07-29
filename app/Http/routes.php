@@ -34,7 +34,7 @@ Route::post('/api/hall', 'APIController@getStudentHall');
 Route::post('/api/local', 'APIController@getLocalData');
 Route::post('/api/kojo', 'APIController@getStudentKojo');
 Route::post('/api/kojo/name', 'APIController@getStudentKojoName');
-Route::get('/api/send', 'APIController@pushToSRMS');
+Route::post('/api/send', 'APIController@getApplicant');
 //Route::post('/api/student', 'APIController@getStudentID');
 Route::post('fireVoucher', 'APIController@fireVoucher');
 Route::get('/api/student/{indexno}/password', 'APIController@getStudentPassword');

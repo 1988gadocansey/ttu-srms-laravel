@@ -25,7 +25,8 @@
         "khill/lavacharts": "^3.0",
         "simplesoftwareio/simple-qrcode": "~1",
         "league/csv": "^8.1",
-        "maatwebsite/excel": "~2.1.0"
+        "maatwebsite/excel": "~2.1.0",
+        "jenssegers/agent": "^2.6"
     },
     "require-dev": {
         "fzaninotto/faker": "~1.4",

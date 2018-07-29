@@ -144,7 +144,9 @@ return [
         Khill\Lavacharts\Laravel\LavachartsServiceProvider::class,
         SimpleSoftwareIO\QrCode\QrCodeServiceProvider::class,
         Maatwebsite\Excel\ExcelServiceProvider::class,
-          
+        Jenssegers\Agent\AgentServiceProvider::class,
+
+
         /*
          * Application Service Providers...
          */
@@ -203,6 +205,7 @@ return [
         'SnappyImage' => Barryvdh\Snappy\Facades\SnappyImage::class,
         'QrCode' => SimpleSoftwareIO\QrCode\Facades\QrCode::class,
         'Excel' => Maatwebsite\Excel\Facades\Excel::class,
+        'Agent' => Jenssegers\Agent\Facades\Agent::class,
        
     ],
 ];

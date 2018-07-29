@@ -1,6 +1,6 @@
-@extends('layouts.printlayout')
 
-@section('content')
+
+
 @inject('help', 'App\Http\Controllers\SystemController')
 <div align="center"  >
 <style>
@@ -20,7 +20,7 @@
     border-collapse: collapse;
     border-spacing: 0;
     margin-bottom: 15px;
-    width:821px;
+
 }
 /*.uk-table td{
     border:none;
@@ -40,14 +40,3 @@
                
 
 </div>
-        @endsection
-
-        @section('js')
-        <script type="text/javascript">
-
-         //window.print();
- 
-
-        </script>
-
-        @endsection

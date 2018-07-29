@@ -23,6 +23,99 @@ class APIController extends Controller
     {
         // $this->middleware('auth');
     }
+    public function getApplicant(Request $request, SystemController $sys){
+
+      
+     foreach ($request->all() as $student) {
+         # code...
+     
+                          
+                    
+         
+        $program = $student["program"];
+        $ptype = $sys->getProgrammeType($program);
+        if ($ptype == "NON TERTIARY") {
+            $level = "100NT";
+            $group=date("Y") + 2 . "/".(date("Y") + 3);
+        } elseif ($ptype == "HND") {
+            $level = "100H";
+            $group=date("Y")+3 . "/".(date("Y") + 4);
+        } elseif ($ptype == "BTECH") {
+            $level = "100BTT";
+            $group=date("Y") + 2 . "/".(date("Y") + 3);
+        }
+        elseif ($ptype == "DEGREE") {
+            $level = "100BT";
+            $group=date("Y") + 4 . "/".(date("Y") + 5);
+        }
+        else {
+            $level = "500MT";
+            $group=date("Y") + 2 . "/".(date("Y") + 3);
+        }
+        /////////////////////////////////////////////////////
+        $checker=Models\StudentModel::where("STNO",$student['stno'])->get();
+        if(count($checker)==0) {
+            $query = new Models\StudentModel();
+            $query->YEAR = $level;
+            $query->LEVEL = $level;
+            $query->FIRSTNAME = $student['firstname'];
+            $query->SURNAME = $student['lastname'];
+            $query->OTHERNAMES = $student['othernames'];
+            $query->TITLE = $student['title'];
+            $query->SEX = $student['gender'];
+            $query->DATEOFBIRTH = $student['dob'];
+            $query->NAME = $student['name'];
+            $query->AGE = $student['age'];
+            $query->MARITAL_STATUS = $student['marital'];
+            $query->DATE_ADMITTED = $student['date-admitted'];
+            $query->GRADUATING_GROUP = $group;
+            $query->HAS_PASSWORD = 1;
+            $query->HALL = $student['hall'];
+            $query->ADDRESS = $student['address'];
+            $query->RESIDENTIAL_ADDRESS = $student['address'];
+            $query->EMAIL = $student['email'];
+            $query->PROGRAMMECODE = $student['program'];
+            $query->TELEPHONENO = $student['phone'];
+            $query->COUNTRY = $student['country'];
+            $query->REGION = $student['region'];
+            $query->RELIGION = $student['religion'];
+            $query->HOMETOWN = $student['hometown'];
+            $query->GUARDIAN_NAME = $student['guardian-name'];
+            $query->GUARDIAN_ADDRESS = $student['guardian-address'];
+            $query->GUARDIAN_PHONE = $student['guardian-phone'];
+            $query->GUARDIAN_OCCUPATION = $student['guardian-occupation'];
+            $query->DISABILITY = $student['disable'];
+            $query->STNO = $student['stno'];
+            $query->INDEXNO = $student['stno'];
+            $query->TYPE = $student['type'];
+            $query->STUDENT_TYPE = $student['resident'];
+            $query->ALLOW_REGISTER = 1;
+            $query->STATUS = "Admitted";
+            $query->SYSUPDATE = "1";
+            $query->BILLS = $student['fees'];
+            $query->BILL_OWING = $student['fees'];
+            $query->PAID = 0.00;
+            @$query->save();
+            @$sys->getPassword($student['stno']);
+        }
+        else{ 
+            Models\StudentModel::where("STNO",$student['stno'])->update(
+                array("FIRSTNAME"=> $student['firstname'],
+                    "SURNAME"=> $student['lastname'],
+                    "OTHERNAMES"=>$student['othernames'],
+                    "NAME"=>$student['name'],
+                    "BILLS"=> $student['fees'],
+                    "BILL_OWING"=> $student['fees'],
+                    "PROGRAMMECODE"=> $student['program'],
+                    "HALL"=> $student['hall'],
+                    "GRADUATING_GROUP"=> $group,
+                )
+            );
+          }
+        }
+       return Models\StudentModel::count();
+    
+    }
     public function pushToSRMS(Request $request, SystemController $sys)
     {
         ini_set('max_execution_time', 280000);
