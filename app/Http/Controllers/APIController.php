@@ -311,13 +311,20 @@ class APIController extends Controller
         return response()->json(array('data' => $data));
 
     }
+    public function indexNumFormater($stuid){
 
+        return str_replace('/','',$stuid);
+    }
     public function getStudentData(Request $request, $student)
     {
         header('Content-Type: application/json');
+        //$student=$this->indexNumFormater($student);
+        //type-checking comparison operator is necessary
 
-        $data = @Models\StudentModel::where("INDEXNO", $student)->orWhere("STNO", $student)->select("INDEXNO", "STNO", "NAME", "PROGRAMMECODE", "LEVEL", "BILLS", "STATUS")->first();
-        if (empty($data)) {
+            $data = @Models\StudentModel::where("INDEXNO", $student)->orWhere("STNO", $student)->select("INDEXNO", "STNO", "NAME", "PROGRAMMECODE", "LEVEL", "BILLS", "STATUS")->first();
+
+
+         if (empty($data)) {
 
             //return response()->json(array('data'=>"Student with index number $student does not exist."));
             $json = json_decode(file_get_contents("http://45.33.4.164/admissions/applicant/$student"), true, JSON_PRETTY_PRINT);

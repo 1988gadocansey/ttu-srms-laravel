@@ -25,20 +25,20 @@
  * API route of quality assurance
  *
  */
-Route::get('student/{indexno}/qa', 'APIController@qualityAssurance');
+Route::get('student/{indexno}/qa', 'APIController@qualityAssurance')->where('indexno', '(.*)');;
 Route::get('delete/wrong', 'StudentController@showWrong');
 
-Route::get('student/{indexno}/liaison', 'APIController@liaison');
+Route::get('student/{indexno}/liaison', 'APIController@liaison')->where('indexno', '(.*)');;
 Route::post('api/receivePayment', 'APIController@payFeeLive');
 Route::post('/api/hall', 'APIController@getStudentHall');
 Route::post('/api/local', 'APIController@getLocalData');
 Route::post('/api/kojo', 'APIController@getStudentKojo');
 Route::post('/api/kojo/name', 'APIController@getStudentKojoName');
-Route::post('/api/send', 'APIController@getApplicant');
+Route::post('/api/send', 'APIController@pushToSRMS');
 //Route::post('/api/student', 'APIController@getStudentID');
 Route::post('fireVoucher', 'APIController@fireVoucher');
-Route::get('/api/student/{indexno}/password', 'APIController@getStudentPassword');
-Route::get( '/api/student/{indexno}', "APIController@getStudentData");
+Route::get('/api/student/{indexno}/password', 'APIController@getStudentPassword')->where('indexno', '(.*)');;
+Route::get( '/api/student/{indexno}', "APIController@getStudentData")->where('indexno', '(.*)');;
 Route::group(['middleware' => ['web']], function () {
     Route::auth();
     Route::get('/', function () {
@@ -62,7 +62,7 @@ Route::group(['middleware' => ['web']], function () {
     Route::get('/lock', function () {
         return view('auth/screenLock');
     });
-    Route::get('/indexno/gen', 'StudentController@generateIndexNo');
+    Route::get('/indexno/gen', 'StudentController@generateIndexNo')->where('indexno', '(.*)');;
     Route::get('/generate', 'BankController@generateAccounts');
 
     Route::controller('search_password', 'PasswordController', [
@@ -82,7 +82,7 @@ Route::group(['middleware' => ['web']], function () {
     Route::post( 'finance/upload', "FeeController@uploadFeesBalance");
     Route::post( 'load/fees', "StudentController@uploadPaymentZenith");
 
-    Route::get( '/api/student', "APIController@getStudentData");
+    Route::get( '/api/student', "APIController@getStudentData")->where('indexno', '(.*)');;
     Route::get( '/api/student/{program}', "APIController@getStudentProgram");
 
 
