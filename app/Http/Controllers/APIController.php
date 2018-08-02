@@ -25,7 +25,7 @@ class APIController extends Controller
     }
     public function getApplicant(Request $request, SystemController $sys){
 
-      
+
      foreach ($request->all() as $student) {
          # code...
      
@@ -39,14 +39,14 @@ class APIController extends Controller
              $group=date("Y") + 1 . "/".(date("Y") + 2);
          } elseif ($ptype == "HND") {
              $level = "100H";
-             $group=date("Y")+3 . "/".(date("Y") + 4);
+             $group=date("Y")+2 . "/".(date("Y") + 3);
          } elseif ($ptype == "BTECH") {
              $level = "100BTT";
              $group=date("Y") + 1 . "/".(date("Y") + 2);
          }
          elseif ($ptype == "DEGREE") {
              $level = "100BT";
-             $group=date("Y") + 4 . "/".(date("Y") + 5);
+             $group=date("Y") + 3 . "/".(date("Y") + 4);
          }
          else {
              $level = "500MT";
@@ -119,34 +119,35 @@ class APIController extends Controller
     public function pushToSRMS(Request $request, SystemController $sys)
     {
         ini_set('max_execution_time', 280000);
-        $data = file_get_contents("http://127.0.0.1:8000/admissions/srms/forward"); // put the contents of the file into a variable
+        $data = file_get_contents("http://127.0.0.1:/admissions/srms/forward"); // put the contents of the file into a variable
         $records = json_decode($data, true, JSON_PRETTY_PRINT); // decode the JSON feed
+
 
         
         foreach ($records as $student) {
-                         
-                    
-         
+
+
+
         $program = $student["program"];
         $ptype = $sys->getProgrammeType($program);
-        if ($ptype == "NON TERTIARY") {
-            $level = "100NT";
-            $group=date("Y") + 1 . "/".(date("Y") + 2);
-        } elseif ($ptype == "HND") {
-            $level = "100H";
-            $group=date("Y")+3 . "/".(date("Y") + 4);
-        } elseif ($ptype == "BTECH") {
-            $level = "100BTT";
-            $group=date("Y") + 1 . "/".(date("Y") + 2);
-        }
-        elseif ($ptype == "DEGREE") {
-            $level = "100BT";
-            $group=date("Y") + 4 . "/".(date("Y") + 5);
-        }
-        else {
-            $level = "500MT";
-            $group=date("Y") + 1 . "/".(date("Y") + 2);
-        }
+            if ($ptype == "NON TERTIARY") {
+                $level = "100NT";
+                $group=date("Y") + 1 . "/".(date("Y") + 2);
+            } elseif ($ptype == "HND") {
+                $level = "100H";
+                $group=date("Y")+2 . "/".(date("Y") + 3);
+            } elseif ($ptype == "BTECH") {
+                $level = "100BTT";
+                $group=date("Y") + 1 . "/".(date("Y") + 2);
+            }
+            elseif ($ptype == "DEGREE") {
+                $level = "100BT";
+                $group=date("Y") + 3 . "/".(date("Y") + 4);
+            }
+            else {
+                $level = "500MT";
+                $group=date("Y") + 1 . "/".(date("Y") + 2);
+            }
         /////////////////////////////////////////////////////
         $checker=Models\StudentModel::where("STNO",$student['stno'])->get();
         if(count($checker)==0) {

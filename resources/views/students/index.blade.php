@@ -156,7 +156,7 @@
                         <div class="uk-width-medium-1-5">
                             <div class="uk-margin-small-top">
 
-                                {!!  Form::select('status', array('Admitted'=>'Admitted','In School'=>'In school','Alumni' => 'Completed','Deferred' => 'Deferred','Dead' => 'Dead','Rusticated' => 'Rusticated','Unknown' => 'Unknown'), null, ['placeholder' => 'select status of student','id'=>'parent','value'=>'In school','class'=>'md-input parent'],old("level","")); !!}
+                                {!!  Form::select('status', array('Admitted'=>'Admitted','In school'=>'In school','Alumni' => 'Completed','Deferred' => 'Deferred','Dead' => 'Dead','Rusticated' => 'Rusticated','Unknown' => 'Unknown'), null, ['placeholder' => 'select status of student','id'=>'parent','value'=>'In school','class'=>'md-input parent'],old("level","")); !!}
 
                             </div>
                         </div>
@@ -334,64 +334,33 @@
                                     @if(substr($row->LEVEL, 0, 3 ) === "100" || substr($row->LEVEL, 0, 3 ) === "500"  )
                                         <img style="width:90px;height:auto;margin-left:-5px" <?php
                                         $pic = $row->STNO;
-                                        echo $sys->picture("{!! url(\"public/albums/applicants/$pic.jpg\") !!}", 90)
-                                        ?>  src="http://application.ttuportal.com/public/uploads/photos/{{$pic}}.jpg"
+                                        echo $sys->picture("{!! url(\"public/albums/applicants/$pic.jpg\") !!}", 50)
+                                        ?>  src="http://www.ttuportal.com/admissions/public/albums/thumbnails/{{$pic}}.jpg"
                                              alt="photo"/>
 
 
 
 
+
+
                                     @else
-                                        
-                    
 
 
-                         <?php
-                          $pic = $row->INDEXNO;
-                          $filename = url("public/albums/students/$pic.JPG");
-
-                         //$img_info   = @getimagesize($src);
-
-                         //$mime   = $img_info['mime'];
-                        if(preg_match('/[.](JPG)$/', $filename)) {
-                            ?>
-
-                             <img   style="width:90px;height: auto;"  <?php
-                                    
-
-                                    ?>   src='{{url("public/albums/students/$pic.JPG")}}' alt="  Affix student picture here"    />
-
-                                   
-                                    <?php
-                        }
-                          
-                          elseif(preg_match('/[.](jpg)$/', $filename)){?>
-                                <img   style="width:90px;height: auto;"  <?php
-                                     
-
-                                    ?>   src='{{url("public/albums/students/$pic.JPG")}}' alt="  Affix student picture here"    />
-
-                                   
-                                  <?php  
-                            
-
-                          }
-                             else{?>
-                             <img   style="width:90px;height: auto;"  <?php
 
 
-                             ?>   src='{{url("public/albums/students/USER.JPG")}}'    />
+                                        <?php
+                                        $pic = $row->INDEXNO;
+                                        $filename = url("public/albums/students/$pic.JPG");
+
+                                        //for 2 weeks Gad couldn't write the code below. i did i one sunday morning
+                                        ?>
+
+                                        <a onclick="return MM_openBrWindow('{{url("/student_show/$row->ID/id")}}', 'mark', 'width=800,height=500')"><img  style="width:90px;height: auto;" src='{{url("public/albums/students/$pic.JPG")}}' onerror="this.onerror=function my(){return this.src='{{url("public/albums/students/USER.JPG")}}';};this.src='{{url("public/albums/students/$pic.jpg")}}';" /></a>
 
 
-                    <?php
 
 
-                    }
-                        ?>
-
-
-                        @endif
-
+                    @endif
                 </div>
 
 
