@@ -34,24 +34,24 @@ class APIController extends Controller
          
         $program = $student["program"];
         $ptype = $sys->getProgrammeType($program);
-        if ($ptype == "NON TERTIARY") {
-            $level = "100NT";
-            $group=date("Y") + 2 . "/".(date("Y") + 3);
-        } elseif ($ptype == "HND") {
-            $level = "100H";
-            $group=date("Y")+3 . "/".(date("Y") + 4);
-        } elseif ($ptype == "BTECH") {
-            $level = "100BTT";
-            $group=date("Y") + 2 . "/".(date("Y") + 3);
-        }
-        elseif ($ptype == "DEGREE") {
-            $level = "100BT";
-            $group=date("Y") + 4 . "/".(date("Y") + 5);
-        }
-        else {
-            $level = "500MT";
-            $group=date("Y") + 2 . "/".(date("Y") + 3);
-        }
+         if ($ptype == "NON TERTIARY") {
+             $level = "100NT";
+             $group=date("Y") + 1 . "/".(date("Y") + 2);
+         } elseif ($ptype == "HND") {
+             $level = "100H";
+             $group=date("Y")+3 . "/".(date("Y") + 4);
+         } elseif ($ptype == "BTECH") {
+             $level = "100BTT";
+             $group=date("Y") + 1 . "/".(date("Y") + 2);
+         }
+         elseif ($ptype == "DEGREE") {
+             $level = "100BT";
+             $group=date("Y") + 4 . "/".(date("Y") + 5);
+         }
+         else {
+             $level = "500MT";
+             $group=date("Y") + 1 . "/".(date("Y") + 2);
+         }
         /////////////////////////////////////////////////////
         $checker=Models\StudentModel::where("STNO",$student['stno'])->get();
         if(count($checker)==0) {
@@ -119,7 +119,7 @@ class APIController extends Controller
     public function pushToSRMS(Request $request, SystemController $sys)
     {
         ini_set('max_execution_time', 280000);
-        $data = file_get_contents("http://127.0.0.1:2200/admissions/srms/forward"); // put the contents of the file into a variable
+        $data = file_get_contents("http://127.0.0.1:8000/admissions/srms/forward"); // put the contents of the file into a variable
         $records = json_decode($data, true, JSON_PRETTY_PRINT); // decode the JSON feed
 
         
@@ -131,13 +131,13 @@ class APIController extends Controller
         $ptype = $sys->getProgrammeType($program);
         if ($ptype == "NON TERTIARY") {
             $level = "100NT";
-            $group=date("Y") + 2 . "/".(date("Y") + 3);
+            $group=date("Y") + 1 . "/".(date("Y") + 2);
         } elseif ($ptype == "HND") {
             $level = "100H";
             $group=date("Y")+3 . "/".(date("Y") + 4);
         } elseif ($ptype == "BTECH") {
             $level = "100BTT";
-            $group=date("Y") + 2 . "/".(date("Y") + 3);
+            $group=date("Y") + 1 . "/".(date("Y") + 2);
         }
         elseif ($ptype == "DEGREE") {
             $level = "100BT";
@@ -145,7 +145,7 @@ class APIController extends Controller
         }
         else {
             $level = "500MT";
-            $group=date("Y") + 2 . "/".(date("Y") + 3);
+            $group=date("Y") + 1 . "/".(date("Y") + 2);
         }
         /////////////////////////////////////////////////////
         $checker=Models\StudentModel::where("STNO",$student['stno'])->get();
@@ -483,6 +483,10 @@ class APIController extends Controller
                 if ($bankDetail) {
 
 
+                    $data = @Models\StudentModel::where("INDEXNO", $indexno)->orWhere("STNO", $indexno)->select("INDEXNO", "STNO", "NAME", "PROGRAMMECODE", "LEVEL", "BILLS", "STATUS")->get();
+
+
+                    if (empty($data)) {
 
 
                         $json = json_decode(file_get_contents("http://45.33.4.164/admissions/applicant/$indexno"), true, JSON_PRETTY_PRINT);
@@ -500,6 +504,7 @@ class APIController extends Controller
                             } else {
                                 $details = "Part payment";
                             }
+
 
                             $receipt = $this->getReceipt();
 
@@ -523,7 +528,7 @@ class APIController extends Controller
 
                                 // @StudentModel::where("INDEXNO", $indexno)->orWhere("STNO", $indexno)->update(array("BILL_OWING" => $owing, "PAID" => $paid));
                                 @$this->updateReceipt();
-                                 \DB::commit();
+                                \DB::commit();
                                 //return Response::json("Success", "01");
                                 header('Content-Type: application/json');
                                 // return  json_encode(array('responseCode'=>'01','responseMessage'=>'Successfully Processed'));
@@ -537,7 +542,67 @@ class APIController extends Controller
                             }
 
                         }
+                    }
+                    else{
 
+
+
+                        foreach ($data as $i) {
+
+
+                            if ($i["fees"] <= $amount) {
+                                $details = "Full payment";
+
+
+                            } else {
+                                $details = "Part payment";
+                            }
+
+                            $receipt = $this->getReceipt();
+
+                            $feeLedger = new Models\FeePaymentModel();
+                            $feeLedger->INDEXNO = $i->INDEXNO;
+                            $feeLedger->PROGRAMME = $i->PROGRAMMECODE;
+                            $feeLedger->AMOUNT = $amount;
+                            $feeLedger->PAYMENTTYPE = $type;
+                            $feeLedger->PAYMENTDETAILS = $details . " of " . $type;
+                            $feeLedger->BANK_DATE = $date;
+
+
+                            $level=mb_substr($i->INDEXNO, 0, 3);
+
+                            $owing=$i->BILL_OWING - $amount;
+                            $paid=$i->PAID + $amount;
+
+
+
+                            $feeLedger->LEVEL = $i->LEVEL;
+                            $feeLedger->RECIEPIENT = "API_CALL";
+                            $feeLedger->BANK = $bank;
+                            $feeLedger->TRANSACTION_ID = $transactionId;
+                            $feeLedger->RECEIPTNO = $receipt;
+                            $feeLedger->YEAR = $year;
+                            $feeLedger->FEE_TYPE = $type;
+                            $feeLedger->SEMESTER = $sem;
+                            if ($feeLedger->save()) {
+
+                                 @StudentModel::where("INDEXNO", $i->INDEXNO)->orWhere("STNO", $i->INDEXNO)->update(array("BILL_OWING" => $owing, "PAID" => $paid));
+                                @$this->updateReceipt();
+                                \DB::commit();
+                                //return Response::json("Success", "01");
+                                header('Content-Type: application/json');
+                                // return  json_encode(array('responseCode'=>'01','responseMessage'=>'Successfully Processed'));
+                                return response()->json(array('responseCode' => '01', 'responseMessage' => 'Successfully Processed'));
+
+                            } else {
+                                header('Content-Type: application/json');
+                                // return  json_encode(array('responseCode'=>'09','responseMessage'=>'Failed'));
+
+                                return response()->json(array('responseCode' => '09', 'responseMessage' => $i->PROGRAMMECODE));
+                            }
+
+                        }
+                    }
 
                     }
 

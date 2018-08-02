@@ -25,20 +25,21 @@
  * API route of quality assurance
  *
  */
-Route::get('student/{indexno}/qa', 'APIController@qualityAssurance')->where('indexno', '(.*)');;
+Route::get('student/{indexno}/qa', 'APIController@qualityAssurance')->where('indexno', '(.*)');
 Route::get('delete/wrong', 'StudentController@showWrong');
 
-Route::get('student/{indexno}/liaison', 'APIController@liaison')->where('indexno', '(.*)');;
+Route::get('student/{indexno}/liaison', 'APIController@liaison')->where('indexno', '(.*)');
 Route::post('api/receivePayment', 'APIController@payFeeLive');
 Route::post('/api/hall', 'APIController@getStudentHall');
 Route::post('/api/local', 'APIController@getLocalData');
 Route::post('/api/kojo', 'APIController@getStudentKojo');
 Route::post('/api/kojo/name', 'APIController@getStudentKojoName');
-Route::post('/api/send', 'APIController@pushToSRMS');
+Route::get('/api/send', 'APIController@pushToSRMS');
+Route::post('/api/send/realtime', 'APIController@getApplicant');
 //Route::post('/api/student', 'APIController@getStudentID');
 Route::post('fireVoucher', 'APIController@fireVoucher');
-Route::get('/api/student/{indexno}/password', 'APIController@getStudentPassword')->where('indexno', '(.*)');;
-Route::get( '/api/student/{indexno}', "APIController@getStudentData")->where('indexno', '(.*)');;
+Route::get('/api/student/{indexno}/password', 'APIController@getStudentPassword')->where('indexno', '(.*)');
+Route::get( '/api/student/{indexno}', "APIController@getStudentData")->where('indexno', '(.*)');
 Route::group(['middleware' => ['web']], function () {
     Route::auth();
     Route::get('/', function () {
