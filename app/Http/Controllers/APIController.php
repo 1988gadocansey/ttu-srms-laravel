@@ -104,6 +104,8 @@ class APIController extends Controller
                     "SURNAME"=> $student['lastname'],
                     "OTHERNAMES"=>$student['othernames'],
                     "NAME"=>$student['name'],
+                    "LEVEL"=>$level,
+                    "YEAR"=>$level,
                     "BILLS"=> $student['fees'],
                     "BILL_OWING"=> $student['fees'],
                     "PROGRAMMECODE"=> $student['program'],
@@ -119,7 +121,7 @@ class APIController extends Controller
     public function pushToSRMS(Request $request, SystemController $sys)
     {
         ini_set('max_execution_time', 280000);
-        $data = file_get_contents("http://127.0.0.1:/admissions/srms/forward"); // put the contents of the file into a variable
+        $data = file_get_contents("http://45.33.4.164/admissions/srms/forward"); // put the contents of the file into a variable
         $records = json_decode($data, true, JSON_PRETTY_PRINT); // decode the JSON feed
 
 
