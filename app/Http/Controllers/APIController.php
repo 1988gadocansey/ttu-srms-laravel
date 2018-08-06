@@ -300,13 +300,18 @@ class APIController extends Controller
         header('Content-Type: application/json');
 
         $record = @Models\PortalPasswordModel::where("username", $indexno)->first();
-        $data="No password found";
+        $student = @Models\StudentModel::where("INDEXNO", $indexno)->first();
+        $data=[];
 
         if (!empty($record)) {
 
 
 
-            $data=$record->real_password;
+
+
+            $data["name"]=$student->NAME;
+            $data["phone"]=$student->TELEPHONENO;
+            $data["password"]=$record->real_password;
 
 
         }
