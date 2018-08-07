@@ -300,7 +300,7 @@ class APIController extends Controller
         header('Content-Type: application/json');
 
         $record = @Models\PortalPasswordModel::where("username", $indexno)->first();
-        $student = @Models\StudentModel::where("INDEXNO", $indexno)->first();
+        $student = @Models\StudentModel::where("INDEXNO", $indexno)->orWhere("STNO", $indexno)->first();
         $data=[];
 
         if (!empty($record)) {
@@ -311,6 +311,7 @@ class APIController extends Controller
 
             $data["name"]=$student->NAME;
             $data["phone"]=$student->TELEPHONENO;
+            $data["email"]=$student->EMAIL;
             $data["password"]=$record->real_password;
 
 
