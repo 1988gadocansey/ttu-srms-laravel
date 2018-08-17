@@ -520,6 +520,7 @@ class APIController extends Controller
                             $feeLedger = new Models\FeePaymentModel();
                             $feeLedger->INDEXNO = $indexno;
                             $feeLedger->PROGRAMME = $i["pcode"];
+                            $feeLedger->STUDENT = $i["student"];
                             $feeLedger->AMOUNT = $amount;
                             $feeLedger->PAYMENTTYPE = $type;
                             $feeLedger->PAYMENTDETAILS = $details . " of " . $type;
@@ -700,6 +701,7 @@ class APIController extends Controller
                         $feeLedger = new Models\FeePaymentModel();
                         $feeLedger->INDEXNO = $indexno;
                         $feeLedger->PROGRAMME = $data->PROGRAMMECODE;
+
                         $feeLedger->AMOUNT = $amount;
                         $feeLedger->PAYMENTTYPE = $type;
                         $feeLedger->PAYMENTDETAILS = $details . " of " . $type;
