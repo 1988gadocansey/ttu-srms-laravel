@@ -492,10 +492,12 @@ class APIController extends Controller
                 if ($bankDetail) {
 
 
-                    $data = @Models\StudentModel::where("INDEXNO", $indexno)->orWhere("STNO", $indexno)->select("INDEXNO", "STNO", "NAME", "PROGRAMMECODE", "LEVEL", "BILLS", "STATUS")->get();
+                    $data = @Models\StudentModel::where("INDEXNO", $indexno)->orWhere("STNO", $indexno)->first();
+
 
 
                     if (empty($data)) {
+
 
 
                         $json = json_decode(file_get_contents("http://45.33.4.164/admissions/applicant/$indexno"), true, JSON_PRETTY_PRINT);
@@ -520,7 +522,7 @@ class APIController extends Controller
                             $feeLedger = new Models\FeePaymentModel();
                             $feeLedger->INDEXNO = $indexno;
                             $feeLedger->PROGRAMME = $i["pcode"];
-                            $feeLedger->STUDENT = $i["student"];
+                            $feeLedger->STUDENT = $sys->getStudentIDfromIndexno($indexno);
                             $feeLedger->AMOUNT = $amount;
                             $feeLedger->PAYMENTTYPE = $type;
                             $feeLedger->PAYMENTDETAILS = $details . " of " . $type;
@@ -557,10 +559,10 @@ class APIController extends Controller
 
 
 
-                        foreach ($data as $i) {
 
 
-                            if ($i["fees"] <= $amount) {
+
+                            if ($data->BILL_OWING <= $amount) {
                                 $details = "Full payment";
 
 
@@ -571,22 +573,23 @@ class APIController extends Controller
                             $receipt = $this->getReceipt();
 
                             $feeLedger = new Models\FeePaymentModel();
-                            $feeLedger->INDEXNO = $i->INDEXNO;
-                            $feeLedger->PROGRAMME = $i->PROGRAMMECODE;
+                            $feeLedger->INDEXNO = $data->INDEXNO;
+                            $feeLedger->STUDENT= $data->ID;
+                            $feeLedger->PROGRAMME = $data->PROGRAMMECODE;
                             $feeLedger->AMOUNT = $amount;
                             $feeLedger->PAYMENTTYPE = $type;
                             $feeLedger->PAYMENTDETAILS = $details . " of " . $type;
                             $feeLedger->BANK_DATE = $date;
 
 
-                            $level=mb_substr($i->INDEXNO, 0, 3);
+                            $level=mb_substr($data->INDEXNO, 0, 3);
 
-                            $owing=$i->BILL_OWING - $amount;
-                            $paid=$i->PAID + $amount;
+                            $owing=$data->BILL_OWING - $amount;
+                            $paid=$data->PAID + $amount;
 
 
 
-                            $feeLedger->LEVEL = $i->LEVEL;
+                            $feeLedger->LEVEL = $data->LEVEL;
                             $feeLedger->RECIEPIENT = "API_CALL";
                             $feeLedger->BANK = $bank;
                             $feeLedger->TRANSACTION_ID = $transactionId;
@@ -596,7 +599,7 @@ class APIController extends Controller
                             $feeLedger->SEMESTER = $sem;
                             if ($feeLedger->save()) {
 
-                                 @StudentModel::where("INDEXNO", $i->INDEXNO)->orWhere("STNO", $i->INDEXNO)->update(array("BILL_OWING" => $owing, "PAID" => $paid));
+                                 @StudentModel::where("INDEXNO", $data->INDEXNO)->orWhere("STNO", $data->INDEXNO)->update(array("BILL_OWING" => $owing, "PAID" => $paid));
                                 @$this->updateReceipt();
                                 \DB::commit();
                                 //return Response::json("Success", "01");
@@ -608,10 +611,10 @@ class APIController extends Controller
                                 header('Content-Type: application/json');
                                 // return  json_encode(array('responseCode'=>'09','responseMessage'=>'Failed'));
 
-                                return response()->json(array('responseCode' => '09', 'responseMessage' => $i->PROGRAMMECODE));
+                                return response()->json(array('responseCode' => '09', 'responseMessage' => $data->PROGRAMMECODE));
                             }
 
-                        }
+
                     }
 
                     }
