@@ -2949,7 +2949,7 @@ class SystemController extends Controller
         }
         $program = $data->PROGRAMMECODE;
         if (empty($que) && !empty($indexno)) {
-
+            $studentID=$this->getStudentIDfromIndexno($indexno);
             $str = 'abcdefhkmnprtuvwxy34678abcdefhkmnprtuvwxy34678';
             $shuffled = str_shuffle($str);
             $vcode = substr($shuffled, 0, 9);
@@ -2958,6 +2958,7 @@ class SystemController extends Controller
             Models\PortalPasswordModel::create([
                 'username' => $indexno,
                 'real_password' => $real,
+                'student' => $studentID,
                 'level' => $level,
                 'programme' => $program,
                 'biodata_update' => '1',

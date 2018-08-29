@@ -300,7 +300,7 @@ echo $obj->picture("{!! url(\"public/albums/students/$pic.jpg\") !!}", 90) ?>   
 
                                         <label for="">Residential Status :</label>     
                                         <div class="md-input-wrapper md-input-filled">
-                                            {!!   Form::select('type',array("Resident"=>"Resident",'Non Resident'=>"Non Resident"),old('type',$data->STUDENT_TYPE),array('placeholder'=>'Select residential status', "style"=>"","class"=>"md-input","v-model"=>"type","v-form-ctrl"=>"","v-select"=>"type"))  !!}
+                                            {!!   Form::select('type',array("1"=>"Resident",'0'=>"Non Resident"),old('type',$data->STUDENT_TYPE),array('placeholder'=>'Select residential status', "style"=>"","class"=>"md-input","v-model"=>"type","v-form-ctrl"=>"","v-select"=>"type"))  !!}
                                             <span class="md-input-bar"></span>
                                         </div>    
                                          <p class="uk-text-danger uk-text-small"  v-if="updateForm.type.$error.required">Residential Status is required</p>                                        
@@ -318,7 +318,7 @@ echo $obj->picture("{!! url(\"public/albums/students/$pic.jpg\") !!}", 90) ?>   
 
                                        </div>
                               </div>
-                                <div class="parsley-row" v-if ="type=='Resident'">
+                                <div class="parsley-row" v-if ="type=='1'">
                                     <div class="uk-input-group">
 
                                         <label for="">Hall :</label>     
@@ -550,7 +550,7 @@ var vm = new Vue({
     gphone : "{{  $data->GUARDIAN_PHONE }}",
     goccupation : "{{  $data->GUARDIAN_OCCUPATION }}",
     hostel : "{{  $data->HOSTEL }}",
-    residential : "{{  $data->STUDENT_TYPE }}",
+    type : "{{  $data->STUDENT_TYPE }}",
     category : "{{  $data->TYPE }}",
     halls : "{{  $data->HALL }}",
     year : "{{  $data->YEAR }}",
