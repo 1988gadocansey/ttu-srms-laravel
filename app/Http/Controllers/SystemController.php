@@ -2930,7 +2930,7 @@ class SystemController extends Controller
     public  function getPassword($indexno)
     {
         $data = Models\StudentModel::where("STNO", $indexno)->orWhere("INDEXNO", $indexno)->first();
-        $que = Models\PortalPasswordModel::where("username", $data->STNO)->orWhere("username", $data->INDEXNO)->first();
+        $que = Models\PortalPasswordModel::where("student", $data->ID)->orWhere("username", $data->INDEXNO)->first();
         $ptype=$this->getProgrammeType($data->PROGRAMMECODE);
         if($ptype=="NON TERTIARY"){
             $level="100NT";

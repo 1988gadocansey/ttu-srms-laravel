@@ -117,6 +117,7 @@ class APIController extends Controller
                     "GRADUATING_GROUP"=> $group,
                 )
             );
+            @$sys->getPassword($student['stno']);
           }
         }
        return Models\StudentModel::count();
@@ -127,7 +128,7 @@ class APIController extends Controller
         ini_set('max_execution_time', 280000);
         $data = file_get_contents("http://127.0.0.1:8000/admissions/srms/forward"); // put the contents of the file into a variable
         $records = json_decode($data, true, JSON_PRETTY_PRINT); // decode the JSON feed
-
+        //dd($records);
 
         
         foreach ($records as $student) {
