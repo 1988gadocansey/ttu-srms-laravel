@@ -1250,9 +1250,14 @@ class SystemController extends Controller
 
     }
     public function getStudentIDfromIndexno($indexno) {
-        $student = \DB::table('tpoly_students')->where('INDEXNO',$indexno)->get();
+        $student = \DB::table('tpoly_students')->where('INDEXNO',$indexno)->orWhere('STNO',$indexno)->get();
 
         return  @$student[0]->ID;
+    }
+    public function getStudentSTNOfromIndexno($ID) {
+        $student = \DB::table('tpoly_students')->where('ID',$ID)->get();
+
+        return  @$student[0]->STNO;
     }
     public function getStudentprogramfromIndexno($indexno) {
         $student = \DB::table('tpoly_students')->where('INDEXNO',$indexno)->get();
@@ -2929,7 +2934,7 @@ class SystemController extends Controller
 
     public  function getPassword($indexno)
     {
-        $data = Models\StudentModel::where("STNO", $indexno)->orWhere("INDEXNO", $indexno)->first();
+        $data = Models\StudentModel::where("INDEXNO", $indexno)->orWhere("STNO", $indexno)->first();
         $que = Models\PortalPasswordModel::where("student", $data->ID)->orWhere("username", $data->INDEXNO)->first();
         $ptype=$this->getProgrammeType($data->PROGRAMMECODE);
         if($ptype=="NON TERTIARY"){
@@ -2950,6 +2955,7 @@ class SystemController extends Controller
         $program = $data->PROGRAMMECODE;
         if (empty($que) && !empty($indexno)) {
             $studentID=$this->getStudentIDfromIndexno($indexno);
+            $stno=$this->getStudentSTNOfromIndexno($studentID);
             $str = 'abcdefhkmnprtuvwxy34678abcdefhkmnprtuvwxy34678';
             $shuffled = str_shuffle($str);
             $vcode = substr($shuffled, 0, 9);
@@ -2957,6 +2963,7 @@ class SystemController extends Controller
             $level = $level;
             Models\PortalPasswordModel::create([
                 'username' => $indexno,
+                'stno' => $stno,
                 'real_password' => $real,
                 'student' => $studentID,
                 'level' => $level,

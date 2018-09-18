@@ -25,10 +25,10 @@
  * API route of quality assurance
  *
  */
-Route::get('student/{indexno}/qa', 'APIController@qualityAssurance')->where('indexno', '(.*)');
+Route::get('student/{indexno}/qa', 'APIController@qualityAssurance')->where('indexno', '(.*)');;
 Route::get('delete/wrong', 'StudentController@showWrong');
 
-Route::get('student/{indexno}/liaison', 'APIController@liaison')->where('indexno', '(.*)');
+Route::get('student/{indexno}/liaison', 'APIController@liaison')->where('indexno', '(.*)');;
 Route::post('api/receivePayment', 'APIController@payFeeLive');
 Route::post('/api/hall', 'APIController@getStudentHall');
 Route::post('/api/local', 'APIController@getLocalData');
@@ -36,10 +36,9 @@ Route::post('/api/kojo', 'APIController@getStudentKojo');
 Route::post('/api/kojo/name', 'APIController@getStudentKojoName');
 Route::get('/api/send', 'APIController@pushToSRMS');
 Route::post('/api/send/realtime', 'APIController@getApplicant');
-//Route::post('/api/student', 'APIController@getStudentID');
 Route::post('fireVoucher', 'APIController@fireVoucher');
-Route::get('/api/student/{indexno}/password', 'APIController@getStudentPassword')->where('indexno', '(.*)');
-Route::get( '/api/student/{indexno}', "APIController@getStudentData")->where('indexno', '(.*)');
+Route::get('/api/student/{indexno}/password', 'APIController@getStudentPassword')->where('indexno', '(.*)');;
+Route::get( '/api/student/{indexno}', "APIController@getStudentData")->where('indexno', '(.*)');;
 Route::group(['middleware' => ['web']], function () {
     Route::auth();
     Route::get('/', function () {
@@ -81,7 +80,7 @@ Route::group(['middleware' => ['web']], function () {
     Route::get( '/finance/upload', "FeeController@showUploadBalance");
 
     Route::post( 'finance/upload', "FeeController@uploadFeesBalance");
-    Route::post( 'load/fees', "StudentController@uploadPaymentZenith");
+    Route::post( '/load/fees', "StudentController@uploadPaymentZenith");
 
     Route::get( '/api/student', "APIController@getStudentData")->where('indexno', '(.*)');;
     Route::get( '/api/student/{program}', "APIController@getStudentProgram");
@@ -173,6 +172,10 @@ Route::group(['middleware' => ['web']], function () {
 
     Route::match(array("get", "post"), '/finance/protocol','FeeController@allowRegister');
     Route::post('/processProtocol', 'FeeController@processProtocol');
+    Route::match(array("get", "post"), '/finance/status','FeeController@status');
+    Route::post('/processStatus', 'FeeController@processStatus');
+    Route::match(array("get", "post"), '/finance/chapro','FeeController@chaProgram');
+    Route::post('/processProgram', 'FeeController@processProgram');
 
 
     /* Route::controller('/view_payments', 'PaymentController', [
@@ -245,6 +248,7 @@ Route::group(['middleware' => ['web']], function () {
     //Academic Modules
 
     Route::get('/courses','CourseController@index');
+    Route::get('/bulk/password','APIController@generateBulkPassword');
 
     Route::get('/create_course','CourseController@create');
     Route::match(array("get", "post"), '/course/{id}/edit', "CourseController@edit");
@@ -294,6 +298,7 @@ Route::group(['middleware' => ['web']], function () {
     Route::post('/create_calender','AcademicCalenderController@storeCalender');
     Route::delete('/delete_calender', 'AcademicCalenderController@destroy');
     Route::get('/fireCalender/{item}/id/{action}/action','AcademicCalenderController@updateCalender');
+    Route::get('/fireCourse/{item}/id/{action}/action','CourseController@updateClose');
     Route::match(array("get", "post"), '/printReceipt', "PaymentController@printLostReceipt");
     // E-Payments goes here
     Route::get('/pay_transcript', 'PaymentController@showPayform');

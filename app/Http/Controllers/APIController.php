@@ -23,120 +23,39 @@ class APIController extends Controller
     {
         // $this->middleware('auth');
     }
+    public function generateBulkPassword(Request $request, SystemController $sys){
+        $student=Models\StudentModel::where("LEVEL","LIKE","%"."100"."%")->where("HAS_PASSWORD","0")->get();
+
+        $password="";
+            foreach ($student as $row){
+
+                $password=Models\PortalPasswordModel::where("username",$row->INDEXNO)->orWhere("username",$row->STNO)->get();
+
+                if(count($password)==0){
+
+                    $sys->getPassword($row->INDEXNO);
+                    Models\StudentModel::where("INDEXNO",$row->INDEXNO)->orWhere("STNO",$row->STNO)->update(array("HAS_PASSWORD"=>1));
+
+
+
+                }
+
+            }
+
+            return $password;
+
+    }
     public function getApplicant(Request $request, SystemController $sys){
 
 
-     foreach ($request->all() as $student) {
-         # code...
-     
-                          
-                    
-         
-        $program = $student["program"];
-        $ptype = $sys->getProgrammeType($program);
-         if ($ptype == "NON TERTIARY") {
-             $level = "100NT";
-             $group=date("Y") + 1 . "/".(date("Y") + 2);
-         } elseif ($ptype == "HND") {
-             $level = "100H";
-             $group=date("Y")+2 . "/".(date("Y") + 3);
-         } elseif ($ptype == "BTECH") {
-             $level = "100BTT";
-             $group=date("Y") + 1 . "/".(date("Y") + 2);
-         }
-         elseif ($ptype == "DEGREE") {
-             $level = "100BT";
-             $group=date("Y") + 3 . "/".(date("Y") + 4);
-         }
-         else {
-             $level = "500MT";
-             $group=date("Y") + 1 . "/".(date("Y") + 2);
-         }
-        /////////////////////////////////////////////////////
-        $checker=Models\StudentModel::where("STNO",$student['stno'])->get();
-        if(count($checker)==0) {
-            $query = new Models\StudentModel();
-            $query->YEAR = $level;
-            $query->LEVEL = $level;
-            $query->FIRSTNAME = $student['firstname'];
-            $query->SURNAME = $student['lastname'];
-            $query->OTHERNAMES = $student['othernames'];
-            $query->TITLE = $student['title'];
-            $query->SEX = $student['gender'];
-            $query->DATEOFBIRTH = $student['dob'];
-            $query->NAME = $student['name'];
-            $query->AGE = $student['age'];
-            $query->MARITAL_STATUS = $student['marital'];
-            $query->DATE_ADMITTED = $student['date-admitted'];
-            $query->GRADUATING_GROUP = $group;
-            $query->HAS_PASSWORD = 1;
-            $query->HALL = $student['hall'];
-            $query->ADDRESS = $student['address'];
-            $query->RESIDENTIAL_ADDRESS = $student['address'];
-            $query->EMAIL = $student['email'];
-            $query->PROGRAMMECODE = $student['program'];
-            $query->TELEPHONENO = $student['phone'];
-            $query->COUNTRY = $student['country'];
-            $query->REGION = $student['region'];
-            $query->RELIGION = $student['religion'];
-            $query->HOMETOWN = $student['hometown'];
-            $query->GUARDIAN_NAME = $student['guardian-name'];
-            $query->GUARDIAN_ADDRESS = $student['guardian-address'];
-            $query->GUARDIAN_PHONE = $student['guardian-phone'];
-            $query->GUARDIAN_OCCUPATION = $student['guardian-occupation'];
-            $query->DISABILITY = $student['disable'];
-            $query->STNO = $student['stno'];
-            $query->INDEXNO = $student['stno'];
-            $query->TYPE = $student['type'];
-            $query->STUDENT_TYPE = $student['resident'];
-            $query->ALLOW_REGISTER = 1;
-            $query->STATUS = "Admitted";
-            $query->SYSUPDATE = "1";
-            $query->BILLS = $student['fees'];
-            $query->BILL_OWING = $student['fees'];
-            $query->PAID = 0.00;
-            @$query->save();
-            @$sys->getPassword($student['stno']);
-        }
-        else{ 
-            Models\StudentModel::where("STNO",$student['stno'])->update(
-                array("FIRSTNAME"=> $student['firstname'],
-                    "SURNAME"=> $student['lastname'],
-                    "INDEXNO"=> $student['stno'],
-                    "OTHERNAMES"=>$student['othernames'],
-                    "NAME"=>$student['name'],
-                    "LEVEL"=>$level,
-                    "YEAR"=>$level,
-                    "STATUS"=>"Admitted",
-
-                    "BILLS"=> $student['fees'],
-                    "SMS_SENT"=> 0,
-
-                    "PROGRAMMECODE"=> $student['program'],
-                    "HALL"=> $student['hall'],
-                    "GRADUATING_GROUP"=> $group,
-                )
-            );
-            @$sys->getPassword($student['stno']);
-          }
-        }
-       return Models\StudentModel::count();
-    
-    }
-    public function pushToSRMS(Request $request, SystemController $sys)
-    {
-        ini_set('max_execution_time', 280000);
-        $data = file_get_contents("http://127.0.0.1:8000/admissions/srms/forward"); // put the contents of the file into a variable
-        $records = json_decode($data, true, JSON_PRETTY_PRINT); // decode the JSON feed
-        //dd($records);
-
-        
-        foreach ($records as $student) {
+        foreach ($request->all() as $student) {
+            # code...
 
 
 
-        $program = $student["program"];
-        $ptype = $sys->getProgrammeType($program);
+
+            $program = $student["program"];
+            $ptype = $sys->getProgrammeType($program);
             if ($ptype == "NON TERTIARY") {
                 $level = "100NT";
                 $group=date("Y") + 1 . "/".(date("Y") + 2);
@@ -155,68 +74,171 @@ class APIController extends Controller
                 $level = "500MT";
                 $group=date("Y") + 1 . "/".(date("Y") + 2);
             }
-        /////////////////////////////////////////////////////
-        $checker=Models\StudentModel::where("STNO",$student['stno'])->get();
-        if(count($checker)==0) {
-            $query = new Models\StudentModel();
-            $query->YEAR = $level;
-            $query->LEVEL = $level;
-            $query->FIRSTNAME = $student['firstname'];
-            $query->SURNAME = $student['lastname'];
-            $query->OTHERNAMES = $student['othernames'];
-            $query->TITLE = $student['title'];
-            $query->SEX = $student['gender'];
-            $query->DATEOFBIRTH = $student['dob'];
-            $query->NAME = $student['name'];
-            $query->AGE = $student['age'];
-            $query->MARITAL_STATUS = $student['marital'];
-            $query->DATE_ADMITTED = $student['date-admitted'];
-            $query->GRADUATING_GROUP = $group;
-            $query->HAS_PASSWORD = 1;
-            $query->HALL = $student['hall'];
-            $query->ADDRESS = $student['address'];
-            $query->RESIDENTIAL_ADDRESS = $student['address'];
-            $query->EMAIL = $student['email'];
-            $query->PROGRAMMECODE = $student['program'];
-            $query->TELEPHONENO = $student['phone'];
-            $query->COUNTRY = $student['country'];
-            $query->REGION = $student['region'];
-            $query->RELIGION = $student['religion'];
-            $query->HOMETOWN = $student['hometown'];
-            $query->GUARDIAN_NAME = $student['guardian-name'];
-            $query->GUARDIAN_ADDRESS = $student['guardian-address'];
-            $query->GUARDIAN_PHONE = $student['guardian-phone'];
-            $query->GUARDIAN_OCCUPATION = $student['guardian-occupation'];
-            $query->DISABILITY = $student['disable'];
-            $query->STNO = $student['stno'];
-            $query->INDEXNO = $student['stno'];
-            $query->TYPE = $student['type'];
-            $query->STUDENT_TYPE = $student['resident'];
-            $query->ALLOW_REGISTER = 1;
-            $query->STATUS = "Admitted";
-            $query->SYSUPDATE = "1";
-            $query->BILLS = $student['fees'];
-            $query->BILL_OWING = $student['fees'];
-            $query->PAID = 0.00;
-            @$query->save();
-            @$sys->getPassword($student['stno']);
+            /////////////////////////////////////////////////////
+            $checker=Models\StudentModel::where("STNO",$student['stno'])->get();
+            if(count($checker)==0) {
+                $query = new Models\StudentModel();
+                $query->YEAR = $level;
+                $query->LEVEL = $level;
+                $query->FIRSTNAME = $student['firstname'];
+                $query->SURNAME = $student['lastname'];
+                $query->OTHERNAMES = $student['othernames'];
+                $query->TITLE = $student['title'];
+                $query->SEX = $student['gender'];
+                $query->DATEOFBIRTH = $student['dob'];
+                $query->NAME = $student['name'];
+                $query->AGE = $student['age'];
+                $query->MARITAL_STATUS = $student['marital'];
+                $query->DATE_ADMITTED = $student['date-admitted'];
+                $query->GRADUATING_GROUP = $group;
+                $query->HAS_PASSWORD = 1;
+                $query->HALL = $student['hall'];
+                $query->ADDRESS = $student['address'];
+                $query->RESIDENTIAL_ADDRESS = $student['address'];
+                $query->EMAIL = $student['email'];
+                $query->PROGRAMMECODE = $student['program'];
+                $query->TELEPHONENO = $student['phone'];
+                $query->COUNTRY = $student['country'];
+                $query->REGION = $student['region'];
+                $query->RELIGION = $student['religion'];
+                $query->HOMETOWN = $student['hometown'];
+                $query->GUARDIAN_NAME = $student['guardian-name'];
+                $query->GUARDIAN_ADDRESS = $student['guardian-address'];
+                $query->GUARDIAN_PHONE = $student['guardian-phone'];
+                $query->GUARDIAN_OCCUPATION = $student['guardian-occupation'];
+                $query->DISABILITY = $student['disable'];
+                $query->STNO = $student['stno'];
+                $query->INDEXNO = $student['stno'];
+                $query->TYPE = $student['type'];
+                $query->STUDENT_TYPE = $student['resident'];
+                $query->ALLOW_REGISTER = 1;
+                $query->STATUS = "Admitted";
+                $query->SYSUPDATE = "1";
+                $query->BILLS = $student['fees'];
+                $query->BILL_OWING = $student['fees'];
+                $query->PAID = 0.00;
+                @$query->save();
+                @$sys->getPassword($student['stno']);
+            }
+            else{
+                Models\StudentModel::where("STNO",$student['stno'])->update(
+                    array("FIRSTNAME"=> $student['firstname'],
+                        "SURNAME"=> $student['lastname'],
+                        "INDEXNO"=> $student['stno'],
+                        "OTHERNAMES"=>$student['othernames'],
+                        "NAME"=>$student['name'],
+                        "LEVEL"=>$level,
+                        "YEAR"=>$level,
+
+
+                        "BILLS"=> $student['fees'],
+                        "SMS_SENT"=> 0,
+
+                        "PROGRAMMECODE"=> $student['program'],
+                        "HALL"=> $student['hall'],
+                        "GRADUATING_GROUP"=> $group,
+                    )
+                );
+                @$sys->getPassword($student['stno']);
+            }
         }
-        else{ 
-            Models\StudentModel::where("STNO",$student['stno'])->update(
-                array("FIRSTNAME"=> $student['firstname'],
-                    "SURNAME"=> $student['lastname'],
-                    "OTHERNAMES"=>$student['othernames'],
-                    "NAME"=>$student['name'],
-                    "BILLS"=> $student['fees'],
-                    "BILL_OWING"=> $student['fees'],
-                    "PROGRAMMECODE"=> $student['program'],
-                    "HALL"=> $student['hall'],
-                    "GRADUATING_GROUP"=> $group,
-                )
-            );
-          }
-      }
-       return Models\StudentModel::count();
+        return Models\StudentModel::count();
+
+    }
+    public function pushToSRMS(Request $request, SystemController $sys)
+    {
+        ini_set('max_execution_time', 280000);
+        $data = file_get_contents("http://127.0.0.1:3030/admissions/srms/forward"); // put the contents of the file into a variable
+        $records = json_decode($data, true, JSON_PRETTY_PRINT); // decode the JSON feed
+
+
+
+        foreach ($records as $student) {
+
+
+
+            $program = $student["program"];
+            $ptype = $sys->getProgrammeType($program);
+            if ($ptype == "NON TERTIARY") {
+                $level = "100NT";
+                $group=date("Y") + 1 . "/".(date("Y") + 2);
+            } elseif ($ptype == "HND") {
+                $level = "100H";
+                $group=date("Y")+2 . "/".(date("Y") + 3);
+            } elseif ($ptype == "BTECH") {
+                $level = "100BTT";
+                $group=date("Y") + 1 . "/".(date("Y") + 2);
+            }
+            elseif ($ptype == "DEGREE") {
+                $level = "100BT";
+                $group=date("Y") + 3 . "/".(date("Y") + 4);
+            }
+            else {
+                $level = "500MT";
+                $group=date("Y") + 1 . "/".(date("Y") + 2);
+            }
+            /////////////////////////////////////////////////////
+            $checker=Models\StudentModel::where("STNO",$student['stno'])->get();
+            if(count($checker)==0) {
+                $query = new Models\StudentModel();
+                $query->YEAR = $level;
+                $query->LEVEL = $level;
+                $query->FIRSTNAME = $student['firstname'];
+                $query->SURNAME = $student['lastname'];
+                $query->OTHERNAMES = $student['othernames'];
+                $query->TITLE = $student['title'];
+                $query->SEX = $student['gender'];
+                $query->DATEOFBIRTH = $student['dob'];
+                $query->NAME = $student['name'];
+                $query->AGE = $student['age'];
+                $query->MARITAL_STATUS = $student['marital'];
+                $query->DATE_ADMITTED = $student['date-admitted'];
+                $query->GRADUATING_GROUP = $group;
+                $query->HAS_PASSWORD = 1;
+                $query->HALL = $student['hall'];
+                $query->ADDRESS = $student['address'];
+                $query->RESIDENTIAL_ADDRESS = $student['address'];
+                $query->EMAIL = $student['email'];
+                $query->PROGRAMMECODE = $student['program'];
+                $query->TELEPHONENO = $student['phone'];
+                $query->COUNTRY = $student['country'];
+                $query->REGION = $student['region'];
+                $query->RELIGION = $student['religion'];
+                $query->HOMETOWN = $student['hometown'];
+                $query->GUARDIAN_NAME = $student['guardian-name'];
+                $query->GUARDIAN_ADDRESS = $student['guardian-address'];
+                $query->GUARDIAN_PHONE = $student['guardian-phone'];
+                $query->GUARDIAN_OCCUPATION = $student['guardian-occupation'];
+                $query->DISABILITY = $student['disable'];
+                $query->STNO = $student['stno'];
+                $query->INDEXNO = $student['stno'];
+                $query->TYPE = $student['type'];
+                $query->STUDENT_TYPE = $student['resident'];
+                $query->ALLOW_REGISTER = 1;
+                $query->STATUS = "Admitted";
+                $query->SYSUPDATE = "1";
+                $query->BILLS = $student['fees'];
+                $query->BILL_OWING = $student['fees'];
+                $query->PAID = 0.00;
+                @$query->save();
+                @$sys->getPassword($student['stno']);
+            }
+            else{
+                Models\StudentModel::where("STNO",$student['stno'])->update(
+                    array("FIRSTNAME"=> $student['firstname'],
+                        "SURNAME"=> $student['lastname'],
+                        "OTHERNAMES"=>$student['othernames'],
+                        "NAME"=>$student['name'],
+                        "BILLS"=> $student['fees'],
+                        "BILL_OWING"=> $student['fees'],
+                        "PROGRAMMECODE"=> $student['program'],
+                        "HALL"=> $student['hall'],
+                        "GRADUATING_GROUP"=> $group,
+                    )
+                );
+            }
+        }
+        return Models\StudentModel::count();
     }
     public function pushToSrms2(Request $request)
     {
@@ -262,33 +284,33 @@ class APIController extends Controller
 
                 $query->HALL = $i["hall"];
                 //$query->ADDRESS = $student->ADDRESS;
-               // $query->RESIDENTIAL_ADDRESS = $student->RESIDENTIAL_ADDRESS;
-               // $query->EMAIL = $student->EMAIL;
+                // $query->RESIDENTIAL_ADDRESS = $student->RESIDENTIAL_ADDRESS;
+                // $query->EMAIL = $student->EMAIL;
                 $query->PROGRAMMECODE = $i["program"];
                 $query->TELEPHONENO = $i["phone"];
-               /* $query->COUNTRY = $student->NATIONALITY;
-                $query->REGION = $student->REGION;
-                $query->RELIGION = $student->RELIGION;
-                $query->HOMETOWN = $student->HOMETOWN;
-                $query->GUARDIAN_NAME = $student->GURDIAN_NAME;
-                $query->GUARDIAN_ADDRESS = $student->GURDIAN_ADDRESS;
-                $query->GUARDIAN_PHONE = $student->GURDIAN_PHONE;
-                $query->GUARDIAN_OCCUPATION = $student->GURDIAN_OCCUPATION;
-                $query->DISABILITY = $student->PHYSICALLY_DISABLED;
-                $query->STATUS = "In School";
-                $query->SYSUPDATE = "1";
+                /* $query->COUNTRY = $student->NATIONALITY;
+                 $query->REGION = $student->REGION;
+                 $query->RELIGION = $student->RELIGION;
+                 $query->HOMETOWN = $student->HOMETOWN;
+                 $query->GUARDIAN_NAME = $student->GURDIAN_NAME;
+                 $query->GUARDIAN_ADDRESS = $student->GURDIAN_ADDRESS;
+                 $query->GUARDIAN_PHONE = $student->GURDIAN_PHONE;
+                 $query->GUARDIAN_OCCUPATION = $student->GURDIAN_OCCUPATION;
+                 $query->DISABILITY = $student->PHYSICALLY_DISABLED;
+                 $query->STATUS = "In School";
+                 $query->SYSUPDATE = "1";
 
 
-                $query->BILLS = $student->ADMISSION_FEES;
-                $query->BILL_OWING = $student->ADMISSION_FEES - $item->Amount;
-                $query->STNO = $student->APPLICATION_NUMBER;
-                $query->INDEXNO = $student->APPLICATION_NUMBER;
-                $query->save();
-                $this->getPassword($student->APPLICATION_NUMBER);*/
+                 $query->BILLS = $student->ADMISSION_FEES;
+                 $query->BILL_OWING = $student->ADMISSION_FEES - $item->Amount;
+                 $query->STNO = $student->APPLICATION_NUMBER;
+                 $query->INDEXNO = $student->APPLICATION_NUMBER;
+                 $query->save();
+                 $this->getPassword($student->APPLICATION_NUMBER);*/
                 $query->save();
             } else {
-               // $owing = $student->ADMISSION_FEES - $item->Amount;
-               // Models\StudentModel::where("STNO", $item->StudentID)->update(array("BILL_OWING" => $owing));
+                // $owing = $student->ADMISSION_FEES - $item->Amount;
+                // Models\StudentModel::where("STNO", $item->StudentID)->update(array("BILL_OWING" => $owing));
             }
 
         }
@@ -335,10 +357,10 @@ class APIController extends Controller
         //$student=$this->indexNumFormater($student);
         //type-checking comparison operator is necessary
 
-            $data = @Models\StudentModel::where("INDEXNO", $student)->orWhere("STNO", $student)->select("INDEXNO", "STNO", "NAME", "PROGRAMMECODE", "LEVEL", "BILLS", "STATUS")->first();
+        $data = @Models\StudentModel::where("INDEXNO", $student)->orWhere("STNO", $student)->select("INDEXNO", "STNO", "NAME", "PROGRAMMECODE", "LEVEL", "BILLS", "STATUS")->first();
 
 
-         if (empty($data)) {
+        if (empty($data)) {
 
             //return response()->json(array('data'=>"Student with index number $student does not exist."));
             $json = json_decode(file_get_contents("http://45.33.4.164/admissions/applicant/$student"), true, JSON_PRETTY_PRINT);
@@ -353,7 +375,7 @@ class APIController extends Controller
                 $data["hall"] = $i["hall"];
                 $data["type"] = "Newly admited applicant";
             }*/
-            
+
             foreach ($a as $i) {
                 $data["INDEXNO"] = $i["application_number"];
                 $data["STNO"] = $i["application_number"];
@@ -362,7 +384,7 @@ class APIController extends Controller
                 $data["LEVEL"] = '100';
                 $data["BILLS"] = $i["fees"];
                 $data["STATUS"] = "Applicant";
-                 
+
             }
 
 
@@ -452,7 +474,7 @@ class APIController extends Controller
         }
     }
 
-     public function  getLevel($ptype){
+    public function  getLevel($ptype){
         if($ptype=="NON TERTIARY"){
             $level="100NT";
         }
@@ -471,7 +493,7 @@ class APIController extends Controller
         return $level;
     }
 
-     public function payFeeLive(Request $request, SystemController $sys)
+    public function payFeeLive(Request $request, SystemController $sys)
     {
         header('Content-Type: application/json');
         $bankAuth = ["128ashbx393932", "1nm383ypmwd123"];
@@ -567,64 +589,64 @@ class APIController extends Controller
 
 
 
-                            if ($data->BILL_OWING <= $amount) {
-                                $details = "Full payment";
+                        if ($data->BILL_OWING <= $amount) {
+                            $details = "Full payment";
 
 
-                            } else {
-                                $details = "Part payment";
-                            }
+                        } else {
+                            $details = "Part payment";
+                        }
 
-                            $receipt = $this->getReceipt();
+                        $receipt = $this->getReceipt();
 
-                            $feeLedger = new Models\FeePaymentModel();
-                            $feeLedger->INDEXNO = $data->INDEXNO;
-                            $feeLedger->STUDENT= $data->ID;
-                            $feeLedger->PROGRAMME = $data->PROGRAMMECODE;
-                            $feeLedger->AMOUNT = $amount;
-                            $feeLedger->PAYMENTTYPE = $type;
-                            $feeLedger->PAYMENTDETAILS = $details . " of " . $type;
-                            $feeLedger->BANK_DATE = $date;
-
-
-                            $level=mb_substr($data->INDEXNO, 0, 3);
-
-                            $owing=$data->BILL_OWING - $amount;
-                            $paid=$data->PAID + $amount;
+                        $feeLedger = new Models\FeePaymentModel();
+                        $feeLedger->INDEXNO = $data->INDEXNO;
+                        $feeLedger->STUDENT= $data->ID;
+                        $feeLedger->PROGRAMME = $data->PROGRAMMECODE;
+                        $feeLedger->AMOUNT = $amount;
+                        $feeLedger->PAYMENTTYPE = $type;
+                        $feeLedger->PAYMENTDETAILS = $details . " of " . $type;
+                        $feeLedger->BANK_DATE = $date;
 
 
+                        $level=mb_substr($data->INDEXNO, 0, 3);
 
-                            $feeLedger->LEVEL = $data->LEVEL;
-                            $feeLedger->RECIEPIENT = "API_CALL";
-                            $feeLedger->BANK = $bank;
-                            $feeLedger->TRANSACTION_ID = $transactionId;
-                            $feeLedger->RECEIPTNO = $receipt;
-                            $feeLedger->YEAR = $year;
-                            $feeLedger->FEE_TYPE = $type;
-                            $feeLedger->SEMESTER = $sem;
-                            if ($feeLedger->save()) {
+                        $owing=$data->BILL_OWING - $amount;
+                        $paid=$data->PAID + $amount;
 
-                                 @StudentModel::where("INDEXNO", $data->INDEXNO)->orWhere("STNO", $data->INDEXNO)->update(array("BILL_OWING" => $owing, "PAID" => $paid));
-                                @$this->updateReceipt();
-                                \DB::commit();
-                                //return Response::json("Success", "01");
-                                header('Content-Type: application/json');
-                                // return  json_encode(array('responseCode'=>'01','responseMessage'=>'Successfully Processed'));
-                                return response()->json(array('responseCode' => '01', 'responseMessage' => 'Successfully Processed'));
 
-                            } else {
-                                header('Content-Type: application/json');
-                                // return  json_encode(array('responseCode'=>'09','responseMessage'=>'Failed'));
 
-                                return response()->json(array('responseCode' => '09', 'responseMessage' => $data->PROGRAMMECODE));
-                            }
+                        $feeLedger->LEVEL = $data->LEVEL;
+                        $feeLedger->RECIEPIENT = "API_CALL";
+                        $feeLedger->BANK = $bank;
+                        $feeLedger->TRANSACTION_ID = $transactionId;
+                        $feeLedger->RECEIPTNO = $receipt;
+                        $feeLedger->YEAR = $year;
+                        $feeLedger->FEE_TYPE = $type;
+                        $feeLedger->SEMESTER = $sem;
+                        if ($feeLedger->save()) {
+
+                            @StudentModel::where("INDEXNO", $data->INDEXNO)->orWhere("STNO", $data->INDEXNO)->update(array("BILL_OWING" => $owing, "PAID" => $paid));
+                            @$this->updateReceipt();
+                            \DB::commit();
+                            //return Response::json("Success", "01");
+                            header('Content-Type: application/json');
+                            // return  json_encode(array('responseCode'=>'01','responseMessage'=>'Successfully Processed'));
+                            return response()->json(array('responseCode' => '01', 'responseMessage' => 'Successfully Processed'));
+
+                        } else {
+                            header('Content-Type: application/json');
+                            // return  json_encode(array('responseCode'=>'09','responseMessage'=>'Failed'));
+
+                            return response()->json(array('responseCode' => '09', 'responseMessage' => $data->PROGRAMMECODE));
+                        }
 
 
                     }
 
-                    }
+                }
 
-                 else {
+                else {
                     return response()->json(array('responseCode' => '08', 'responseMessage' => 'Bank Account does not exist'));
 
                 }
