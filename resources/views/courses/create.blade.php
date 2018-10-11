@@ -15,7 +15,7 @@
  
 @endsection
 @section('content')
-<div class="uk-width-xLarge-1-10">
+<div class="uk-width-xLarge-1-1">
     <div class="md-card">
         <div class="md-card-content" style="">
 

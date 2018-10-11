@@ -649,7 +649,7 @@ class ApplicantController extends Controller {
                     $query->GUARDIAN_PHONE = $student->GURDIAN_PHONE;
                     $query->GUARDIAN_OCCUPATION = $student->GURDIAN_OCCUPATION;
                     $query->DISABILITY = $student->PHYSICALLY_DISABLED;
-                    $query->STATUS = "In School";
+                    $query->STATUS = "In school";
                     $query->SYSUPDATE = "1";
 
 
@@ -1063,7 +1063,7 @@ class ApplicantController extends Controller {
                 $query->GUARDIAN_PHONE = $student->GURDIAN_PHONE;
                 $query->GUARDIAN_OCCUPATION = $student->GURDIAN_OCCUPATION;
                 $query->DISABILITY = $student->PHYSICALLY_DISABLED;
-                $query->STATUS = "In School";
+                $query->STATUS = "In school";
                 $query->SYSUPDATE = "1";
 
 

@@ -142,7 +142,7 @@
                      <th style=" ">AMOUNT</th>
 
                        
-                     <th data-priority="1" class="filter-false remove sorter-false uk-text-center"    >ACTION</th>   
+                      
                                      
                 </tr>
              </thead>
@@ -159,10 +159,7 @@
                                             <td> {{ @$row->levels->slug }}</td>
                                            <td> {{ @$row->YEAR }}</td>
                                             <td> {{ @$row->AMOUNT }}</td>
-                                            <td> 
-                                                   <a href="#"><i class="md-icon material-icons">&#xE254;</i></a>
-                                             
-                                            </td>
+                                            
                                               
                                         </tr>
                                          @endforeach
@@ -172,7 +169,7 @@
           
      </div>
      </div>
-        @if(@\Auth::user()->role == 'FO' || @\Auth::user()->department == 'Admissions')
+        @if(@\Auth::user()->department == 'Tptop')
 <div class="md-fab-wrapper">
     <a class="md-fab md-fab-small md-fab-accent md-fab-wave" title="create new account" href="#new_task" data-uk-modal="{ center:true }">
             <i class="material-icons md-18">&#xE145;</i>

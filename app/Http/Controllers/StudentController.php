@@ -113,7 +113,7 @@ class StudentController extends Controller
             }) ;
         }
         elseif (@\Auth::user()->department=="Finance") {
-            $student = StudentModel::where("STATUS","In School");
+            $student = StudentModel::where("STATUS","In school");
         }
         else{
             $departmentArray=explode(",",@\Auth::user()->department);
@@ -198,7 +198,28 @@ class StudentController extends Controller
             $student->where($request->input('by'), "LIKE", "%" . $request->input("search", "") . "%")
             ;
         }
-        $data = $student->orderBy('LEVEL')->orderBy('PROGRAMMECODE')->orderBy('INDEXNO')->paginate(100);
+
+        if ($request->has('pay') && trim($request->input('pay')) != "") {
+            // dd($request);
+            $student->where("PAID", ">=", $request->input("pay", ""))
+            ;
+        }
+
+        //StudentModel::where('INDEXNO', $indexno)->orWhere("STNO", $request->input('stno'))->update(array('BILL_OWING' => $owing, 'PAID' => $paid, 'BILLS' => $totalbill, 'TELEPHONENO' => $phone, 'SYSUPDATE' => '1', "ALLOW_REGISTER" => $status));
+            $array = $sys->getSemYear();
+            $yearr = $array[0]->YEAR;
+        $data = $student->orderBy('LEVEL')->orderBy('PROGRAMMECODE')->orderBy('INDEXNO')->paginate(500);
+    /*    foreach ($data as $correctFee) {
+            
+            $myFee = $sys->getYearBill($yearr,$correctFee->LEVEL,$correctFee->PROGRAMMECODE);
+            $feePaid = $sys->getTotalPayment($correctFee->INDEXNO, $yearr);
+            $myBill = $correctFee->BALANCE + $myFee;
+            $myOwe = $myBill-$feePaid;
+
+            Models\StudentModel::where('INDEXNO', $correctFee->INDEXNO)->orWhere("STNO", $correctFee->STNO)->update(array('BILL_OWING' => $myOwe, 'PAID' => $feePaid, 'BILLS' => $myBill));
+           // dd($correctFee->INDEXNO);
+        }
+     */  
 
         $request->flashExcept("_token");
 
@@ -231,7 +252,7 @@ class StudentController extends Controller
             }) ;
         }
         elseif (@\Auth::user()->department=="Finance") {
-            $student = StudentModel::where("STATUS","In School");
+            $student = StudentModel::where("STATUS","In school");
         }
         else{
             $departmentArray=explode(",",@\Auth::user()->department);
@@ -346,10 +367,12 @@ class StudentController extends Controller
             $NAME = $member->NAME;
             $FIRSTNAME = $member->FIRSTNAME;
             $SURNAME = $member->SURNAME;
-            $PROGRAMME = $sys->getProgram($member->PROGRAMME);
+            $PROGRAMME = $sys->getProgram($member->PROGRAMMECODE);
+            //dd($PROGRAMME, $member->PROGRAMME, $member->SURNAME);
             $INDEXNO = $member->INDEXNO;
             $CGPA = $member->CGPA;
             $BILLS = $member->BILLS;
+            $PAID = $member->PAID;
             $BILL_OWING = $member->BILL_OWING;
             $PASSWORD=$sys->getStudentPassword($INDEXNO);
             $newstring = str_replace("]", "", "$message");
@@ -492,7 +515,7 @@ class StudentController extends Controller
             $disability = $request->input('disabilty');
             $title = $request->input('title');
             $age = $sys->age($dob, 'eu');
-            $group = "";
+            //$group = "";
             $fname = $request->input('fname');
             $bill= $request->input('bill');
             $lname = $request->input('surname');
@@ -505,43 +528,43 @@ class StudentController extends Controller
                 $name = $lname . ' ' . $othername . ' ' . $fname;
                 $query = new StudentModel();
                 $query->YEAR = $year;
-                $query->LEVEL = $level;
+                //$query->LEVEL = $level;
                 $query->FIRSTNAME = $fname;
                 $query->SURNAME = $lname;
                 $query->OTHERNAMES = $othername;
                 $query->TITLE = $title;
                 $query->SEX = $gender;
-                $query->DATEOFBIRTH = $dob;
+                //$query->DATEOFBIRTH = $dob;
                 $query->NAME = $name;
-                $query->AGE = $age;
-                $query->GRADUATING_GROUP = $group;
-                $query->MARITAL_STATUS = $marital_status;
-                $query->HALL = $hall;
-                $query->ADDRESS = $address;
-                $query->RESIDENTIAL_ADDRESS = $residentAddress;
-                $query->EMAIL = $email;
-                $query->PROGRAMMECODE = $program;
-                $query->TELEPHONENO = $phone;
-                $query->COUNTRY = $country;
-                $query->REGION = $region;
-                $query->RELIGION = $religion;
-                $query->HOMETOWN = $hometown;
-                $query->GUARDIAN_NAME = $gname;
-                $query->GUARDIAN_ADDRESS = $gaddress;
-                $query->GUARDIAN_PHONE = $gphone;
-                $query->GUARDIAN_OCCUPATION = $goccupation;
-                $query->DISABILITY = $disability;
-                $query->STATUS = "In School";
-                $query->SYSUPDATE = "1";
-                $query->NHIS = $nhis;
-                $query->STUDENT_TYPE = $type;
-                $query->TYPE = $category;
+                //$query->AGE = $age;
+                //$query->GRADUATING_GROUP = $group;
+                //$query->MARITAL_STATUS = $marital_status;
+                //$query->HALL = $hall;
+                //$query->ADDRESS = $address;
+                //$query->RESIDENTIAL_ADDRESS = $residentAddress;
+                //$query->EMAIL = $email;
+                //$query->PROGRAMMECODE = $program;
+                //$query->TELEPHONENO = $phone;
+                //$query->COUNTRY = $country;
+                //$query->REGION = $region;
+                //$query->RELIGION = $religion;
+                //$query->HOMETOWN = $hometown;
+                //$query->GUARDIAN_NAME = $gname;
+                //$query->GUARDIAN_ADDRESS = $gaddress;
+                //$query->GUARDIAN_PHONE = $gphone;
+                //$query->GUARDIAN_OCCUPATION = $goccupation;
+                //$query->DISABILITY = $disability;
+                //$query->STATUS = "In school";
+                //$query->SYSUPDATE = "1";
+                //$query->NHIS = $nhis;
+                //$query->STUDENT_TYPE = $type;
+                //$query->TYPE = $category;
 
-                $query->HOSTEL = $hostel;
+                //$query->HOSTEL = $hostel;
                 //$query->BILLS=$sys->getYearBill( $fiscalYear, $level, $program);
                 // $query->BILL_OWING=$sys->getYearBill( $fiscalYear, $level, $program);
-                $query->STNO =$indexno;
-                $query->INDEXNO =$indexno;
+                //$query->STNO =$indexno;
+                //$query->INDEXNO =$indexno;
 
                 if($query->save()){
                     \DB::commit();
@@ -605,7 +628,7 @@ class StudentController extends Controller
         $hall=$sys->getHalls();
         $religion=$sys->getReligion();
 
-        $trails=  Models\AcademicRecordsModel::where('student', $id)->where("grade","F")->paginate(100);
+        $trails=  Models\AcademicRecordsModel::where('student', $id)->where("grade","F")->where("resit","no")->paginate(100);
 
         return view('students.show')->with('student', $query)
             ->with('programme', $programme)
@@ -667,9 +690,9 @@ class StudentController extends Controller
     public function edit($id,  SystemController $sys,Request $request)
     {
         //
-        if($request->user()->isSupperAdmin || @\Auth::user()->department=="top"  || @\Auth::user()->department=="Tpmid" || @\Auth::user()->department=="Tptop" || @\Auth::user()->role=="HOD" || @\Auth::user()->role=="Support" ||   @\Auth::user()->role=="Dean" || @\Auth::user()->department=="Rector" || @\Auth::user()->department=="Admissions" || @\Auth::user()->department=="Planning"){
+        if($request->user()->isSupperAdmin || @\Auth::user()->department=="top"  || @\Auth::user()->department=="Tpmid" || @\Auth::user()->department=="Tptop" || @\Auth::user()->role=="HOD" || @\Auth::user()->role=="Support"){
 
-            $query = StudentModel::where('ID', $id)->where('STATUS','In School')->first();
+            $query = StudentModel::where('ID', $id)->where('STATUS','In school')->first();
             //dd( $query );
         }
         else{
@@ -753,10 +776,10 @@ class StudentController extends Controller
                 $year=$request->input('year');
                 $id=$request->input('id');
 
-                $level=$request->input('year');
+                //$level=$request->input('year');
                 $indexno=$request->input('indexno');
 
-                $program=$request->input('programme');
+                /*$program=$request->input('programme');
                 $gender=$request->input('gender');
                 $category=$request->input('category');
                 $hostel=$request->input('hostel');
@@ -779,9 +802,10 @@ class StudentController extends Controller
                 $nhis=$request->input('nhis');
                 $type=$request->input('type');
                 $disability=$request->input('disabilty');
+                */
                 $title=$request->input('title');
-                $age=$sys->age($dob,'eu');
-                $group=0;
+                $age=@$sys->age($dob,'eu');
+                //$group=0;
                 $firstname=$request->input('fname');
                 $surname=$request->input('surname');
                 $othername=$request->input('othernames');
@@ -836,7 +860,7 @@ class StudentController extends Controller
                         "GUARDIAN_OCCUPATION"=>strtoupper($goccupation),
                         "DISABILITY"=>strtoupper($disability),
                         "PROGRAMMECODE"=>strtoupper($program),
-                        "STATUS"=>"In School",
+                        "STATUS"=>"In school",
                         "NHIS"=>$nhis,
                         "STUDENT_TYPE"=>strtoupper($type),
                         "TYPE"=>strtoupper($category),
@@ -977,7 +1001,7 @@ class StudentController extends Controller
                         $student->BILL_OWING = $balance;
                         $student->NAME = $name;
                         $student->PROGRAMMECODE = $program;
-                        $student->STATUS = "In School";
+                        $student->STATUS = "In school";
                         $student->SYSUPDATE = "1";
                         $student->ADDRESS= $address;
                         $student->GRADUATING_GROUP = $group;
@@ -991,7 +1015,7 @@ class StudentController extends Controller
                         ]);
                     } else {
 
-                        StudentModel::where('INDEXNO', $indexno)->update(array("STNO"=>$stno,"ADDRESS"=>$address,"LEVEL" => @$level, "YEAR" => $level, "PROGRAMMECODE" => $program, "SYSUPDATE" => "1", "STATUS" => 'In School', "NAME" => $name, "GRADUATING_GROUP" => $group,  "BILL_OWING" => $balance));
+                        StudentModel::where('INDEXNO', $indexno)->update(array("STNO"=>$stno,"ADDRESS"=>$address,"LEVEL" => @$level, "YEAR" => $level, "PROGRAMMECODE" => $program, "SYSUPDATE" => "1", "STATUS" => 'In school', "NAME" => $name, "GRADUATING_GROUP" => $group,  "BILL_OWING" => $balance));
 
                     }
                 } else {
@@ -1156,7 +1180,7 @@ class StudentController extends Controller
 //                                $student->YEAR=$year;
 //                                $student->NAME=$name;
 //                                $student->PROGRAMMECODE=$program;
-//                                $student->STATUS="In School";
+//                                $student->STATUS="In school";
 //                                $student->SYSUPDATE="1";
 //
 //                                $student->GRADUATING_GROUP=$group;
@@ -1173,7 +1197,7 @@ class StudentController extends Controller
 //                              }
 //                             else{
 //
-//                                         StudentModel::where('INDEXNO', $indexno)->update(array("LEVEL" =>@$level, "YEAR" => $year, "PROGRAMMECODE" => $program, "SYSUPDATE"=>"1", "STATUS" => 'In School',"NAME"=>$name,"GRADUATING_GROUP"=>$group,"BILLS"=>$bill,"BILL_OWING"=>$owing,"SEX"=>$gender,"FIRSTNAME"=>$othername,"TELEPHONENO"=>$phone,"RESIDENT_ADDRESS"=>$resident,"ADDRESS"=>$contact,"SURNAME"=>$surname));
+//                                         StudentModel::where('INDEXNO', $indexno)->update(array("LEVEL" =>@$level, "YEAR" => $year, "PROGRAMMECODE" => $program, "SYSUPDATE"=>"1", "STATUS" => 'In school',"NAME"=>$name,"GRADUATING_GROUP"=>$group,"BILLS"=>$bill,"BILL_OWING"=>$owing,"SEX"=>$gender,"FIRSTNAME"=>$othername,"TELEPHONENO"=>$phone,"RESIDENT_ADDRESS"=>$resident,"ADDRESS"=>$contact,"SURNAME"=>$surname));
 //                                        \DB::commit();
 //                               }
 //
@@ -1436,12 +1460,16 @@ class StudentController extends Controller
                         }
 
                         $oldStudent = Models\StudentModel::where("STNO", $indexno)->orWhere("INDEXNO", $indexno)->first();
+                        //dd($oldStudent);
                         if(!empty($oldStudent)) {
                             $level = $oldStudent->LEVEL;
                             $index = $oldStudent->INDEXNO;
                             $program = $oldStudent->PROGRAMMECODE;
                             $bill = $sys->getYearBill($year, $level, $program);
-
+                            $balance = $oldStudent->BALANCE;
+                            $stuID = $oldStudent->ID;
+                            $status = $oldStudent->STATUS;
+                            
                             //$bill_owing = $bill - $item->amount;
                             if ($bill <= $item->amount) {
                                 $details = "Full payment";
@@ -1450,21 +1478,22 @@ class StudentController extends Controller
                                 $details = "Part payment";
                             }
 
-                            $date = $item->PaymentDate;
-
-                            $checker=Models\FeePaymentModel::where("INDEXNO",$index)->where("YEAR",$year)->where("AMOUNT",$item->amount)->where("BANK_DATE",$item->paymentdate)->where("FEE_TYPE",$item->type)->get();
+                            $date =date("Y-m-d",strtotime($item->paymentdate)); 
+//dd($date);
+                            $checker=Models\FeePaymentModel::where("STUDENT",$stuID)->where("YEAR",$year)->where("AMOUNT",$item->amount)->where("BANK_DATE",$date)->where("FEE_TYPE",$item->type)->get();
                             //dd( $checker);
-                            if(count($checker)==0){
+                            if(empty($checker) || count($checker)==0){
                                 $feeLedger = new Models\FeePaymentModel();
+                                $feeLedger->STUDENT = $stuID;
                                 $feeLedger->INDEXNO = $index;
                                 $feeLedger->PROGRAMME = $program;
                                 $feeLedger->AMOUNT = $item->amount;
                                 $feeLedger->PAYMENTTYPE = $details;
                                 $feeLedger->PAYMENTDETAILS = "Paid at bank";
-                                $feeLedger->BANK_DATE = $item->paymentdate;
+                                $feeLedger->BANK_DATE = $date;
                                 $feeLedger->CHECKER = rand();
                                 $feeLedger->LEVEL = $level;
-                                $feeLedger->RECIEPIENT = 701099;
+                                $feeLedger->RECIEPIENT = $item->reciepient;
                                 $feeLedger->BANK = $item->accountnumber;
                                 if(empty($item->transaction)){
                                     $feeLedger->TRANSACTION_ID = rand();
@@ -1476,17 +1505,28 @@ class StudentController extends Controller
                                 $feeLedger->YEAR = $year;
                                 $feeLedger->FEE_TYPE = $item->type;
                                 //$feeLedger->SEMESTER = $sem;
-                                $feeLedger->save();
-                                if ($feeLedger->save()) {
-                                    @StudentModel::where("INDEXNO", $indexno)->orWhere("STNO", $indexno)->update(array("BILLS" => $bill));
 
+                                $feeLedger->save();
+                                $paid = $sys->getTotalPayment($stuID, $year);
+                                if ($feeLedger->save()) {
+                                    if ($status == "In school") {
+                                        @StudentModel::where("ID", $stuID)->where("STATUS", "In school")->update(array("PAID" => $paid, "BILLS" => $bill + $balance, "BILL_OWING" => $bill + $balance - $paid, "STATUS" => "In school"));
+                                    }
+                                    
+                                    if ($status == "Admitted") {
+                                    @StudentModel::where("ID", $stuID)->where("STATUS", "Admitted")->update(array("PAID" => $paid, "BILLS" => $bill + $balance, "BILL_OWING" => $bill + $balance - $paid, "STATUS" => "In school", "ALLOW_REGISTER" => 1));
+                                    }
+
+                                    if ($status == "Alumni") {
+                                    @StudentModel::where("ID", $stuID)->where("STATUS", "Alumni")->update(array("PAID" => $paid, "BILLS" => $balance, "BILL_OWING" => $balance - $paid));
+                                    }
                                     $sys->updateReceipt();
                                 }
 
                             }
                             else{
 
-                                Models\FeePaymentModel::where("INDEXNO",$index)->where("YEAR",$year)->where("AMOUNT",$item->amount)->where("BANK_DATE",$item->paymentdate)->where("FEE_TYPE",$item->type)->update(array("AMOUNT"=>$item->amount));
+                                Models\FeePaymentModel::where("STUDENT",$stuID)->where("YEAR",$year)->where("AMOUNT",$item->amount)->where("BANK_DATE",$date)->where("FEE_TYPE",$item->type)->update(array("AMOUNT"=>$item->amount));
 
                             }
 
@@ -1525,7 +1565,7 @@ class StudentController extends Controller
             //->where("year",$year)
             ->where("sem",$semester)
             ->where("grade","F")
-            ->whereNull("resit")
+            ->where("resit","no")
             ->groupBy("indexno")
             ->orderBy("indexno")
 

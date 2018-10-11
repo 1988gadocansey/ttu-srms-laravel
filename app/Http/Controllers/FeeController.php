@@ -67,12 +67,13 @@ class FeeController extends Controller
     {
         $sys = new SystemController();
         $array = $sys->getSemYear();
-        if ($term == "" && $yearr == "") {
+        if ($yearr == "") {
             //$term = $array[0]->SEMESTER;
             $yearr = $array[0]->YEAR;
         }
-
-        $fee = FeePaymentModel::query()->where('YEAR', '=', $yearr)->where('INDEXNO', $student)->sum('AMOUNT');
+       
+        $fee = $sys->getTotalPayment($student, $yearr);
+        //$fee = FeePaymentModel::query()->where('YEAR', '=', $yearr)->where('INDEXNO', $student)->sum('AMOUNT');
         return $fee;
 
 
@@ -91,7 +92,7 @@ class FeeController extends Controller
         }
 
         if ($request->has('indexno') && trim($request->input('indexno')) != "") {
-            $fee->where("INDEXNO", '=', $request->input("indexno", ""));
+            $fee->where("INDEXNO", "LIKE", "%" . $request->input("indexno", "") . "%");
         }
         if ($request->has('year') && trim($request->input('year')) != "") {
             $fee->where("YEAR", "=", $request->input("year", ""));
@@ -105,7 +106,7 @@ class FeeController extends Controller
         if ($request->has('type') && trim($request->input('type'))) {
             $fee->where("PAYMENTTYPE", "=", $request->input('type'));
         }
-        $data = $fee->groupBy('INDEXNO')->orderBy('TRANSDATE', 'DESC')->paginate(200);
+        $data = $fee->groupBy('STUDENT')->orderBy('TRANSDATE', 'DESC')->paginate(500);
 
         $request->flashExcept("_token");
         \Session::put('students', $data);
@@ -114,7 +115,7 @@ class FeeController extends Controller
             $a[] = $row->AMOUNT;
             //$data[$key]->TOTALS = array_sum($a);
 
-            $t[] = $this->getTotalPayment($row->INDEXNO, $row->YEAR);
+            $t[] = $this->getTotalPayment($row->STUDENT, $row->YEAR);
             $data[$key]->TOTALS = @array_sum($t);
         }
 
@@ -179,7 +180,7 @@ class FeeController extends Controller
      */
     public function owingAndPaid(Request $request)
     {
-        $student = StudentModel::query();
+        $student = StudentModel::query()->where('STATUS', 'In school')->where('BILL_OWING',">",0)->orderBy('INDEXNO');
         if ($request->has('search') && trim($request->input('search')) != "") {
             // dd($request);
             $student->where($request->input('by'), "LIKE", "%" . $request->input("search", "") . "%");
@@ -361,7 +362,7 @@ class FeeController extends Controller
     }
 
     // approve bill here
-    public function approve(Request $request, $id)
+    public function approvSe(Request $request, $id)
     {
         if (@\Auth::user()->role == 'FO') {
             $sys = new SystemController();
@@ -434,7 +435,7 @@ class FeeController extends Controller
         $year = $array[0]->YEAR;
         $student = explode(',', $request->input('q'));
         $student = $student[0];
-
+       $stuID = $sys->getStudentIDfromIndexno($student);
         $sql = StudentModel::where("INDEXNO", $student)->orwhere("STNO", $student)->get();
 //         if($sys->getStudentAccountInfo($student)==1){
         if (@\Auth::user()->department != 'Finance') {
@@ -444,15 +445,24 @@ class FeeController extends Controller
                 });
             })->get();
         }
-        $finance = FeePaymentModel::where("INDEXNO", $student)->orWhere("INDEXNO", $sql[0]->STNO)->paginate(10);
+
+        $currentFees = $sys->getStudentFee($student,$sql[0]->LEVEL);
+
+        $finance = FeePaymentModel::where("STUDENT", $stuID)->orderBy("YEAR", "DESC")->orderBy("TRANSDATE", "DESC")->paginate(10);
+
+        $financeSum = FeePaymentModel::where("STUDENT", $stuID)->where("YEAR", $year)->sum("AMOUNT");
+
+        if (is_null($financeSum)) {
+            $financeSum = 0;
+        }
         //dd($finance); 
         if (count($sql) == 0) {
 
             return redirect("/pay_fees")->with("error", "<span style='font-weight:bold;font-size:13px;'> $request->input('q') does not exist!</span>");
         } else {
 
-            return view("finance.fees.processPayment")->with('data', $sql)->with('year', $year)->with('banks', $this->banks())->with('receipt', $this->getReceipt())->with('level', $sys->getLevelList())
-                ->with("finance", $finance);
+            return view("finance.fees.processPayment")->with('data', $sql)->with('year', $year)->with('currentFees', $currentFees)->with('banks', $this->banks())->with('receipt', $this->getReceipt())->with('level', $sys->getLevelList())
+                ->with("finance", $finance)->with("financeSum", $financeSum);
 
         }
 //         }
@@ -539,10 +549,14 @@ class FeeController extends Controller
                 }
             } else {
 
+                //amount = paying now
                 $amount = $request->input('amount');
                 $receipt = $request->input('receipt');
                 $indexno = $request->input('student');
-                $owing = $request->input('bill') - $amount;
+                $totalbill = $request->input('totalbill');
+
+                $owing = $request->input('totalbill') - $request->input('financesum') - $request->input('amount');
+                $paid = $request->input('financesum') + $request->input('amount');
                 $program = $request->input('programme');
                 $level = $request->input('level');
                 $bank = $request->input('bank');
@@ -593,25 +607,25 @@ class FeeController extends Controller
                         $newyear = substr($level, 0, 1);
 
 
-                        $balance = StudentModel::where("INDEXNO", $indexno)->orWhere("STNO", $request->input('stno'))->where('STATUS', '=', 'In school')->get();
+                        $balance = StudentModel::where("INDEXNO", $indexno)->orWhere("STNO", $request->input('stno'))->get();
                         //dd($balance);
 
 
-                        $billOwing = (@$balance[0]->BILL_OWING - $amount) + $previousOwing;
-                        $billpaid = (@$balance[0]->PAID + $amount);
+                        //$billOwing = (@$balance[0]->BILL_OWING - $amount) + $previousOwing;
+                        //$billpaid = (@$balance[0]->PAID + $amount);
                         
-                        StudentModel::where('INDEXNO', $indexno)->orWhere("STNO", $request->input('stno'))->update(array('BILL_OWING' => $billOwing, 'PAID' => $billpaid, 'TELEPHONENO' => $phone, 'SYSUPDATE' => '1', "ALLOW_REGISTER" => $status));
+                        StudentModel::where('INDEXNO', $indexno)->orWhere("STNO", $request->input('stno'))->update(array('BILL_OWING' => $owing, 'PAID' => $paid, 'BILLS' => $totalbill, 'TELEPHONENO' => $phone, 'SYSUPDATE' => '1', "ALLOW_REGISTER" => $status));
                          //dd($billOwing);
 
 
-                        $smsOwing = @StudentModel::where("INDEXNO", $indexno)->orWhere("STNO", $request->input('stno'))->where('STATUS', '=', 'In school')->get();
+                    //    $smsOwing = @StudentModel::where("INDEXNO", $indexno)->orWhere("STNO", $request->input('stno'))->where('STATUS', '=', 'In school')->get();
 
 
-                        $smsOwe = $smsOwing[0]->BILL_OWING;
-                        $firstname = $smsOwing[0]->FIRSTNAME;
-                        \Session::put('applicant', $indexno);
-                        $message = "Hi $firstname, GHS$amount paid as $feetype, you owe GHS$smsOwe Please visit ttuportal.com to do your course registration. You can print your receipt using receipt no. $receipt ";
-                        \DB::commit();
+                    //    $smsOwe = $smsOwing[0]->BILL_OWING;
+                    //    $firstname = $smsOwing[0]->FIRSTNAME;
+                    //    \Session::put('applicant', $indexno);
+                    //    $message = "Hi $firstname, GHS$amount paid as $feetype, you owe GHS$smsOwe Please visit ttuportal.com to do your course registration. You can print your receipt using receipt no. $receipt ";
+                    //    \DB::commit();
                        // if ($sys->firesms($message, $phone, $indexno)) {
 
                        // }
@@ -637,7 +651,7 @@ class FeeController extends Controller
     // allow student to register by authority
     public function allowRegister(Request $request)
     {
-        if (@\Auth::user()->department == "Finance" || @\Auth::user()->department == "Tpmid" || @\Auth::user()->department == "Tptop") {
+        if (@\Auth::user()->department == "Finance" || @\Auth::user()->department == "Tptop") {
             if ($request->isMethod("get")) {
                 return view("finance.fees.allowRegister");
             } else {
@@ -667,7 +681,7 @@ class FeeController extends Controller
 
     public function processProtocol(Request $request, SystemController $sys)
     {
-        if (@\Auth::user()->department == "Tpmid" || @\Auth::user()->department == "Tptop") {
+        if (@\Auth::user()->department == "Finance" || @\Auth::user()->department == "Tptop") {
 
             $this->validate($request, [
                 'action' => 'required',
@@ -690,11 +704,209 @@ class FeeController extends Controller
             $protocol->action = $action;
             $protocol->policy = $type;
             $protocol->user = @\Auth::user()->fund;
-            Models\StudentModel::where("INDEXNO", $student)->update(array('STATUS' => 'In school',"PROTOCOL" => 1));
+            Models\StudentModel::where("INDEXNO", $student)->update(array('STATUS' => 'In school',"PROTOCOL" => 1, "ALLOW_REGISTER" => 1));
             if ($protocol->save()) {
-                return redirect("/students")->with("success", "Registration protocol subscribed for $student successful. He/She can proceed to register");
+                return redirect("/students")->with("success", "Registration protocol granted for $student successfully. He/She can proceed to register");
             } else {
                 return redirect("/finance/protocol")->with("error", "Error processing protocol for $student. Try again later");
+
+            }
+
+        } else {
+            return redirect("/dashboard");
+        }
+    }
+
+    public function status(Request $request)
+    {
+        if (@\Auth::user()->department == "Academic" || @\Auth::user()->department == "Tptop") {
+            if ($request->isMethod("get")) {
+                return view("finance.fees.rusticate");
+            } else {
+                $sys = new SystemController();
+                $array = $sys->getSemYear();
+                //$sem = $array[0]->SEMESTER;
+                $year = $array[0]->YEAR;
+                $student = explode(',', $request->input('q'));
+                $student = $student[0];
+
+                $sql = StudentModel::where("INDEXNO", $student)->orwhere("STNO", $student)->get();
+                //dd($sql);
+                if (count($sql) == 0) {
+
+                    return redirect("/students")->with("error", "<span style='font-weight:bold;font-size:13px;'> $request->input('q') does not exist!</span>");
+                } else {
+
+                    return view("finance.fees.processStatus")->with('data', $sql)->with('year', $year);
+
+                }
+            }
+        } else {
+            return redirect("/dashboard");
+        }
+
+    }
+
+    public function processStatus(Request $request, SystemController $sys)
+    {
+        if (@\Auth::user()->department == "Academic" || @\Auth::user()->department == "Tptop") {
+
+            $this->validate($request, [
+                'duration' => 'required',
+                'reason' => 'required',
+                'status' => 'required',
+            ]);
+            //dd($request);
+            $array = $sys->getSemYear();
+            $sem = $array[0]->SEMESTER;
+            $year = $array[0]->YEAR;
+            $grad1 = substr($year, 0,4);
+            $duration = $request->input("duration");
+            $student = $request->input("student");
+            $reason = $request->input("reason");
+            $status = $request->input("status");
+            $level = $request->input("level");
+            $balanc = StudentModel::where("INDEXNO", $student)->get();
+            $grad2 = '';
+                    $balance = @$balanc[0]->BALANCE;
+                    $paid = @$balanc[0]->PAID;
+                    //dd($level);
+            if (empty($level) || $level == '') {
+                $level = $sys->getLevelStudent($student);
+            }
+            //dd($level);
+            $feeNow = $sys->getStudentFee($student,$level);
+            $billF = $feeNow + $balance;
+
+           
+            
+            //dd($feeNow);
+            $owe = $billF - $paid;
+           
+            
+            
+            //dd($feeNow);
+            if ($level == '300H' || $level == '200NT' || $level == '200BTT' || $level == '400BT') {
+                $grad2 = $year;
+            }
+            if ($level == '200H' || $level == '100NT' || $level == '100BTT' || $level == '300BT') {
+                $gradx = $grad1+1;
+                $grady = $grad1+2;
+                $grad2 = $gradx.'/'.$grady;
+            }
+            if ($level == '100H' || $level == '200BT') {
+               $gradx = $grad1+2;
+                $grady = $grad1+3;
+                $grad2 = $gradx.'/'.$grady;
+            }
+
+            if ($level == '100BT') {
+               $gradx = $grad1+3;
+                $grady = $grad1+4;
+                $grad2 = $gradx.'/'.$grady;
+            }
+            $protocol = new Models\StatusModel();
+//dd($grad2);
+            $protocol->year = $year;
+            $protocol->sem = $sem;
+            $protocol->student = $student;
+            $protocol->reason = $reason;
+            $protocol->duration = $duration;
+            $protocol->action = $status;
+            $protocol->user = @\Auth::user()->fund;
+            if ($status == 'In school') {
+                Models\StudentModel::where("INDEXNO", $student)->update(array('STATUS' => $status,"ALLOW_REGISTER" => 1,"GRADUATING_GROUP" => $grad2,"LEVEL" => $level,"BILLS" => $billF,"BILL_OWING" => $owe));
+            }
+            if ($status != 'In school') {
+                Models\StudentModel::where("INDEXNO", $student)->update(array('STATUS' => $status,"LEVEL" => $level,"ALLOW_REGISTER" => 0,"REGISTERED" => 0));
+            }
+            
+            if ($protocol->save()) {
+                return redirect("/finance/status")->with("success", "Status changed for $student");
+            } else {
+                return redirect("/finance/status")->with("error", "Error changing status for $student. Try again later");
+
+            }
+
+        } else {
+            return redirect("/dashboard");
+        }
+    }
+
+    public function chaProgram(Request $request, SystemController $sys)
+    {
+        if (@\Auth::user()->department == "Academic" || @\Auth::user()->department == "Tptop") {
+            if ($request->isMethod("get")) {
+                return view("finance.fees.chapro");
+            } else {
+                $sys = new SystemController();
+                $array = $sys->getSemYear();
+                //$sem = $array[0]->SEMESTER;
+                $year = $array[0]->YEAR;
+                $student = explode(',', $request->input('q'));
+                $student = $student[0];
+
+                $sql = StudentModel::where("INDEXNO", $student)->orwhere("STNO", $student)->get();
+                $proCurrent = @$sql[0]->PROGRAMMECODE;
+                $pro = $sys->getProgramList();
+                if (count($sql) == 0) {
+
+                    return redirect("/students")->with("error", "<span style='font-weight:bold;font-size:13px;'> $request->input('q') does not exist!</span>");
+                } else {
+
+                    return view("finance.fees.processPro")->with('data', $sql)->with('year', $year)->with('pro', $pro);
+
+                }
+            }
+        } else {
+            return redirect("/dashboard");
+        }
+
+    }
+
+    public function processProgram(Request $request, SystemController $sys)
+    {
+
+        //dd($request);
+        if (@\Auth::user()->department == "Academic" || @\Auth::user()->department == "Tptop") {
+
+            $this->validate($request, [
+                
+                'reason' => 'required',
+                'program' => 'required',
+            ]);
+            //dd($request);
+            $array = $sys->getSemYear();
+            $sem = $array[0]->SEMESTER;
+            $year = $array[0]->YEAR;
+            $grad1 = substr($year, 0,4);
+            $duration = "change of program";
+            $student = $request->input("student");
+            $reason = $request->input("reason");
+            $status = $request->input("program");
+            $balanc = StudentModel::where("INDEXNO", $student)->get();
+          
+                    $balance = @$balanc[0]->BALANCE;
+                    $paid = @$balanc[0]->PAID;
+                    $level = @$balanc[0]->LEVEL;
+
+                    //dd($level);
+                    //function getYearBill($year,$level,$program)
+           
+            $feeNow = $sys->getYearBill($year,$level,$status);
+            $billF = $feeNow + $balance;
+            //dd($feeNow);
+            $owe = $billF - $paid;
+           
+            
+             $protocol = Models\StudentModel::where("INDEXNO", $student)->update(array('PROGRAMMECODE' => $status,"BILLS" => $billF,"BILL_OWING" => $owe));
+            
+            //dd($protocol);
+            
+            if ($protocol) {
+                return redirect("/finance/chapro")->with("success", "Programme changed for $student");
+            } else {
+                return redirect("/finance/chapro")->with("error", "Error changing programme for $student. Try again later");
 
             }
 
@@ -1320,7 +1532,7 @@ class FeeController extends Controller
                             if (array_search($program, $programme)) {
 
 
-                                StudentModel::where('PROGRAMMECODE', $program)->where('year', $year)->update(array("SYSUPDATE" => "1", "STATUS" => 'In School', "BILLS" => $bill, "BILL_OWING" => $owing));
+                                StudentModel::where('PROGRAMMECODE', $program)->where('year', $year)->update(array("SYSUPDATE" => "1", "STATUS" => 'In school', "BILLS" => $bill, "BILL_OWING" => $owing));
                                 \DB::commit();
 
 

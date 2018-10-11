@@ -493,11 +493,11 @@ class SystemController extends Controller
 
     }
     public function graduatingGroup($indexNo) {
-        $level= substr($indexNo, 2,2);
-        $group="20".$level;
-        $group_=($group + 3)."/".($group + 4);
+       // $level= substr($indexNo, 2,2);
+       // $group="20".$level;
+       // $group_=($group + 3)."/".($group + 4);
 
-        return $group_;
+       // return $group_;
 
     }
     public function getProgramDepartment($program){
@@ -567,7 +567,7 @@ class SystemController extends Controller
         //$query="SELECT count($table_field)  from questionnaire_table where lecturer='$lecturer' AND programmecode='$programmecode'";
         //$query="SELECT COUNT($table_field) from questionnaire_table as total WHERE  $table_field='$Yes_or_No' and lecturer='$lecturer' and coursecode='$coursecode'";
         $total=Models\QAquestionModel::
-        where("$table_field","$Yes_or_No")
+            where("$table_field","$Yes_or_No")
             ->where("lecturer",$lecturer)
             ->where("coursecode",$coursecode)
             ->where("academic_year",$year)
@@ -577,12 +577,12 @@ class SystemController extends Controller
 
         return $total;
     }
-    /*//counting the lecturer involved
-    $queryc="SELECT COUNT(lecturer) from questionnaire_table as total2 WHERE coursecode='$coursecode' and lecturer='$lecturer'";
-    echo  $queryc;
-    $query_resultc=mysql_query($queryc) or die("error in counting lecturer1");
-    $datac =mysql_fetch_row($query_resultc) or die('Error here too');
-    $total_course_assessed= $datac[0];*/
+/*//counting the lecturer involved
+$queryc="SELECT COUNT(lecturer) from questionnaire_table as total2 WHERE coursecode='$coursecode' and lecturer='$lecturer'";
+echo  $queryc;
+$query_resultc=mysql_query($queryc) or die("error in counting lecturer1");
+$datac =mysql_fetch_row($query_resultc) or die('Error here too');
+$total_course_assessed= $datac[0];*/
 
 
     function remark($percentage_score)
@@ -816,34 +816,23 @@ class SystemController extends Controller
     // this is purposely for select box
     public function getProgramList() {
         $departmentArray=explode(",",@\Auth::user()->department);
-        if( @\Auth::user()->department=='top' || @\Auth::user()->department=='Tptop' || @\Auth::user()->department=="Tpmid" || @\Auth::user()->department=="Tptop" || @\Auth::user()->department=="Finance" || @\Auth::user()->department=="Rector" || @\Auth::user()->role=="Rector" || @\Auth::user()->department=="Registrar" || @\Auth::user()->department=="Admissions" ||  @\Auth::user()->department=="Planning"  || @\Auth::user()->role=="Accountant" || @\Auth::user()->department == 'Examination' || @\Auth::user()->role == 'Admin' || @\Auth::user()->role == 'Lecturer'|| @\Auth::user()->department=="qa"){
+        if( @\Auth::user()->department=='btech'){
+            $program = \DB::table('tpoly_programme')->where('TYPE','BTECH')->orWhere('TYPE','MTECH')->orderby("PROGRAMME")
+                ->lists('PROGRAMME', 'PROGRAMMECODE');
+            return $program;
+        }
+        elseif( @\Auth::user()->department=='top' || @\Auth::user()->department=='Tptop' || @\Auth::user()->department=="Tpmid" || @\Auth::user()->department=="Tptop" || @\Auth::user()->department=="Finance" || @\Auth::user()->department=="Rector" || @\Auth::user()->role=="Rector" || @\Auth::user()->department=="Registrar" || @\Auth::user()->department=="Admissions" ||  @\Auth::user()->department=="Planning"  || @\Auth::user()->role=="Accountant" || @\Auth::user()->department == 'Examination' || @\Auth::user()->role == 'Admin' || @\Auth::user()->role == 'Lecturer'|| @\Auth::user()->department=="qa"){
             $program = \DB::table('tpoly_programme')->orderby("PROGRAMME")
                 ->lists('PROGRAMME', 'PROGRAMMECODE');
             return $program;
         }
         elseif( @\Auth::user()->role=='Registrar' ){
             $user_school= @\Auth::user()->department;
-            $programCase=Models\ProgrammeModel::where("DEPTCODE",$user_school)->first();
-            $departmentCase=Models\DepartmentModel::where("DEPTCODE",$programCase->DEPTCODE)->first();
-            $faculty=$departmentCase->FACCODE;
+            $program = \DB::table('users')->join('tpoly_faculty','users.department', '=', 'tpoly_faculty.FACCODE')->join('tpoly_department','tpoly_faculty.FACCODE', '=', 'tpoly_department.FACCODE')->join('tpoly_programme','tpoly_department.DEPTCODE', '=', 'tpoly_programme.DEPTCODE')->where('users.department',$user_school)->orderby("tpoly_programme.PROGRAMME")->groupby("tpoly_programme.PROGRAMME")->lists('tpoly_programme.PROGRAMME', 'tpoly_programme.PROGRAMMECODE');
+            return $program;
 
-            $programStruct=Models\ProgrammeModel::query()->orderBy("TYPE");
-            $data=$programStruct->whereHas('departments', function($q)use ($user_school, $faculty) {
+            //SELECT e.PROGRAMMECODE FROM users a join tpoly_faculty c on a.department = c.FACCODE join tpoly_department d on c.FACCODE = d.FACCODE join tpoly_programme e on d.DEPTCODE = e.DEPTCODE WHERE a.department = 'SAA' GROUP by e.PROGRAMMECODE
 
-
-
-                    $q->whereHas("school", function($q)use ($user_school, $faculty){
-                        $q->where('FACCODE',  $faculty);
-
-
-                });}) ->select('PROGRAMME', 'PROGRAMMECODE')->get();
-
-
-
-
-
-            return $data;
- 
 
         }
         else{
@@ -952,7 +941,7 @@ class SystemController extends Controller
         }
     }
 
-    public function getMountedCourseList2() {
+     public function getMountedCourseList2() {
 
         if(@\Auth::user()->role=='Lecturer'){
             $course=@\DB::table('tpoly_mounted_courses')
@@ -1250,12 +1239,12 @@ class SystemController extends Controller
 
     }
     public function getStudentIDfromIndexno($indexno) {
-        $student = \DB::table('tpoly_students')->where('INDEXNO',$indexno)->orWhere('STNO',$indexno)->get();
+        $student = \DB::table('tpoly_students')->where('INDEXNO',$indexno)->get();
 
         return  @$student[0]->ID;
     }
-    public function getStudentSTNOfromIndexno($ID) {
-        $student = \DB::table('tpoly_students')->where('ID',$ID)->get();
+    public function getStudentAppnofromIndexno($indexno) {
+        $student = \DB::table('tpoly_students')->where('INDEXNO',$indexno)->get();
 
         return  @$student[0]->STNO;
     }
@@ -1297,7 +1286,7 @@ class SystemController extends Controller
     }
 
     //$total = \DB::table('tpoly_students')->where('LEVEL',$level)->where("REGISTERED","1")
-    //          ->where("STATUS","In School")
+    //          ->where("STATUS","In school")
     //            ->count();
     //    return $total;
 
@@ -1325,7 +1314,7 @@ class SystemController extends Controller
         $sem=$array[0]->SEMESTER;
 
         $total = \DB::table('tpoly_levelgender')
-            //->where('STATUS','In School')
+            //->where('STATUS','In school')
             //->where('tpoly_students.PROGRAMMECODE', $program)
             ->where('tpoly_levelgender.LEVEL', "LIKE", "%". $level . "%")
             //->where('tpoly_levelgender.LEVEL', "LIKE", "%". $level . "%")
@@ -1345,7 +1334,7 @@ class SystemController extends Controller
         $sem=$array[0]->SEMESTER;
 
         $total = \DB::table('tpoly_levelgender')
-            //->where('STATUS','In School')
+            //->where('STATUS','In school')
             //->where('tpoly_students.PROGRAMMECODE', $program)
             //->where('tpoly_levelgender.LEVEL', "LIKE", "%". $level . "%")
             //->where('tpoly_levelgender.LEVEL', "LIKE", "%". $level . "%")
@@ -1365,7 +1354,7 @@ class SystemController extends Controller
         $sem=$array[0]->SEMESTER;
 
         $total = \DB::table('tpoly_levelgender')
-            //->where('STATUS','In School')
+            //->where('STATUS','In school')
             //->where('tpoly_students.PROGRAMMECODE', $program)
             //->where('tpoly_levelgender.LEVEL', "LIKE", "%". $level . "%")
             //->where('tpoly_levelgender.LEVEL', "LIKE", "%". $level . "%")
@@ -1379,16 +1368,26 @@ class SystemController extends Controller
     }
 
     public function getStudentsHighestCGPA_HND($skip){
-        //$array = $this->getSemYear();
+        $array = $this->getSemYear();
 
-        //$year = $array[0]->YEAR;
+        $currentResultsArray=$array[0]->RESULT_DATE;
+       // dd($resultb);
+
+        $currentResultsArray1 = explode(',',$currentResultsArray);
+        $resultyear = $currentResultsArray1[0];
+        $resultsem = $currentResultsArray1[1];
+
+        $year = $array[0]->YEAR;
+        if ($array[0]->YEAR != $resultyear) {
+            $year = $resultyear;
+        }
         //$sem=$array[0]->SEMESTER;
 
         $total = \DB::table('tpoly_students')
             ->join('tpoly_programme', 'tpoly_students.PROGRAMMECODE', '=', 'tpoly_programme.PROGRAMMECODE')
-            ->where('tpoly_students.STATUS','In School')
+            //->where('tpoly_students.STATUS','In school')
             ->where('tpoly_students.LEVEL', "LIKE", "%"."H")
-            ->where('tpoly_students.LEVEL', "=", "300H")
+            ->where('tpoly_students.GRADUATING_GROUP', "=", $year)
             ->where('tpoly_students.TOTAL_CREDIT_DONE', ">", "75")
             ->orderby("tpoly_students.CGPA",'DESC')
             ->skip($skip)
@@ -1410,9 +1409,10 @@ class SystemController extends Controller
         $sem=$array[0]->SEMESTER;
 
         $total = \DB::table('tpoly_students')
-            ->where('STATUS','In School')
+            ->where('STATUS','In school')
             //->where('tpoly_students.PROGRAMMECODE', $program)
-            ->where('tpoly_students.LEVEL', "LIKE", "%". $level . "%")
+           // ->where('tpoly_students.LEVEL', "LIKE", "%". $level . "%")
+            ->where('tpoly_students.LEVEL', $level)
             // ->where('tpoly_academic_record.year', $year)
             //->where('tpoly_academic_record.sem', $sem)
             // ->groupBy('tpoly_academic_record.student')
@@ -1427,9 +1427,9 @@ class SystemController extends Controller
         $sem=$array[0]->SEMESTER;
 
         $total = \DB::table('tpoly_students')
-            ->where('STATUS','In School')
+            ->where('STATUS','In school')
             ->where('tpoly_students.SEX', $gen)
-            ->where('tpoly_students.LEVEL', "LIKE", "%". $level . "%")
+            ->where('tpoly_students.LEVEL',$level)
             // ->where('tpoly_academic_record.year', $year)
             //->where('tpoly_academic_record.sem', $sem)
             // ->groupBy('tpoly_academic_record.student')
@@ -1438,7 +1438,40 @@ class SystemController extends Controller
     }
 
 
+    public function getStudentsTotalPerLevelAllGrad($level,$gyear){
+        $array = $this->getSemYear();
 
+        $year = $array[0]->YEAR;
+        $sem=$array[0]->SEMESTER;
+
+        $total = \DB::table('tpoly_students')
+            ->where('STATUS','Alumni')
+            ->where('tpoly_students.GRADUATING_GROUP', $gyear)
+           // ->where('tpoly_students.LEVEL', "LIKE", "%". $level . "%")
+            ->where('tpoly_students.LEVEL', $level)
+            // ->where('tpoly_academic_record.year', $year)
+            //->where('tpoly_academic_record.sem', $sem)
+            // ->groupBy('tpoly_academic_record.student')
+            ->get();
+        return count($total);
+    }
+
+    public function getStudentsTotalPerLevelAllGenGrad($level,$gen,$gyear){
+        $array = $this->getSemYear();
+
+        $year = $array[0]->YEAR;
+        $sem=$array[0]->SEMESTER;
+
+        $total = \DB::table('tpoly_students')
+            ->where('STATUS','Alumni')
+            ->where('tpoly_students.SEX', $gen)
+            ->where('tpoly_students.LEVEL',$level)
+            ->where('tpoly_students.GRADUATING_GROUP', $gyear)
+            //->where('tpoly_academic_record.sem', $sem)
+            // ->groupBy('tpoly_academic_record.student')
+            ->get();
+        return count($total);
+    }
 
     public function getStudentsTotalPerLevelAllRegistered($level){
         $array = $this->getSemYear();
@@ -1447,9 +1480,9 @@ class SystemController extends Controller
         $sem=$array[0]->SEMESTER;
 
         $total = \DB::table('tpoly_students')
-            ->where('STATUS','In School')
+            ->where('STATUS','In school')
             ->where('tpoly_students.REGISTERED',1)
-            ->where('tpoly_students.LEVEL', "LIKE", "%". $level . "%")
+            ->where('tpoly_students.LEVEL',$level)
             // ->where('tpoly_academic_record.year', $year)
             //->where('tpoly_academic_record.sem', $sem)
             // ->groupBy('tpoly_academic_record.student')
@@ -1720,13 +1753,13 @@ class SystemController extends Controller
     public function getStudentsTotalPerProgram4($program,$level=NULL){
         if($level==NULL){
             $total = \DB::table('tpoly_students')->where('PROGRAMMECODE',$program)
-                ->where("STATUS","In School")->where("SYSUPDATE","1")
+                ->where("STATUS","In school")->where("SYSUPDATE","1")
                 ->count();
             return $total;
         }
         else{
             $total = \DB::table('tpoly_students')->where('PROGRAMMECODE',$program)
-                ->where("year",$level)->where("STATUS","In School")->where("SYSUPDATE","1")
+                ->where("year",$level)->where("STATUS","In school")->where("SYSUPDATE","1")
 
                 ->count();
             return $total;
@@ -1737,7 +1770,7 @@ class SystemController extends Controller
     public function getStudentsTotalPerProgram2($level){
 
         $total = \DB::table('tpoly_students')->where('LEVEL',$level)->where("REGISTERED","1")
-            ->where("STATUS","In School")
+            ->where("STATUS","In school")
             ->count();
         return $total;
 
@@ -1749,7 +1782,7 @@ class SystemController extends Controller
 
         $year=$array[0]->YEAR;
         $total= \DB::table('tpoly_students')
-            ->join('tpoly_feedetails', 'tpoly_feedetails.INDEXNO', '=', 'tpoly_students.INDEXNO')
+            ->join('tpoly_feedetails', 'tpoly_feedetails.STUDENT', '=', 'tpoly_students.ID')
 
             ->where('tpoly_students.PROGRAMMECODE',$program)
             ->where('tpoly_feedetails.LEVEL',$level)
@@ -1760,13 +1793,67 @@ class SystemController extends Controller
 
     }
 
+    public function getProgramStudent($student){        
+
+        $program = \DB::table('tpoly_students')->where('INDEXNO',$student)->get();                 
+
+        return @$program[0]->PROGRAMMECODE;     
+
+    }
+
+    public function getLevelStudent($student){        
+
+        $level = \DB::table('tpoly_students')->where('INDEXNO',$student)->get();                 
+
+        return @$level[0]->LEVEL;     
+
+    }
+
+    public function getStudentFee($student,$level){
+        $array = $this->getSemYear();
+        
+            $yearr = $array[0]->YEAR;
+       $program=  $this->getProgramStudent($student);
+
+        $fee = \DB::table('tpoly_bills')->where('PROGRAMME',$program)->where('LEVEL',$level)->where('YEAR',$yearr)->get();
+
+          //dd($fee[0]->AMOUNT);       
+
+        return @$fee[0]->AMOUNT;
+
+                // dd($total);
+
+        //return @$total;
+
+    }
+
+    public function getTotalPayment($student, $yearr)
+    {
+        //$sys = new SystemController();
+        $array = $this->getSemYear();
+        
+            $yearr = $array[0]->YEAR;
+        
+        $id = $this->getStudentIDfromIndexno($student);        
+
+        $appNo = $this->getStudentAppnofromIndexno($student);
+
+        $fee = \DB::table('tpoly_feedetails')->where('YEAR', '=', $yearr)->where('STUDENT', $student)->sum('AMOUNT');
+
+        //$fee2 = \DB::table('tpoly_feedetails')->where('YEAR', '=', $yearr)->where('INDEXNO', $appNo)->sum('AMOUNT');
+        //$fee = $fee1+$fee2;
+        return $fee;
+
+
+    }
+
 
     public function getTotalPaymentByProgram($program,$level){
         $array=$this->getSemYear();
 
         $year=$array[0]->YEAR;
         $amount= \DB::table('tpoly_students')
-            ->join('tpoly_feedetails', 'tpoly_feedetails.INDEXNO', '=', 'tpoly_students.INDEXNO')
+            ->join('tpoly_feedetails', 'tpoly_feedetails.STUDENT', '=', 'tpoly_students.ID')
 
             ->where('tpoly_students.PROGRAMMECODE',$program)
             ->where('tpoly_feedetails.LEVEL',$level)
@@ -1805,7 +1892,7 @@ class SystemController extends Controller
         $total= \DB::table('tpoly_students')
             ->where('tpoly_students.PROGRAMMECODE',$program)
             ->where('tpoly_students.LEVEL',$level)
-            ->where('tpoly_students.STATUS','In School')
+            ->where('tpoly_students.STATUS','In school')
             ->sum("tpoly_students.BILL_OWING");
 
         return @$total;
@@ -1816,7 +1903,7 @@ class SystemController extends Controller
         $total= \DB::table('tpoly_students')
             ->where('tpoly_students.PROGRAMMECODE',$program)
             ->where('tpoly_students.LEVEL',$level)
-            ->where('tpoly_students.STATUS','In School')
+            ->where('tpoly_students.STATUS','In school')
             ->where("tpoly_students.BILL_OWING",">",0)
             ->count("tpoly_students.ID");
         return @$total;
@@ -2025,7 +2112,7 @@ class SystemController extends Controller
 
     }
 
-    public function getCourseMountedInfo2($courseCode,$sem,$level,$year,$program){
+public function getCourseMountedInfo2($courseCode,$sem,$level,$year,$program){
 
         $course = \DB::table('tpoly_mounted_courses')->where('COURSE_CODE',$courseCode)->where('COURSE_SEMESTER',$sem)->where('COURSE_LEVEL',$level)->where('COURSE_YEAR',$year)
             ->where("PROGRAMME",$program)
@@ -2524,7 +2611,7 @@ class SystemController extends Controller
                     $query->GUARDIAN_PHONE = $student->GURDIAN_PHONE;
                     $query->GUARDIAN_OCCUPATION = $student->GURDIAN_OCCUPATION;
                     $query->DISABILITY = $student->PHYSICALLY_DISABLED;
-                    $query->STATUS = "In School";
+                    $query->STATUS = "In school";
                     $query->SYSUPDATE = "1";
 
 
@@ -2681,7 +2768,7 @@ class SystemController extends Controller
                         $query->GUARDIAN_PHONE = $student->GURDIAN_PHONE;
                         $query->GUARDIAN_OCCUPATION = $student->GURDIAN_OCCUPATION;
                         $query->DISABILITY = $student->PHYSICALLY_DISABLED;
-                        $query->STATUS = "In School";
+                        $query->STATUS = "In school";
                         $query->SYSUPDATE = "1";
 
 
@@ -2854,7 +2941,7 @@ class SystemController extends Controller
                         $query->GUARDIAN_PHONE = $student->GURDIAN_PHONE;
                         $query->GUARDIAN_OCCUPATION = $student->GURDIAN_OCCUPATION;
                         $query->DISABILITY = $student->PHYSICALLY_DISABLED;
-                        $query->STATUS = "In School";
+                        $query->STATUS = "In school";
                         $query->SYSUPDATE = "1";
 
 
@@ -2934,7 +3021,7 @@ class SystemController extends Controller
 
     public  function getPassword($indexno)
     {
-        $data = Models\StudentModel::where("INDEXNO", $indexno)->orWhere("STNO", $indexno)->first();
+        $data = Models\StudentModel::where("STNO", $indexno)->orWhere("INDEXNO", $indexno)->first();
         $que = Models\PortalPasswordModel::where("student", $data->ID)->orWhere("username", $data->INDEXNO)->first();
         $ptype=$this->getProgrammeType($data->PROGRAMMECODE);
         if($ptype=="NON TERTIARY"){
@@ -2955,7 +3042,6 @@ class SystemController extends Controller
         $program = $data->PROGRAMMECODE;
         if (empty($que) && !empty($indexno)) {
             $studentID=$this->getStudentIDfromIndexno($indexno);
-            $stno=$this->getStudentSTNOfromIndexno($studentID);
             $str = 'abcdefhkmnprtuvwxy34678abcdefhkmnprtuvwxy34678';
             $shuffled = str_shuffle($str);
             $vcode = substr($shuffled, 0, 9);
@@ -2963,7 +3049,6 @@ class SystemController extends Controller
             $level = $level;
             Models\PortalPasswordModel::create([
                 'username' => $indexno,
-                'stno' => $stno,
                 'real_password' => $real,
                 'student' => $studentID,
                 'level' => $level,

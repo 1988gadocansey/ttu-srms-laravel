@@ -191,9 +191,8 @@
                                      <th data-priority="critical">NAME</th>
                                      <th>INDEXNO</th>
                                       <th>LEVEL</th> 
-                                      <th>SESSION TYPE</th>
                                       <th>PHONE</th>
-                                      <th>PROGRAMME</th>
+                                      <th>BALANCE B/F</th>
                                       <th>YEAR FEES</th>
                                        
                                       <th>ACCUMULATED OWING</th>
@@ -214,9 +213,9 @@
                                             
                                             <td> {{ @$row->INDEXNO }}</td>
                                             <td> {{ @$row->levels->slug }}</td>
-                                            <td> {{ @$row->TYPE }}</td>
                                              <td> {{ @$row->TELEPHONENO }}</td>
-                                            <td> {{ strtoupper(@$row->programme->PROGRAMME) }}</td>
+                                            <td> {{ @$row->BALANCE }}</td>
+                                            <td> {{ @$row->BILLS - @$row->BALANCE }}</td>
                                             <td> {{ @$row->BILLS }}</td>
                                             
                                           

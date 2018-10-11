@@ -41,7 +41,7 @@
    @inject('sys', 'App\Http\Controllers\SystemController')
   
       
-         <div class="uk-grid uk-grid-width-large-1-4 uk-grid-width-medium-1-2 uk-grid-medium uk-sortable ">
+         <div class="uk-grid uk-grid-width-large-1-4 uk-grid-width-medium-1-2 uk-grid-medium">
                  <div>
                     <div class="md-card">
                         <div class="md-card-content">
@@ -336,140 +336,126 @@
                         </div>
                    @endif
             </div> 
-         
-        
-            <!-- tasks -->
+  
+
             <div class="uk-grid" data-uk-grid-margin data-uk-grid-match="{target:'.md-card-content'}">
-                <div class="uk-width-medium-1-2">
+                
+                <div class="uk-width-medium-1-4">
                     <div class="md-card">
                         <div class="md-card-content">
                             <div class="uk-overflow-container">
                                 <table class="uk-table">
                                     <thead>
                                         <tr style="background-color: #697c9a;">
-                                            <th colspan="5" style="color: #ffffff;" class="uk-text-nowrap" >STUDENT POPULATION BY LEVEL</th>
-                                                                                        
+                                            <th colspan="2" style="color: #ffffff;" class="uk-text-nowrap" >GENDER - FEMALE</th>
+
                                         </tr>
-                                        <tr style="border-bottom-style:solid; border-bottom-color:#ffffff">
-                                            <th class="uk-text-nowrap"><strong>Level</strong></th>
-                                            <th class="uk-text-nowrap"><strong>M</strong></th>
-                                            <th class="uk-text-nowrap"><strong>F</strong></th>
-                                            
-                                            <th class="uk-text-nowrap"><strong>Total</strong></th>
-                                            <th class="uk-text-nowrap"><strong>Reg</strong></th>
-                                        </tr>
+                                        
                                     </thead>
                                     <tbody>
-                                       
-                                       <tr class="uk-table-middle" style="background-color: #e0e7f5;">
-                                            <td>Non Tertiary Level 100 </td>
-                                            <td class=''><?php $am=$sys->getStudentsTotalPerLevelAllGen('100NT','Male'); echo $am;?></td>
-                                            <td class=''><?php $af=$sys->getStudentsTotalPerLevelAllGen('100NT','Female'); echo $af;?></td>
-                                            
-                                            <td class=''><?php $at=$sys->getStudentsTotalPerLevelAll('100NT'); echo $at;?></td>
-                                            <td class=''><?php $ar=$sys->getStudentsTotalPerLevelAllRegistered('100NT'); echo $ar;?></td>
-                                        </tr>
-                                        <tr class="uk-table-middle">
-                                            <td>Non Tertiary Level 200</td>
-                                            <td class=''><?php $bm=$sys->getStudentsTotalPerLevelAllGen('200NT','Male'); echo $bm;?></td>
-                                            <td class=''><?php $bf=$sys->getStudentsTotalPerLevelAllGen('200NT','Female'); echo $bf;?></td>
-                                            
-                                            <td class=''><?php $bt=$sys->getStudentsTotalPerLevelAll('200NT'); echo $bt;?></td>
-                                            <td class=''><?php $br=$sys->getStudentsTotalPerLevelAllRegistered('200NT'); echo $br;?></td>
-                                        </tr>
-                                        <tr class="uk-table-middle" style="background-color: #e0e7f5;">
-                                            <td>Level 100 HND</td>
-                                            <td class=''><?php $cm=$sys->getStudentsTotalPerLevelAllGen('100H','Male'); echo $cm;?></td>
-                                            <td class=''><?php $cf=$sys->getStudentsTotalPerLevelAllGen('100H','Female'); echo $cf;?></td>
-                                            
-                                            <td class=''><?php $ct=$sys->getStudentsTotalPerLevelAll('100H'); echo $ct;?></td>
-                                            <td class=''><?php $cr=$sys->getStudentsTotalPerLevelAllRegistered('100H'); echo $cr;?></td>
-                                        </tr>
-                                      <tr class="uk-table-middle">
-                                            <td>Level 200 HND</td>
-                                            <td class=''><?php $dm=$sys->getStudentsTotalPerLevelAllGen('200H','Male'); echo $dm;?></td>
-                                            <td class=''><?php $df=$sys->getStudentsTotalPerLevelAllGen('200H','Female'); echo $df;?></td>
-                                            
-                                            <td class=''><?php $dt=$sys->getStudentsTotalPerLevelAll('200H'); echo $dt;?></td>
-                                            <td class=''><?php $dr=$sys->getStudentsTotalPerLevelAllRegistered('200H'); echo $dr;?></td>
-                                        </tr>
-                                      <tr class="uk-table-middle" style="background-color: #e0e7f5;">
-                                            <td>Level 300 HND</td>
-                                            <td class=''><?php $em=$sys->getStudentsTotalPerLevelAllGen('300H','Male'); echo $em;?></td>
-                                            <td class=''><?php $ef=$sys->getStudentsTotalPerLevelAllGen('300H','Female'); echo $ef;?></td>
-                                            
-                                            <td class=''><?php $et=$sys->getStudentsTotalPerLevelAll('300H'); echo $et;?></td>
-                                            <td class=''><?php $er=$sys->getStudentsTotalPerLevelAllRegistered('300H'); echo $er;?></td>
-                                        </tr>
-                                   
-                                         <tr class="uk-table-middle">
-                                            <td>Level 100 BTECH TOP UP</td>
-                                            <td class=''><?php $fm=$sys->getStudentsTotalPerLevelAllGen('100BTT','Male'); echo $fm;?></td>
-                                            <td class=''><?php $ff=$sys->getStudentsTotalPerLevelAllGen('100BTT','Female'); echo $ff;?></td>
-                                            
-                                            <td class=''><?php $ft=$sys->getStudentsTotalPerLevelAll('100BTT'); echo $ft;?></td>
-                                            <td class=''><?php $fr=$sys->getStudentsTotalPerLevelAllRegistered('100BTT'); echo $fr;?></td>
-                                        </tr>
-                                          <tr class="uk-table-middle" style="background-color: #e0e7f5;">
-                                            <td>Level 200 BTECH TOP UP</td>
-                                            <td class=''><?php $gm=$sys->getStudentsTotalPerLevelAllGen('200BTT','Male'); echo $gm;?></td>
-                                            <td class=''><?php $gf=$sys->getStudentsTotalPerLevelAllGen('200BTT','Female'); echo $gf;?></td>
-                                            
-                                            <td class=''><?php $gt=$sys->getStudentsTotalPerLevelAll('200BTT'); echo $gt;?></td>
-                                            <td class=''><?php $gr=$sys->getStudentsTotalPerLevelAllRegistered('200BTT'); echo $gr;?></td>
-                                        </tr>
-                                        <tr class="uk-table-middle">
-                                            <td>Level 100 MASTERS</td>
-                                            <td class='grey'><?php $hm=$sys->getStudentsTotalPerLevelAllGen('500MT','Male'); echo $hm;?></td>
-                                            <td class=''><?php $hf=$sys->getStudentsTotalPerLevelAllGen('500MT','Female'); echo $hf;?></td>
-                                            
-                                            <td class=''><?php $ht=$sys->getStudentsTotalPerLevelAll('500MT'); echo $ht;?></td>
-                                            <td class=''><?php $hr=$sys->getStudentsTotalPerLevelAllRegistered('500MT'); echo $hr;?></td>
-                                        </tr>
-                                        <tr class="uk-table-middle" style="background-color: #e0e7f5;">
-                                            <td>Level 200 MASTERS</td>
-                                            <td class=''><?php $im=$sys->getStudentsTotalPerLevelAllGen('600MT','Male'); echo $im;?></td>
-                                            <td class=''><?php $if=$sys->getStudentsTotalPerLevelAllGen('600MT','Female'); echo $if;?></td>
-                                            
-                                            <td class=''><?php $it=$sys->getStudentsTotalPerLevelAll('600MT'); echo $it;?></td>
-                                            <td class=''><?php $ir=$sys->getStudentsTotalPerLevelAllRegistered('600MT'); echo $ir;?></td>
-                                        </tr>
-                                        
-                                        
-                                        <tr>
-                                            <td><strong>Total</strong></td>
-                                            <td><strong><?php echo $am+$bm+$cm+$dm+$em+$fm+$gm+$hm+$im?>
-                                            </strong></td>
-                                            <td><strong><?php echo $af+$bf+$cf+$df+$ef+$ff+$gf+$hf+$if?>
-                                            </strong></td>
-                                            
-                                            <td><strong><?php echo $at+$bt+$ct+$dt+$et+$ft+$gt+$ht+$it?>
-                                            </strong></td> 
-                                            <td><strong><?php echo $ar+$br+$cr+$dr+$er+$fr+$gr+$hr+$ir?>
-                                            </strong></td>                                          
-                                        </tr>
-                                        
-                                    </tbody>
-                                      
+
+                                    <tr>
+                                        <td>        
+                                        <p>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;Freshers</p>
+                                        <input  type="text" value="{{$FemaleFresh}}" data-width="110" data-height="110" class="dial" readonly >
+                                        <br/><br/>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;Female: {{$FemaleFresh1}}
+                                            <br/>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;Male: {{$MaleFresh1}}
+                                        </td>
+
+                                        <td>
+                                        <p>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;Graduands</p>
+                                        <input  type="text" value="{{$FemaleFinal}}" data-width="110" data-height="110" class="dial" readonly >
+                                        <br/><br/>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;Female: {{$FemaleFinal1}}
+                                            <br/>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;Male: {{$MaleFinal1}}
+                                        </td>
+                                    </tr>                                        
                                     </tbody>
                                 </table>
-                                
+
                             </div>
                         </div>
                     </div>
                 </div>
-                <div class="uk-width-medium-1-2">
+                <div class="uk-width-medium-1-4">
+                    <div class="md-card">
+                        <div class="md-card-content">
+                            <div class="uk-overflow-container">
+                                <table class="uk-table">
+                                    <thead>
+                                        <tr style="background-color: #ffffff;">
+                                            <th colspan="5" style="color: #888888;" class="uk-text-nowrap" >ADMITTED - IN SCHOOL</th>
+
+                                        </tr>
+                                        
+                                    </thead>
+                                    <tbody>
+
+                                    <tr>
+                                        <td>
+                                            <div style = 'min-height: 30vh'>
+                                        <canvas id="barChartInSchool"></canvas>
+                                    </div>
+
+                                        </td>
+                                    </tr>                                    
+                                    <tr>
+                                        <td>
+                                            p = previous year &nbsp;&nbsp;&nbsp;&nbsp;c = current year
+
+
+                                        </td>
+                                    </tr>                                           
+                                    </tbody>
+                                </table>
+
+                            </div>
+                        </div>
+                    </div>
+                </div>
+                
+                <div class="uk-width-medium-1-4">
+                    <div class="md-card">
+                        <div class="md-card-content">
+                            <div class="uk-overflow-container">
+                                <table class="uk-table">
+                                    <thead>
+                                         <tr style="background-color: #ffffff;">
+                                            <th colspan="5" style="color: #888888;" class="uk-text-nowrap" >CLASS - HND 2017/2018</th>
+                                        
+                                    </thead>
+                                    <tbody>
+
+                                    <tr>
+                                        <td>
+                                            <div >
+                                        <canvas id="doughnutClass"></canvas>
+                                    </div>
+                                    
+                                
+                                        </td>
+                                    </tr>                                    
+                                    
+
+                                    </tbody>
+                                </table>
+
+                            </div>
+                        </div>
+                    </div>
+                </div>
+
+
+                <div class="uk-width-medium-1-4">
                     <div class="md-card">
                         <div class="md-card-content">
                             <div class="uk-overflow-container">
                                 <table class="uk-table">
                                     <thead>
                                         <tr style="background-color: #697c9a;">
-                                            <th colspan="5" style="color: #ffffff;" class="uk-text-nowrap" >OUR 10 BEST STUDENTS || HND LEVEL 300 || PROVISIONAL</th>
+                                            <th colspan="5" style="color: #ffffff;" class="uk-text-nowrap" >OUR BEST STUDENTS || HND 2017/2018</th>
                                                                                         
                                         </tr>
                                         <tr style="border-bottom-style:solid; border-bottom-color:#ffffff">
-                                            <th class="uk-text-nowrap"><strong>No</strong></th>
                                             <th class="uk-text-nowrap"><strong>IndexNo</strong></th>
                                             
                                             <th class="uk-text-nowrap"><strong>Program</strong></th>
@@ -481,9 +467,9 @@
 
                                         <?php
                                         $eku = 0;
-                                        while ($eku < 10 ){
+                                        while ($eku < 5 ){
 
-                                        if ($eku == 0 || $eku == 2 || $eku == 4 || $eku == 6 || $eku == 8) {
+                                        if ($eku == 0 || $eku == 2 || $eku == 4 || $eku == 6 || $eku == 8 || $eku == 10 || $eku == 12) {
                                          ?>
                                          <tr class="uk-table-middle" style="background-color: #e0e7f5;">
                                             
@@ -496,11 +482,11 @@
                                             <?php   
                                         }
                                         ?>
-                                            <td><?php echo $eku+1;?>&nbsp;&nbsp;</td>
+                                            
                                             <td><?php $am=$sys->getStudentsHighestCGPA_HND($eku);
                                             $ind=$am[0]->INDEXNO; echo $ind;?></td>
                                             <td><?php $am=$sys->getStudentsHighestCGPA_HND($eku);
-                                            $ind=$am[0]->PROGRAMME; echo $ind;?></td>
+                                            $ind=$am[0]->SLUG; echo $ind;?></td>
                                             <td><?php $am=$sys->getStudentsHighestCGPA_HND($eku);
                                             $ind=$am[0]->CGPA; echo $ind;?></td>
                                             
@@ -520,16 +506,485 @@
                         </div>
                     </div>
                 </div>
-                <div class="uk-width-medium-1-2">
+            </div>
+
+<div class="uk-grid uk-grid-width-large-1-6 uk-grid-width-xlarge-1-6 uk-grid-width-medium-1-4 uk-grid-width-small-1-2 uk-grid-medium uk-sortable" style="background-color: white; margin-left:0">
+             
+    <div>
+                    <div class="md-card-content" style="border:0.2px solid #cccccc; padding-left:30px; margin:15px; margin-left: 0;">
+                            <div class="uk-float-right uk-margin-top "><span class=""
+                                ><i class="sidebar-menu-icon material-icons md-36"style="margin-right: 15px;">book</i></span></div>
+                            <h4 class="uk-margin-remove"><span class="uk-text-small uk-text-muted "> 100 Non-Ter </span></h4>
+                            <h1 class="uk-text-bold numscroller uk-text-primary" data-min='0' data-max={{$nt100}} data-delay='5' data-increment='100' style="margin:0">{{$nt100}}</h1>
+                            
+                        
+                        </div>
+                </div>
+
+                    <div>
+                    <div class="md-card-content" style="border:0.2px solid #cccccc; padding-left:30px; margin:15px; margin-left: 0;">
+                            <div class="uk-float-right uk-margin-top "><span class="">
+                                <i class="sidebar-menu-icon material-icons md-36"style="margin-right: 15px;">school</i></span></div>
+                                <h4 class="uk-margin-remove"><span class="uk-text-small uk-text-muted "> 200 Non-Ter </span></h4>
+                            <h1 class="uk-text-bold uk-text-success counter" style="margin:0">{{$nt200}}</h1>
+                            
+                        </div>
+                </div>
+
+
+                 <div>
+                    <div id="counterRefresh" class="md-card-content" style="border:0.2px solid #cccccc; padding-left:30px; margin:15px;margin-left: 0;">
+                            <div class="uk-float-right uk-margin-top "><span class=""
+                                ><i class="sidebar-menu-icon material-icons md-36"style="margin-right: 15px;">book</i></span></div>
+                           
+                            <h4 class="uk-margin-remove"><span class="uk-text-small uk-text-muted "> 100 HND </span></h4>
+                             <h1 class="uk-text-bold numscroller uk-text-primary" data-min='0' data-max={{$hnd100}} data-delay='5' data-increment='100' style="margin:0">{{$hnd100}}</h1>
+                        </div>
+
+                </div>
+                 
+                 <div>
+                    <div class="md-card-content" style="border:0.2px solid #cccccc; padding-left:30px; margin:15px;margin-left: 0;">
+                            <div class="uk-float-right uk-margin-top "><span class=""
+                                ><i class="sidebar-menu-icon material-icons md-36"style="margin-right: 15px;">book</i></span></div>                            
+                            <h4 class="uk-margin-remove"><span class="uk-text-small uk-text-muted "> 200 HND </span></h4>
+                            <h1 class="uk-text-bold  counter" style="color: #976800;margin:0">{{$hnd200}}</h1>
+                        </div>
+                </div>
+               
+               <div>
+                    <div class="md-card-content" style="border:0.2px solid #cccccc; padding-left:30px; margin:15px;margin-left: 0;">
+                            <div class="uk-float-right uk-margin-top "><span class="">
+                                <i class="sidebar-menu-icon material-icons md-36" style="margin-right: 15px;">school</i></span></div>
+                            
+                            <h4 class="uk-margin-remove"><span class="uk-text-small uk-text-muted "> 300 HND </span></h4>
+                            <h1 class="uk-text-bold uk-text-success counter" style="margin:0">{{$hnd300}}</h1>
+                        </div>
+                </div>
+                
+              <div>
+                    <div class="md-card-content" style="border:0.2px solid #cccccc; padding-left:30px; margin:15px;margin-left: 0;">
+                            <div class="uk-float-right uk-margin-top "><span class=""
+                                ><i class="sidebar-menu-icon material-icons md-36"style="margin-right: 15px;">book</i></span></div>
+                            <h4 class="uk-margin-remove"><span class="uk-text-small uk-text-muted "> 100 BT Top up </span></h4>
+                            <h1 class="uk-text-bold numscroller uk-text-primary" data-min='0' data-max={{$btt100}} data-delay='5' data-increment='100' style="margin:0">{{$btt100}}</h1>
+                            
+                        </div>
+                </div>
+             
+    
+             
+     <div>
+                    <div class="md-card-content" style="border:0.2px solid #cccccc; padding-left:30px; margin:15px;margin-left: 0;">
+                            <div class="uk-float-right uk-margin-top "><span class="">
+                                <i class="sidebar-menu-icon material-icons md-36" style="margin-right: 15px;">school</i></span></div>
+                            <h4 class="uk-margin-remove"><span class="uk-text-small uk-text-muted "> 200 BT Top up </span></h4>
+                            <h1 class="uk-text-bold uk-text-success counter" style="margin:0">{{$btt200}}</h1>
+                            
+                        </div>
+                </div>
+
+                     <div>
+                    <div class="md-card-content" style="border:0.2px solid #cccccc; padding-left:30px; margin:15px;margin-left: 0;">
+                            <div class="uk-float-right uk-margin-top "><span class=""
+                                ><i class="sidebar-menu-icon material-icons md-36"style="margin-right: 15px;">book</i></span></div>
+                            <h4 class="uk-margin-remove"><span class="uk-text-small uk-text-muted "> 100 BT(4yrs) </span></h4>
+                            <h1 class="uk-text-bold numscroller uk-text-primary" data-min='0' data-max={{$bt100}} data-delay='5' data-increment='100' style="margin:0">{{$bt100}}</h1>
+                            
+                        </div>
+                </div>
+
+
+                  <div>
+                    <div class="md-card-content" style="border:0.2px solid #cccccc; padding-left:30px; margin:15px;margin-left: 0;">
+                            <div class="uk-float-right uk-margin-top "><span class=""
+                                ><i class="sidebar-menu-icon material-icons md-36"style="margin-right: 15px;">book</i></span></div>
+                            <h4 class="uk-margin-remove"><span class="uk-text-small uk-text-muted "> 200 BT(4yrs) </span></h4>
+                            <h1 class="uk-text-bold  counter" style="color: #976800 ;margin:0">{{$bt200}}</h1>
+                            
+                        </div>
+                </div>
+                 
+                 <div>
+                    <div class="md-card-content" style="border:0.2px solid #cccccc; padding-left:30px; margin:15px;margin-left: 0;">
+                            <div class="uk-float-right uk-margin-top "><span class="">
+                                <i class="sidebar-menu-icon material-icons md-36" style="margin-right: 15px;">school</i>
+                            </span></div>
+                            <h4 class="uk-margin-remove"><span class="uk-text-small uk-text-muted "> 300 BT(4yrs) </span></h4>
+                            <h1 class="uk-text-bold uk-text-success counter" style="margin:0">{{$bt300}}</h1>
+                            
+                        </div>
+                </div>
+               
+                <div>
+                    <div class="md-card-content" style="border:0.2px solid #cccccc; padding-left:30px; margin:15px;margin-left: 0;">
+                            <div class="uk-float-right uk-margin-top "><span class=""
+                                ><i class="sidebar-menu-icon material-icons md-36"style="margin-right: 15px;">book</i></span></div>
+                            <h4 class="uk-margin-remove"><span class="uk-text-small uk-text-muted "> 100 Masters </span></h4>
+                            <h1 class="uk-text-bold numscroller uk-text-primary" data-min='0' data-max={{$mt100}} data-delay='5' data-increment='100' style="margin:0">{{$mt100}}</h1>
+                            
+                        </div>
+                </div>
+                
+             <div>
+                    <div class="md-card-content" style="border:0.2px solid #cccccc; padding-left:30px; margin:15px;margin-left: 0;">
+                            <div class="uk-float-right uk-margin-top "><span class=""
+                                ><i class="sidebar-menu-icon material-icons md-36"style="margin-right: 15px;">school</i></span></div>
+                            <h4 class="uk-margin-remove"><span class="uk-text-small uk-text-muted "> 200 Masters </span></h4>
+                            <h1 class="uk-text-bold uk-text-success counter" style="margin:0">{{$mt200}}</h1>
+                            
+                        </div>
+                </div>
+             
+
+            </div>
+
+
+
+
+            <div class="uk-grid" data-uk-grid-margin data-uk-grid-match="{target:'.md-card-content'}">
+                <div class="uk-width-medium-2-5">
                     <div class="md-card">
                         <div class="md-card-content">
-                            <h3 class="heading_a uk-margin-bottom">Statistics</h3>
-                            <div id="ct-chart" class="chartist"></div>
+                            <div class="uk-overflow-container">
+                                <table class="uk-table">
+                                    <thead>
+                                        <tr style="background-color: #ffffff;">
+                                            <th colspan="5" style="color: #888888;" class="uk-text-nowrap" >AVERAGE PERFORMANCE</th>
+
+                                        </tr>
+                                        
+                                    </thead>
+                                    <tbody>
+
+                                    <tr>
+                                        <td>
+                                            <div style = 'min-height: 40vh'>
+                                        <canvas id="lineChartGender"></canvas>
+                                    </div>
+
+                                        </td>
+                                    </tr>                                    
+                                    <tr>
+                                        <td>
+                                            pre = previous year &nbsp;&nbsp;&nbsp;&nbsp;cur = current year
+
+
+                                        </td>
+                                    </tr>                                           
+                                    </tbody>
+                                </table>
+
+                            </div>
                         </div>
                     </div>
                 </div>
-            </div>
 
+                <div class="uk-width-medium-3-5">
+                    <div class="md-card">
+                        <div class="md-card-content">
+                            <div class="uk-overflow-container">
+                                <table class="uk-table">
+                                    <thead>
+                                        <tr style="background-color: #ffffff;">
+                                            <th colspan="5" style="color: #888888;" class="uk-text-nowrap" >CLASS BY PROGRAMME IN %</th>
+
+                                        </tr>
+                                        
+                                    </thead>
+                                    <tbody>
+
+                                    <tr>
+                                        <td>
+                                            <div style = 'min-height: 45vh'>
+                                        <canvas id="lineChart"></canvas>
+                                    </div>
+
+                                        </td>
+                                    </tr>                                    
+                                                                            
+                                    </tbody>
+                                </table>
+
+                            </div>
+                        </div>
+                    </div>
+                </div>
+                
+            </div>
+        <div class="uk-grid" data-uk-grid-margin data-uk-grid-match="{target:'.md-card-content'}">
+                
+                <div class="uk-width-medium-1-4">
+                    <div class="md-card">
+                        <div class="md-card-content">
+                            <div class="uk-overflow-container">
+                                <table class="uk-table">
+                                    <thead>
+                                        <tr style="background-color: #697c9a;">
+                                            <th colspan="5" style="color: #ffffff;" class="uk-text-nowrap" >FRESHERS - REGISTERED</th>
+                                                                                        
+                                        </tr>
+                                        <tr style="border-bottom-style:solid; border-bottom-color:#ffffff">
+                                            <th class="uk-text-nowrap"><strong>Level</strong></th>
+                                            <th class="uk-text-nowrap"><strong>Total</strong></th>
+                                            <th class="uk-text-nowrap"><strong>Reg</strong></th>
+                                        </tr>
+                                    </thead>
+                                    <tbody>
+
+                                                                      
+                                       <tr class="uk-table-middle" style="background-color: #e0e7f5;">
+                                            <td>Non tertiary </td>   
+
+                                            <td class=''><?php $at=$sys->getStudentsTotalPerLevelAll('100NT'); echo $at;?></td>
+                                            <td class=''><?php $ar=$sys->getStudentsTotalPerLevelAllRegistered('100NT'); echo $ar;?></td>
+                                        </tr>
+                                        
+                                        <tr class="uk-table-middle">
+                                            <td>HND</td>
+                                            
+                                            <td class=''><?php $ct=$sys->getStudentsTotalPerLevelAll('100H'); echo $ct;?></td>
+                                            <td class=''><?php $cr=$sys->getStudentsTotalPerLevelAllRegistered('100H'); echo $cr;?></td>
+                                        </tr>
+                                      
+
+                                         <tr class="uk-table-middle" style="background-color: #e0e7f5;">
+                                            <td>BTech top up</td>
+                                            
+                                            <td class=''><?php $ft=$sys->getStudentsTotalPerLevelAll('100BTT'); echo $ft;?></td>
+                                            <td class=''><?php $fr=$sys->getStudentsTotalPerLevelAllRegistered('100BTT'); echo $fr;?></td>
+                                        </tr>
+
+                                        <tr class="uk-table-middle">
+                                            <td>BTech (4 years)</td>
+                                            
+                                            <td class=''><?php $pt=$sys->getStudentsTotalPerLevelAll('100BT'); echo $pt;?></td>
+                                            <td class=''><?php $pr=$sys->getStudentsTotalPerLevelAllRegistered('100BT'); echo $pr;?></td>
+                                        </tr>
+                                        <tr class="uk-table-middle" style="background-color: #e0e7f5;">
+                                            <td>Masters</td>
+                                            
+                                            <td class=''><?php $ht=$sys->getStudentsTotalPerLevelAll('500MT'); echo $ht;?></td>
+                                            <td class=''><?php $hr=$sys->getStudentsTotalPerLevelAllRegistered('500MT'); echo $hr;?></td>
+                                        </tr>
+                                        <tr style="border-bottom-style:solid; border-bottom-color:#ffffff">
+                                            <th class="uk-text-nowrap"><strong>Sum</strong></th>
+                                            <th class="uk-text-nowrap"><strong><?php echo $at+$ct+$pt+$ft+$ht;?></strong></th>
+                                            <th class="uk-text-nowrap"><strong><?php echo $ar+$cr+$pr+$fr+$hr;?></strong></th>
+                                        </tr>
+                                        <tr>
+                                            <td colspan="3">Total = those who have made either full or part payment of fees</td>
+                                        </tr> 
+                                        
+                                    </tbody>
+                                </table>
+                                        
+                            </div>
+                        </div>
+                    </div>
+                </div>
+
+                <div class="uk-width-medium-1-4">
+                    <div class="md-card">
+                        <div class="md-card-content">
+                            <div class="uk-overflow-container">
+                                <table class="uk-table">
+                                    <thead>
+                                        <tr style="background-color: #697c9a;">
+                                            <th colspan="5" style="color: #ffffff;" class="uk-text-nowrap" >CONTINUING - REGISTERED</th>
+                                                                                        
+                                        </tr>
+                                        <tr style="border-bottom-style:solid; border-bottom-color:#ffffff">
+                                            <th class="uk-text-nowrap"><strong>Level</strong></th>
+                                            <th class="uk-text-nowrap"><strong>Total</strong></th>
+                                            <th class="uk-text-nowrap"><strong>Reg</strong></th>
+                                        </tr>
+                                    </thead>
+                                    <tbody>
+
+                                         
+                                        
+                                          <tr class="uk-table-middle" style="background-color: #e0e7f5;">
+                                            <td>Level 200 BTech (4 years)</td>
+                                            
+                                            <td class=''><?php $gt=$sys->getStudentsTotalPerLevelAll('200BT'); echo $gt;?></td>
+                                            <td class=''><?php $gr=$sys->getStudentsTotalPerLevelAllRegistered('200BT'); echo $gr;?></td>
+                                        </tr>
+
+                                        <tr class="uk-table-middle">
+                                            <td>Level 300 BTech (4 years)</td>
+                                            
+                                            <td class=''><?php $ft=$sys->getStudentsTotalPerLevelAll('300BT'); echo $ft;?></td>
+                                            <td class=''><?php $fr=$sys->getStudentsTotalPerLevelAllRegistered('300BT'); echo $fr;?></td>
+                                        </tr>
+                                                           
+                                        <tr class="uk-table-middle" style="background-color: #e0e7f5;">
+                                            <td>Level 200 HND</td>
+                                           
+                                            <td class=''><?php $dt=$sys->getStudentsTotalPerLevelAll('200H'); echo $dt;?></td>
+                                            <td class=''><?php $dr=$sys->getStudentsTotalPerLevelAllRegistered('200H'); echo $dr;?></td>
+                                        </tr>
+                                        <tr style="border-bottom-style:solid; border-bottom-color:#ffffff">
+                                            <th class="uk-text-nowrap"><strong>Sum</strong></th>
+                                            <th class="uk-text-nowrap"><strong><?php echo $gt+$ft+$dt;?></strong></th>
+                                            <th class="uk-text-nowrap"><strong><?php echo $gr+$fr+$dr;?></strong></th>
+                                        </tr>
+                                        <tr>
+                                            <td colspan="3">Total = those who wrote exams last semester</td>
+                                        </tr> 
+                                        
+                                    </tbody>
+                                </table>
+
+                            </div>
+                        </div>
+                    </div>
+                </div>
+
+                <div class="uk-width-medium-1-4">
+                    <div class="md-card">
+                        <div class="md-card-content">
+                            <div class="uk-overflow-container">
+                                <table class="uk-table">
+                                    <thead>
+                                        <tr style="background-color: #697c9a;">
+                                            <th colspan="5" style="color: #ffffff;" class="uk-text-nowrap" >FINAL YEAR - REGISTERED</th>
+                                                                                        
+                                        </tr>
+                                        <tr style="border-bottom-style:solid; border-bottom-color:#ffffff">
+                                            <th class="uk-text-nowrap"><strong>Level</strong></th>
+                                            <th class="uk-text-nowrap"><strong>Total</strong></th>
+                                            <th class="uk-text-nowrap"><strong>Reg</strong></th>
+                                        </tr>
+                                    </thead>
+                                    <tbody>
+
+                                                                      
+                                       <tr class="uk-table-middle" style="background-color: #e0e7f5;">
+                                            <td>Non tertiary </td>   
+
+                                            <td class=''><?php $at=$sys->getStudentsTotalPerLevelAll('200NT'); echo $at;?></td>
+                                            <td class=''><?php $ar=$sys->getStudentsTotalPerLevelAllRegistered('200NT'); echo $ar;?></td>
+                                        </tr>
+                                        
+                                        <tr class="uk-table-middle">
+                                            <td>HND</td>
+                                            
+                                            <td class=''><?php $ct=$sys->getStudentsTotalPerLevelAll('300H'); echo $ct;?></td>
+                                            <td class=''><?php $cr=$sys->getStudentsTotalPerLevelAllRegistered('300H'); echo $cr;?></td>
+                                        </tr>
+                                      
+
+                                         <tr class="uk-table-middle" style="background-color: #e0e7f5;">
+                                            <td>BTech top up</td>
+                                            
+                                            <td class=''><?php $ft=$sys->getStudentsTotalPerLevelAll('200BTT'); echo $ft;?></td>
+                                            <td class=''><?php $fr=$sys->getStudentsTotalPerLevelAllRegistered('200BTT'); echo $fr;?></td>
+                                        </tr>
+
+                                        <tr class="uk-table-middle">
+                                            <td>BTech (4 years)</td>
+                                            
+                                            <td class=''><?php $pt=$sys->getStudentsTotalPerLevelAll('400BT'); echo $pt;?></td>
+                                            <td class=''><?php $pr=$sys->getStudentsTotalPerLevelAllRegistered('400BT'); echo $pr;?></td>
+                                        </tr>
+                                        <tr class="uk-table-middle" style="background-color: #e0e7f5;">
+                                            <td>Masters</td>
+                                            
+                                            <td class=''><?php $ht=$sys->getStudentsTotalPerLevelAll('600MT'); echo $ht;?></td>
+                                            <td class=''><?php $hr=$sys->getStudentsTotalPerLevelAllRegistered('600MT'); echo $hr;?></td>
+                                        </tr>
+                                        <tr style="border-bottom-style:solid; border-bottom-color:#ffffff">
+                                            <th class="uk-text-nowrap"><strong>Sum</strong></th>
+                                            <th class="uk-text-nowrap"><strong><?php echo $at+$ct+$pt+$ft+$ht;?></strong></th>
+                                            <th class="uk-text-nowrap"><strong><?php echo $ar+$cr+$pr+$fr+$hr;?></strong></th>
+                                        </tr>
+                                          
+                                        <tr>
+                                            <td colspan="3">Total = those who wrote exams last semester</td>
+                                        </tr> 
+                                    </tbody>
+                                </table>
+
+                            </div>
+                        </div>
+                    </div>
+                </div>
+
+                <div class="uk-width-medium-1-4">
+                    <div class="md-card">
+                        <div class="md-card-content">
+                            <div class="uk-overflow-container">
+                                <table class="uk-table">
+                                    <thead>
+                                        <tr style="background-color: #697c9a;">
+                                            <th colspan="5" style="color: #ffffff;" class="uk-text-nowrap" >GRADUANDS</th>
+                                                                                        
+                                        </tr>
+                                        <tr style="border-bottom-style:solid; border-bottom-color:#ffffff">
+                                            <th class="uk-text-nowrap"><strong>Level</strong></th>
+                                            <th class="uk-text-nowrap"><strong>M</strong></th>
+                                            <th class="uk-text-nowrap"><strong>F</strong></th>
+                                            <th class="uk-text-nowrap"><strong>T</strong></th>
+                                        </tr>
+                                    </thead>
+                                    <tbody>
+
+                                                                      
+                                       <tr class="uk-table-middle" style="background-color: #e0e7f5;">
+                                            <td>Non tertiary </td>
+                                            <td class=''><?php $am=$sys->getStudentsTotalPerLevelAllGenGrad('200NT','Male','2017/2018'); echo $am;?></td>
+                                            <td class=''><?php $af=$sys->getStudentsTotalPerLevelAllGenGrad('200NT','Female','2017/2018'); echo $af;?></td>
+                                            <td class=''><?php $at=$sys->getStudentsTotalPerLevelAllGrad('200NT','2017/2018'); echo $at;?></td>
+                                        </tr>
+                                        
+                                        <tr class="uk-table-middle">
+                                            <td>HND</td>
+                                            <td class=''><?php $cm=$sys->getStudentsTotalPerLevelAllGenGrad('300H','Male','2017/2018'); echo $cm;?></td>
+                                            <td class=''><?php $cf=$sys->getStudentsTotalPerLevelAllGenGrad('300H','Female','2017/2018'); echo $cf;?></td>
+                                            <td class=''><?php $ct=$sys->getStudentsTotalPerLevelAllGrad('300H','2017/2018'); echo $ct;?></td>
+                                        </tr>
+                                      
+
+                                         <tr class="uk-table-middle" style="background-color: #e0e7f5;">
+                                            <td>BTech top up</td>
+                                            <td class=''><?php $bm=$sys->getStudentsTotalPerLevelAllGenGrad('200BTT','Male','2017/2018'); echo $bm;?></td>
+                                            <td class=''><?php $bf=$sys->getStudentsTotalPerLevelAllGenGrad('200BTT','Female','2017/2018'); echo $bf;?></td>
+                                            <td class=''><?php $bt=$sys->getStudentsTotalPerLevelAllGrad('200BTT','2017/2018'); echo $bt;?></td>
+                                        </tr>
+
+                                        <tr class="uk-table-middle">
+                                            <td>BTech (4 years)</td>
+                                            <td class=''><?php $dm=$sys->getStudentsTotalPerLevelAllGenGrad('400BT','Male','2017/2018'); echo $dm;?></td>
+                                            <td class=''><?php $df=$sys->getStudentsTotalPerLevelAllGenGrad('400BT','Female','2017/2018'); echo $df;?></td>
+                                            <td class=''><?php $dt=$sys->getStudentsTotalPerLevelAllGrad('400BT','2017/2018'); echo $dt;?></td>
+                                        </tr>
+                                        <tr class="uk-table-middle" style="background-color: #e0e7f5;">
+                                            <td>Masters</td>
+                                            <td class=''><?php $em=$sys->getStudentsTotalPerLevelAllGenGrad('600MT','Male','2017/2018'); echo $em;?></td>
+                                            <td class=''><?php $ef=$sys->getStudentsTotalPerLevelAllGenGrad('600MT','Female','2017/2018'); echo $ef;?></td>
+                                            <td class=''><?php $et=$sys->getStudentsTotalPerLevelAllGrad('600MT','2017/2018'); echo $et;?></td>
+                                        </tr>
+                                        <tr style="border-bottom-style:solid; border-bottom-color:#ffffff">
+                                            <th class="uk-text-nowrap"><strong>Sum</strong></th>
+                                            <th class="uk-text-nowrap"><strong><?php echo $am+$bm+$cm+$dm+$em;?></strong></th>
+                                            <th class="uk-text-nowrap"><strong><?php echo $af+$bf+$cf+$df+$ef;?></strong></th>
+                                            <th class="uk-text-nowrap"><strong><?php echo $at+$bt+$ct+$et+$dt;?></strong></th>
+                                        </tr>
+                                          
+                                        <tr>
+                                            <td colspan="3">Total = those who wrote exams last semester</td>
+                                        </tr> 
+                                    </tbody>
+                                </table>
+
+                            </div>
+                        </div>
+                    </div>
+                </div>
+
+            </div>
+                       
           
 @endsection
 @section('js')
@@ -557,5 +1012,540 @@
 
         <!--  dashbord functions -->
         <script src="public/assets/js/pages/dashboard.min.js"></script>
+        <script src="https://cdnjs.cloudflare.com/ajax/libs/Counter-Up/1.0.0/jquery.counterup.js"></script>
+    <script src="jquery.counterup.min.js"></script>
+
+
+ <script src=https://cdnjs.cloudflare.com/ajax/libs/Chart.js/2.7.1/Chart.min.js charset=utf-8></script>
+ <script src="https://cdnjs.cloudflare.com/ajax/libs/jQuery-Knob/1.2.13/jquery.knob.min.js"></script>
+<script>
+    var newTotalArray = new Array();
+    var newTotalMale = new Array();
+    var newTotalFemale = new Array();
+    var years = new Array();
+    var newPrgramClass = new Array();
+    var new1stClass = new Array();
+    var new2ndUClass = new Array();
+    var new2ndLClass = new Array();
+    var newPassClass = new Array();
+    var newFailClass = new Array();
+    <?php
+    foreach($prgram1stClass as $key=> $val){?>
+    new1stClass.push('<?php echo $val; ?>');
+    <?php    }
+
+
+    ?>
+    <?php
+    foreach($prgram2ndUClass as $key=> $val){?>
+    new2ndUClass.push('<?php echo $val; ?>');
+    <?php    }
+
+
+    ?>
+    <?php
+    foreach($prgram2ndLClass as $key=> $val){?>
+    new2ndLClass.push('<?php echo $val; ?>');
+    <?php    }
+
+
+    ?>
+    <?php
+    foreach($prgramPassClass as $key=> $val){?>
+    newPassClass.push('<?php echo $val; ?>');
+    <?php    }
+
+
+    ?>
+    <?php
+    foreach($prgramFailClass as $key=> $val){?>
+    newFailClass.push('<?php echo $val; ?>');
+    <?php    }
+
+
+    ?>
+    <?php
+    foreach($totalYearTotal as $key=> $val){?>
+    newTotalArray.push('<?php echo $val; ?>');
+    <?php    }
+
+
+    ?>
+
+    <?php
+    foreach($totalMalePerYear as $key=> $val){?>
+    newTotalMale.push('<?php echo $val; ?>');
+    <?php    }
+
+
+    ?>
+
+    <?php
+    foreach($totalFemalePerYear as $key=> $val){?>
+    newTotalFemale.push('<?php echo $val; ?>');
+    <?php    }
+
+
+    ?>
+
+
+    <?php
+    foreach($prgramClass as $key=> $val){?>
+    newPrgramClass.push('<?php echo $val; ?>');
+    <?php    }
+
+
+    ?>
+
+    <?php
+    foreach($yearData as $key=> $val){?>
+    years.push('<?php echo $val; ?>');
+    <?php    }
+
+
+        ?>
+
+    
+
+var stClass = '<?php echo  $stClass; ?>';
+var ndClassU = '<?php echo  $ndClassU; ?>';
+var ndClassL = '<?php echo  $ndClassL; ?>';
+var pass = '<?php echo  $pass; ?>';
+var fail = '<?php echo  $fail; ?>';
+
+var admitPreviousHnd = '<?php echo $admitPreviousHnd;?>';
+var admitPreviousBtt = '<?php echo $admitPreviousBtt;?>';
+var admitPreviousBt = '<?php echo $admitPreviousBt;?>';
+var admitPreviousNt = '<?php echo $admitPreviousNt;?>';
+var admitPreviousMt = '<?php echo $admitPreviousMt;?>';
+
+var admitCurrentHnd = '<?php echo $admitCurrentHnd;?>';
+var admitCurrentBtt = '<?php echo $admitCurrentBtt;?>';
+var admitCurrentBt = '<?php echo $admitCurrentBt;?>';
+var admitCurrentNt = '<?php echo $admitCurrentNt;?>';
+var admitCurrentMt = '<?php echo $admitCurrentMt;?>';
+
+var currentTotal = '<?php echo $currentTotal;?>';
+var previousTotal = '<?php echo $previousTotal;?>';
+
+     
+     
+ 
+$(function() {
+        $(".dial").knob();
+    });                            
+
+        window.onload = function() {
+        //lineChart.canvas.parentNode.style.height = '128px';
+        const ctx = document.getElementById("lineChart").getContext("2d");
+        //ctx.height = '100px';
+        window.myBar = new Chart(ctx, {
+            type: 'bar',
+            data: {
+                labels: newPrgramClass,
+                datasets: [
+                    {
+                        label: "1st",
+                        fill: true,
+                        lineTension: 0.0,
+                        borderWidth:0,
+                        backgroundColor: "rgba(132,236,142,0.8)",
+                        borderColor: "rgba(132,236,142,1)",
+                        borderCapStyle: 'butt',
+                        borderDash: [],
+                        BorderDashOffset: 0.0,
+                        borderJoinStyle: 'miter',
+                        pointBorderColor: "rgba(132,236,142,1)",
+                        pointHoverRadius: 5,
+                        pointHoverBackgroundColor: "rgba(132,236,142,1)",
+                        pointHoverBorderColor: "rgba(220,220,220,1)",
+                        pointHitRadius: 10,
+                        pointBorderWidth: 1,
+                        pointRadius: 1,
+                        data: new1stClass,
+                    },
+
+                    {
+                        label: "2nd U",
+                        fill: true,
+                        lineTension: 0.0,
+                        borderWidth:0,
+                        backgroundColor: "rgba(209,211,41,0.8)",
+                        borderColor: "rgba(209,211,41,1)",
+                        borderCapStyle: 'butt',
+                        borderDash: [],
+                        BorderDashOffset: 0.0,
+                        borderJoinStyle: 'miter',
+                        pointBorderColor: "rgba(209,211,41,1)",
+                        pointHoverRadius: 5,
+                        pointHoverBackgroundColor: "rgba(209,211,41,1)",
+                        pointHoverBorderColor: "rgba(220,220,220,1)",
+                        pointHitRadius: 10,
+                        pointBorderWidth: 1,
+                        pointRadius: 1,
+                        data: new2ndUClass,
+                    },
+
+                    {
+                        label: "2nd L",
+                        fill: true,
+                        lineTension: 0.0,
+                        borderWidth:0,
+                        backgroundColor: "rgba(132,132,236,0.8)",
+                        borderColor: "rgba(132,132,236,1)",
+                        borderCapStyle: 'butt',
+                        borderDash: [],
+                        BorderDashOffset: 0.0,
+                        borderJoinStyle: 'miter',
+                        pointBorderColor: "rgba(132,132,236,1)",
+                        pointHoverRadius: 5,
+                        pointHoverBackgroundColor: "rgba(132,132,236,1)",
+                        pointHoverBorderColor: "rgba(220,220,220,1)",
+                        pointHitRadius: 10,
+                        pointBorderWidth: 1,
+                        pointRadius: 1,
+                        data: new2ndLClass,
+                    },
+
+                    {
+                        label: "Pass",
+                        fill: true,
+                        lineTension: 0.0,
+                        borderWidth:0,
+                        backgroundColor: "rgba(158,139,41,0.8)",
+                        borderColor: "rgba(158,139,41,1)",
+                        borderCapStyle: 'butt',
+                        borderDash: [],
+                        BorderDashOffset: 0.0,
+                        borderJoinStyle: 'miter',
+                        pointBorderColor: "rgba(158,139,41,1)",
+                        pointHoverRadius: 5,
+                        pointHoverBackgroundColor: "rgba(158,139,41,1)",
+                        pointHoverBorderColor: "rgba(250,20,20,1)",
+                        pointHitRadius: 10,
+                        pointBorderWidth: 1,
+                        pointRadius: 1,
+                        data: newPassClass,
+                    },
+
+                    {
+                        label: "Fail",
+                        fill: true,
+                        lineTension: 0.0,
+                        borderWidth:0,
+                        backgroundColor: "rgba(253,41,41,0.8)",
+                        borderColor: "rgba(253,41,41,1)",
+                        borderCapStyle: 'butt',
+                        borderDash: [],
+                        BorderDashOffset: 0.0,
+                        borderJoinStyle: 'miter',
+                        pointBorderColor: "rgba(253,41,41,1)",
+                        pointHoverRadius: 5,
+                        pointHoverBackgroundColor: "rgba(253,41,41,1)",
+                        pointHoverBorderColor: "rgba(220,220,220,1)",
+                        pointHitRadius: 10,
+                        pointBorderWidth: 1,
+                        pointRadius: 1,
+                        data: newFailClass,
+                    }
+                ]
+            },
+            options: { maintainAspectRatio: false,
+                legend: {
+                    position : 'bottom',
+                    labels: {
+                    boxWidth: 20,
+                    padding: 20,
+                    }
+                },
+                scales:{
+                    xAxes: [{
+                        stacked: true,
+                        ticks: {
+                            display: false
+                        }
+                            }],
+                    yAxes:[{
+                        stacked: true,
+                        ticks: {
+                            beginAtZero: true
+                        }
+                    }]
+                }
+            }
+        })
+
+         const ctxGender = document.getElementById("lineChartGender").getContext("2d");
+         //ctx.height = '100px';
+         window.myBar = new Chart(ctxGender, {
+             type: 'line',
+             data: {
+                 labels: years,
+                 datasets: [
+                     {
+                         label: "Male",
+                         fill: true,
+                         lineTension: 0.0,
+                         borderWidth:0,
+                         backgroundColor: "rgba(255,255,255,0.2)",
+                         borderColor: "rgba(132,236,142,1)",
+                         borderCapStyle: 'butt',
+                         borderDash: [],
+                         BorderDashOffset: 0.0,
+                         borderJoinStyle: 'miter',
+                         pointBorderColor: "rgba(132,236,142,1)",
+                         pointHoverRadius: 5,
+                         pointHoverBackgroundColor: "rgba(132,236,142,1)",
+                         pointHoverBorderColor: "rgba(220,220,220,1)",
+                         pointHitRadius: 10,
+                         pointBorderWidth: 1,
+                         pointRadius: 1,
+                         data: newTotalMale,
+                     },
+
+                     {
+                         label: "Female",
+                         fill: true,
+                         lineTension: 0.0,
+                         borderWidth:0,
+                         backgroundColor: "rgba(255,255,255,0.2)",
+                         borderColor: "rgba(132,132,236,1)",
+                         borderCapStyle: 'butt',
+                         borderDash: [],
+                         BorderDashOffset: 0.0,
+                         borderJoinStyle: 'miter',
+                         pointBorderColor: "rgba(132,132,236,1)",
+                         pointHoverRadius: 5,
+                         pointHoverBackgroundColor: "rgba(132,132,236,1)",
+                         pointHoverBorderColor: "rgba(220,220,220,1)",
+                         pointHitRadius: 10,
+                         pointBorderWidth: 1,
+                         pointRadius: 1,
+                         data: newTotalFemale,
+                     },
+
+                     {
+                         label: "Total",
+                         fill: true,
+                         lineTension: 0.0,
+                         borderWidth:0,
+                         backgroundColor: "rgba(255,255,255,0.2)",
+                         borderColor: "rgba(236,147,132,1)",
+                         borderCapStyle: 'butt',
+                         borderDash: [],
+                         BorderDashOffset: 0.0,
+                         borderJoinStyle: 'miter',
+                         pointBorderColor: "rgba(236,147,132,1)",
+                         pointHoverRadius: 5,
+                         pointHoverBackgroundColor: "rgba(236,147,132,1)",
+                         pointHoverBorderColor: "rgba(250,20,20,1)",
+                         pointHitRadius: 10,
+                         pointBorderWidth: 1,
+                         pointRadius: 1,
+                         data: newTotalArray,
+                     }
+                 ]
+             },
+             options: { maintainAspectRatio: false,
+                 legend: {
+                     position : 'bottom',
+                     labels: {
+                     boxWidth: 20,
+                     padding: 20,
+                     }
+                 },
+                 scales:{
+                     yAxes:[{
+                         ticks: {
+                             beginAtZero: true
+                         }
+                     }]
+                 }
+             }
+         })
+
+         const ctx1 = document.getElementById("doughnutClass").getContext("2d");
+        window.myBar = new Chart(ctx1, {
+            type: 'doughnut',
+            data: {
+    datasets: [{
+        data: [stClass, ndClassU, ndClassL, pass, fail],
+        backgroundColor:['#a9ec84','#cdec84','#ecda84','#ecb584','#ec8484']
+    }],
+
+    // These labels appear in the legend and in the tooltips when hovering different arcs
+    labels: [
+        '1st',
+        '2nd U',
+        '2nd L',
+        'Pass',
+        'Fail'
+    ]
+},
+options:{
+     legend: {
+                    position : 'left',
+                    labels: {
+                    boxWidth: 20,
+                    
+                    }
+                },
+}
+            
+        })
+
+
+        const ctx3 = document.getElementById("barChartInSchool").getContext("2d");
+        window.myBar = new Chart(ctx3, {
+            type: 'bar',
+            data: {
+                labels: ['p ('+ previousTotal +')', 'c ('+ currentTotal +')'],
+                datasets: [
+                    {
+                        label: "Non-Ter",
+                        fill: true,
+                        lineTension: 0.0,
+                        borderWidth: 0,
+                        backgroundColor: "rgba(87,156,215,0.8)",
+                        borderColor: "rgba(87,156,215,1)",
+                        borderCapStyle: 'butt',
+                        borderDash: [],
+                        BorderDashOffset: 0.0,
+                        borderJoinStyle: 'miter',
+                        pointBorderColor: "rgba(87,156,215,1)",
+                        pointHoverRadius: 5,
+                        pointHoverBackgroundColor: "rgba(87,156,215,1)",
+                        pointHoverBorderColor: "rgba(220,220,220,1)",
+                        pointHitRadius: 10,
+                        pointBorderWidth: 1,
+                        pointRadius: 1,
+                        data: [admitPreviousNt,admitCurrentNt],
+
+                    },
+
+                    {
+                        label: "HND",
+                        fill: true,
+                        lineTension: 0.0,
+                        borderWidth: 0,
+                        backgroundColor: "rgba(237,125,49,0.8)",
+                        borderColor: "rgba(237,125,49,1)",
+                        borderCapStyle: 'butt',
+                        borderDash: [],
+                        BorderDashOffset: 0.0,
+                        borderJoinStyle: 'miter',
+                        pointBorderColor: "rgba(237,125,49,1)",
+                        pointHoverRadius: 5,
+                        pointHoverBackgroundColor: "rgba(237,125,49,1)",
+                        pointHoverBorderColor: "rgba(220,220,220,1)",
+                        pointHitRadius: 10,
+                        pointBorderWidth: 1,
+                        pointRadius: 1,
+                        data: [admitPreviousHnd,admitCurrentHnd],
+                    },
+
+                    {
+                        label: "BTT",
+                        fill: true,
+                        lineTension: 0.0,
+                        borderWidth: 0,
+                        backgroundColor: "rgba(165,165,165,0.8)",
+                        borderColor: "rgba(165,165,165,1)",
+                        borderCapStyle: 'butt',
+                        borderDash: [],
+                        BorderDashOffset: 0.0,
+                        borderJoinStyle: 'miter',
+                        pointBorderColor: "rgba(165,165,165,1)",
+                        pointHoverRadius: 5,
+                        pointHoverBackgroundColor: "rgba(165,165,165,1)",
+                        pointHoverBorderColor: "rgba(220,220,220,1)",
+                        pointHitRadius: 10,
+                        pointBorderWidth: 1,
+                        pointRadius: 1,
+                        data: [admitPreviousBtt,admitCurrentBtt],
+                    },
+
+                    {
+                        label: "BT(4yrs)",
+                        fill: true,
+                        lineTension: 0.0,
+                        borderWidth: 0,
+                        backgroundColor: "rgba(255,192,0,0.8)",
+                        borderColor: "rgba(255,192,0,1)",
+                        borderCapStyle: 'butt',
+                        borderDash: [],
+                        BorderDashOffset: 0.0,
+                        borderJoinStyle: 'miter',
+                        pointBorderColor: "rgba(255,192,0,1)",
+                        pointHoverRadius: 5,
+                        pointHoverBackgroundColor: "rgba(255,192,0,1)",
+                        pointHoverBorderColor: "rgba(220,220,220,1)",
+                        pointHitRadius: 10,
+                        pointBorderWidth: 1,
+                        pointRadius: 1,
+                        data: [admitPreviousBt,admitCurrentBt],
+                    },
+
+                    {
+                        label: "Mst",
+                        fill: true,
+                        lineTension: 0.0,
+                        borderWidth: 0,
+                        backgroundColor: "rgba(126,213,88,0.8)",
+                        borderColor: "rgba(126,213,88,1)",
+                        borderCapStyle: 'butt',
+                        borderDash: [],
+                        BorderDashOffset: 0.0,
+                        borderJoinStyle: 'miter',
+                        pointBorderColor: "rgba(126,213,88,1)",
+                        pointHoverRadius: 5,
+                        pointHoverBackgroundColor: "rgba(126,213,88,1)",
+                        pointHoverBorderColor: "rgba(250,20,20,1)",
+                        pointHitRadius: 10,
+                        pointBorderWidth: 1,
+                        pointRadius: 1,
+                        data: [admitPreviousMt,admitCurrentMt],
+                    }
+                ]
+            },
+            options: { maintainAspectRatio: false,
+                legend: {
+                    position : 'right',
+                    labels: {
+                    boxWidth: 20,
+                    padding:7,
+                    }
+                },
+                scales:{
+                    xAxes: [{
+                        stacked: true
+                            }],
+                    yAxes:[{
+                        stacked: true,
+                        ticks: {
+                            beginAtZero: true
+                        }
+                    }]
+                }
+            }
+        })
+    }
+
+    // $('.counter').counterUp({
+                
+    //       });
+</script>
+
+<script type="text/javascript">
+    setInterval(function(){
+
+       location.reload("true"); 
+    }, 600000)
+
+
+    /* setInterval(function(){
+        $("#counterRefresh").load("dashboard");
+    // }, 2000)*/
+</script>
  
 @endsection

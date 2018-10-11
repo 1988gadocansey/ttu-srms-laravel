@@ -286,6 +286,8 @@
                                 <li><a href='{!! url("/print/receipt") !!}'>Print Fee Receipt</a></li>
                                 <li><a href='{!! url("/print/password") !!}'>Print Password Receipt</a></li>
                                 <li><a href='{!! url("view_payments") !!}'>Payments Ledger</a></li>
+                                    
+                                    <li><a href='{!! url("view_payments_master") !!}'>Payments (sum)</a></li>
                                 <li><a href='{!! url("pay_fees_penalty") !!}'>Late Registration payment</a></li>
                                 <li><a href='{!! url("/attendanceSheet") !!}'>Exam Attendance Sheet</a></li>
                             </ul>
@@ -438,6 +440,7 @@
                                     <li><a href='{!! url("/nservice") !!}'>National Service</a></li>
                                     <li><a href='{!! url("/attendanceSheet") !!}'>Exam Attendance Sheet</a></li>
                                     <li><a href='{!! url("/student/resit") !!}'>Resit List</a></li>
+                                    <li><a href='{!! url("/download_id_cards") !!}'>ID Card List</a></li>
                                 </ul>
                             </div>
                         </li>
@@ -466,7 +469,7 @@
                             <div class="uk-dropdown uk-dropdown-scrollable">
                                 <ul class="uk-nav uk-nav-dropdown">
                                     <li><a href='{!! url("/transcript") !!}' target="_blank">Transcript</a></li>
-                                    <li><a href='{!! url("admissions/statistics/comprehensive") !!}'>Applied/Registered</a></li>
+                                  {{--  <li><a href='{!! url("admissions/statistics/comprehensive") !!}'>Applied/Registered</a></li>--}}
                                     <li><a href='{!! url("/report/registration") !!}'>Registration</a></li>
                                     <li><a href='{!! url("/broadsheet/noticeboard") !!}'>GPA Academic Board</a></li>
                                     <li><a href='{!! url("/broadsheet/napbtex") !!}'>Broadsheet Nabptex</a></li>
@@ -496,7 +499,7 @@
                                     <li><a href='{!! url("/attendanceSheet") !!}'>Exam Attendance Sheet</a></li>
                                     <li><a href='{!! url("/student/resit") !!}'>Resit List</a></li>
 
-                                    <li><a href='{!! url("/finance/protocol") !!}'>Protocols/Policies</a></li>
+                                   
 
 
                                 </ul>
@@ -539,7 +542,6 @@
                                     <li><a href='{!! url("/upload/courses") !!}'>Upload Bulk Courses</a></li>
                                     <li><a href='{!! url("/upload/mounted") !!}'>Upload Bulk Mounted Courses</a></li>
                                     
-                                    <li><a href='{!! url("/finance/upload") !!}'>Upload Students Fees Balance</a></li>
                                     <li><a href='{!! url("/resit") !!}'>Upload Resit</a></li>
                                     <li><a href='{!! url("/getStaffCSV") !!}'>Upload Staff Data</a></li>
 
@@ -554,7 +556,7 @@
                             <a href="#"><i class="sidebar-menu-icon material-icons md-18">control_point</i><span>Mount/Add</span></a>
                             <div class="uk-dropdown uk-dropdown-scrollable">
                                 <ul class="uk-nav uk-nav-dropdown">
-                                    <li><a href='{!! url("/add_students") !!}'>Add Students</a></li>
+                                    
                                     <li><a href='{!! url("/create_grade") !!}'>Create Grading System</a></li>
                                     <li><a href='{!! url("/classes/create") !!}'>Create Classing System</a></li>
                                     <li><a href='{!! url("/registered_courses") !!}'>Enter Semester Marks</a></li>
@@ -563,8 +565,7 @@
                                     <li><a href='{!! url("/create_course") !!}'>Add Courses</a></li>
                                     <li><a href='{!! url("/mount_course") !!}'>Mount Courses</a></li>
                                     <li><a href='{!! url("/system/registration/batch") !!}'>Bulk Registration</a></li>
-                                    <li><a href='{!! url("/add_staff") !!}'>Add Staff</a></li>
-                                    <li><a href='{!! url("/power_users") !!}'>Add Staff 2</a></li>
+                                    
                                 </ul>
                             </div>
                         </li>
@@ -606,16 +607,19 @@
 
                                     <li><a href='{!! url("/students") !!}'>Students</a></li>
                                     <li><a href='{!! url("/nservice") !!}'>National Service</a></li>
-                                    <li><a href='{!! url("/transcript") !!}' target="_blank">Transcript</a></li>
-                                    <li><a href='{!! url("/search_password") !!}'>Search student password</a></li>
+                                    <li><a href='{!! url("/download_id_cards") !!}'>ID Card List</a></li>
+                                    
                                     <li><a href='{!! url("/download_registered") !!}'>Download Excel Sheet</a></li>
                                     <li><a href='{!! url("/download_results") !!}'>Excel NABPTEX</a></li>
+                                    <li><a href='{!! url("/download_error") !!}'>Error NABPTEX</a></li>
                                     <li><a href='{!! url("/attendanceSheet") !!}'>Exam Attendance Sheet</a></li>
                                     <li><a href='{!! url("/student/resit") !!}'>Resit List</a></li>
                                     <li><a href='{!! url("/systems/grades/recover") !!}'>Recover Deleted grades</a></li>
                                     <li><a href='{!! url("/systems/grades/delete") !!}'>Delete uploaded grades</a></li>
 
                                     <li><a href='{!! url("/finance/protocol") !!}'>Protocols/Policies</a></li>
+                                    <li><a href='{!! url("/finance/status") !!}'>Update Status / Level</a></li>
+                                    <li><a href='{!! url("/finance/chapro") !!}'>Update Program</a></li>
                                     <li><a href='{!! url("/updatePassword") !!}'>Reset Staff Password</a></li>
                                     <li><a href='{!! url("/calender") !!}'>Academic Calender</a></li>
                                 </ul>
@@ -657,13 +661,13 @@
                                     <li><a href='{!! url("/upload/fees") !!}'>Bank Fees Upload</a></li>
                                     <li><a href='{!! url("banks") !!}'>View Banks</a></li>
                                     <li><a href='{!! url("view_payments") !!}'>Payments Ledger</a></li>
-                                    <li><a href='{!! url("view_payments") !!}'>Transactions Ledger</a></li>
-                                    <li><a href='{!! url("view_payments_master") !!}'>Master Fee Payment Report</a></li>
+                                    
+                                    <li><a href='{!! url("view_payments_master") !!}'>Payments (sum)</a></li>
                                     <li><a href='{!! url("owing_paid") !!}'>Owing reports</a></li>
                                     <li><a href='{!! url("pay_fees") !!}'>Pay Fees</a></li>
                                     <li><a href='{!! url("/print/receipt") !!}'>Print Fee Receipt</a></li>
                                     <li><a href='{!! url("/print/password") !!}'>Print Password Receipt</a></li>
-                                    <li><a href='{!! url("view_payments") !!}'>Payments Ledger</a></li>
+
                                     <li><a href='{!! url("pay_fees_penalty") !!}'>Late Registration payment</a></li>
 
 
@@ -796,8 +800,8 @@
                                     <li><a href='{!! url("/finance/reports/fees/") !!}'>View Fees</a></li>
                                     <li><a href='{!! url("banks") !!}'>View Banks</a></li>
                                     <li><a href='{!! url("view_payments") !!}'>Payments Ledger</a></li>
-                                    <li><a href='{!! url("view_payments") !!}'>Transactions Ledger</a></li>
-                                    <li><a href='{!! url("view_payments_master") !!}'>Master Fee Payment Report</a></li>
+                                    
+                                    <li><a href='{!! url("view_payments_master") !!}'>Payments (sum)</a></li>
                                     <li><a href='{!! url("owing_paid") !!}'>Owing reports</a></li>
 
 
@@ -828,7 +832,7 @@
                     @endif
 
 
-                    @if( @Auth::user()->role=='Support' )
+                    @if( @Auth::user()->role=='Support' || @Auth::user()->role=='Registrar')
 
                         <li data-uk-dropdown class="uk-hidden-small">
 
@@ -1052,6 +1056,8 @@
                                     <li><a href='{!! url("/transcript") !!}' target="_blank">Transcript</a></li>
                                     <li><a href='{!! url("/broadsheet/noticeboard") !!}'>GPA Academic Board</a></li>
                                     <li><a href='{!! url("/report/registration") !!}'>Registration</a></li>
+                                    <li><a href='{!! url("/download_results") !!}'>Excel NABPTEX</a></li>
+                                    <li><a href='{!! url("/student/resit") !!}'>Resit List</a></li>
                                 </ul>
                             </div>
                         </li>
@@ -1291,6 +1297,7 @@
 <script src="{!! url('public/datatables/js/dataTables.uikit.min.js') !!}"></script>
 <script src="{!! url('public/datatables/js/plugins_datatables.min.js') !!}"></script>
 <script src="{!! url('public/datatables/js/datatables_uikit.min.js') !!}"></script>
+<script src="{!! url('public/assets/js/numscroller.js') !!}"></script>
 
 <script>
     $(function() {
@@ -1550,8 +1557,15 @@
     function recalculateSum()
     {
         var num1 = parseFloat(document.getElementById("pay").value);
+        if(isNaN(num1)){
+        var num1 = 0;
+        }else{
+        var num1 = parseFloat(document.getElementById("pay").value);
+        }
         var num2 = parseFloat(document.getElementById("bill").value);
-        document.getElementById("amount_left").value = (num2 - num1);
+        var num3 = parseFloat(document.getElementById("totalbill").value);
+        var num4 = parseFloat(document.getElementById("financesum").value);
+        document.getElementById("amount_left").value = (num3 - num4 - num1);
     }
     function MM_openBrWindow(theURL, winName, features) { //v2.0
         window.open(theURL, winName, features);

@@ -277,7 +277,7 @@ class StaffController extends Controller
 
             $query->staffID = $staffNo;
 
-
+            $query->fullName = $name;
             $query->phone = $phone;
             $query->department = $department;
 
@@ -292,7 +292,7 @@ class StaffController extends Controller
 
                 User::create([
                     'name' => $name,
-                     //'fullName' => $name,
+                    //'fullName' => $name,
                     'department' =>$department,
                     'fund'=>$staffNo,
                     'staffID' =>$query->id,

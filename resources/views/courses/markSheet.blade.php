@@ -127,7 +127,7 @@ border-radius: 0;
      
          
      <div class="uk-alert uk-alert-info " style="text-transform: uppercase">
-                <center> <p>Course:<b> {!! $course !!}</b> |  Total Students = <b> {!! $total !!}  |  Academic Year = <b> {!! $year !!} |  Semester = <b> {!! $sem !!} sem</center></p>
+                <center> <p>Course:<b> {!! $course !!}</b> ||  Total Students: <b> {!! $total !!}  ||  Academic Year: <b> {!! $year !!} ||  Semester: <b> {!! $sem !!} </center></p>
             </div>
                 
      
@@ -208,7 +208,7 @@ border-radius: 0;
             <center><div style="position: fixed;  bottom: 0px;left: 45%  ">
                         <p>
                             
-                                  <button type="submit"  class="md-btn md-btn-success md-btn-small"><i class="fa fa-save" ></i>Save</button>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;
+                                <!--  <button type="submit"  class="md-btn md-btn-success md-btn-small"><i class="fa fa-save" ></i>Save</button>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;-->
                             
                                    
                         </p>

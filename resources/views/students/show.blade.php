@@ -40,14 +40,17 @@
      @inject('sys', 'App\Http\Controllers\SystemController')
      <center><h5>BIODATA</h5></center>
      <hr>
-     <table ><tr>
-         
-             <td>
-    <table   class="uk-table uk-table-nowrap " >
+     <table class="uk-table uk-table-nowrap ">
         
         <tr>
           <td width="210" class="uppercase" align="right"><strong>INDEXNO N<u>O</u></strong></td>
-          <td width="408" class="capitalize">{{ $student->INDEXNO }}</td>								
+          <td width="408" class="capitalize">{{ $student->INDEXNO }}</td>
+          <td valign="top" rowspan="6" align="left" colspan="2">
+                     <img   style="width:150px;height: auto; margin-left: 100px"  <?php
+                                     $pic = $student->INDEXNO;
+                                     echo $sys->picture("{!! url(\"public/albums/students/$pic.jpg\") !!}", 90)
+                                     ?>   src='{{url("public/albums/students/$pic.JPG")}}' onerror="this.onerror=function my(){return this.src='{{url("public/albums/students/USER.JPG")}}';};this.src='{{url("public/albums/students/$pic.jpg")}}';"    />
+             </td>								
         </tr>
         <tr>
             <td width="210" class="uppercase" align="right"><strong>LEVEL</strong></td>
@@ -74,55 +77,39 @@
             <td class="uppercase" align="right"><strong>MARITAL STATUS</strong></td>
             <td class="capitalize">{!! strtoupper($student->MARITAL_STATUS) !!}</td>
 
+          <td class="uppercase"  width="150" align="right"><strong>PROGRAMME:</strong></td>
+          <td class="capitalize">{!! strtoupper($student->program->PROGRAMME) !!}</td>
+          
+        
         </tr>
+       
+      
+       <tr>
+          <td class="uppercase" align="right"><strong>FEES OWING:</strong></td>
+          <td class="capitalize">GHC<?php echo  $student->BILL_OWING ?></td>
+          <td class="uppercase" align="right"><strong>CLASS:</strong></td>
+          <td class="capitalize">{!! strtoupper($student->CLASS) !!}</td>
+        </tr>
+        
+         <tr>
+          <td class="uppercase" align="right"><strong>EMAIL:</strong></td>
+          <td class="capitalize">{!!strtoupper($student->EMAIL) !!}</td>
+          <td class="uppercase" align="right"><strong>CGPA:</strong></td>
+          <td class="capitalize">{!! strtoupper($student->CGPA) !!}</td>
+        </tr>
+        <tr>
+          <td class="uppercase" align="right"><strong>STATUS:</strong></td>
+          <td class="capitalize">{!! strtoupper($student->STATUS) !!}</td>
+          <td class="uppercase" align="right"><strong>YEAR GROUP:</strong></td>
+          <td class="capitalize">{!! $student->GRADUATING_GROUP !!}</td>
+        </tr>
+        @if(@\Auth::user()->department=='Tptop')
         <tr>
           <td class="uppercase" align="right"><strong>PHONE:</strong></td>
           <td class="capitalize"><?php echo "+233".\substr($student->TELEPHONENO,-9); ?></td>
         </tr>
-       
-        <tr>
-          <td class="uppercase" align="right"><strong>PROGRAMME:</strong></td>
-          <td class="capitalize">{!! strtoupper($student->program->PROGRAMME) !!}</td>
-          
-        </tr>
-         @if(@\Auth::user()->department=='top')
-        <tr>
-          <td class="uppercase" align="right"><strong>CLASS:</strong></td>
-          <td class="capitalize">{!! strtoupper($student->CLASS) !!}</td>
-          
-        </tr>
-       @endif
-       <tr>
-          <td class="uppercase" align="right"><strong>FEES OWING:</strong></td>
-          <td class="capitalize">GHC<?php echo  $student->BILL_OWING ?></td>
-        </tr>
-        <tr>
-          <td class="uppercase" align="right"><strong>GRADUATING GROUP</strong></td>
-          <td class="capitalize">{!! $student->GRADUATING_GROUP !!}</td>
-          
-        </tr>
-         <tr>
-          <td class="uppercase" align="right"><strong>EMAIL</strong></td>
-          <td class="capitalize">{!!strtoupper($student->EMAIL) !!}</td>
-          
-        </tr>
-        <tr>
-          <td class="uppercase" align="right"><strong>STATUS</strong></td>
-          <td class="capitalize">{!! strtoupper($student->STATUS) !!}</td>
-          
-        </tr>
+        @endif
          
-      </table>
-	 		 
-             </td>
-             <td valign="top" >
-                     <img   style="width:150px;height: auto;"  <?php
-                                     $pic = $student->INDEXNO;
-                                     echo $sys->picture("{!! url(\"public/albums/students/$pic.jpg\") !!}", 90)
-                                     ?>   src='{{url("public/albums/students/$pic.jpg")}}' alt="  Affix student picture here"    />
-             </td>
-   
-         </tr>
      </table>
      <fieldset class=""><legend class="uk-text-bold heading_c">LOCATION DATA</legend>
       <table>

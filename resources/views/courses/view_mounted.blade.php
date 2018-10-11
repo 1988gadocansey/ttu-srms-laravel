@@ -317,7 +317,7 @@
 
                      <th style="text-align:center">LECTURER</th> 
 
-                        @if(@\Auth::user()->department=='Tpmid' || @\Auth::user()->department=='Tptop' || @\Auth::user()->department=='qa')
+                        @if(@\Auth::user()->department=='Tpmid' || @\Auth::user()->department=='Tptop')
 
                      <th  class="filter-false remove sorter-false uk-text-center" colspan="2" data-priority="1">ACTION</th>   
 
@@ -363,13 +363,13 @@
 
                                            <td> {{ @$row->lecturer->fullName }}</td>
 
-                                           @if(@\Auth::user()->department=='Tpmid' || @\Auth::user()->department=='Tptop' || @\Auth::user()->department=='qa')
+                                           @if(@\Auth::user()->department=='Tpmid' || @\Auth::user()->department=='Tptop')
 
                                             <td>
 
                                                  <a href='{{url("/mounted/$row->ID/edit")}}'><i  title="click to edit mounted course" class="md-icon material-icons">&#xE254;</i></a>
 
-                                            @if(@\Auth::user()->department=='Tpmid' || @\Auth::user()->department=='Tptop')
+                                            @if(@\Auth::user()->department=='Tptop')
 
                                               {!!Form::open(['action' =>['CourseController@destroy_mounted', 'id'=>$row->ID], 'method' => 'DELETE','name'=>'myform' ,'style' => 'display: inline;'])  !!}
 
@@ -380,6 +380,10 @@
                                                         
 
                                                      {!! Form::close() !!}
+
+                                                     @if(@$row->CLOSED==1)<span class="uk-badge uk-badge-success">Opened</span>
+                                    <span> <a href='{{url("fireCourse/$row->ID/id/closeReg/action")}}' ><i title='Click to close this course' onclick="return confirm('Are you sure you want to close this course?' );" class="md-icon material-icons uk-text-danger">power_settings_new</i></span>
+                                    @else <span class="uk-badge uk-badge-danger">Closed</span><span> <a href='{{url("fireCourse/$row->ID/id/openReg/action")}}' ><i title='Click to open this course' onclick="return confirm('Are you sure you want to open this course?' );" class="md-icon material-icons uk-text-success">power_settings_new</i></span> @endif
 
                                                  @endif
 

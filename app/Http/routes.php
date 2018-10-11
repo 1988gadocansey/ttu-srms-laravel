@@ -371,8 +371,14 @@ Route::group(['middleware' => ['web']], function () {
     Route::get('/download_registered','CourseController@showFileUploadRegistered');
     Route::post('/download_registered','CourseController@downloadRegisteredExcel');
 
+    Route::get('/download_id_cards','CourseController@showFileUploadidCards');
+    Route::post('/download_id_cards','CourseController@downloadidCards');
+
     Route::get('/download_results','CourseController@showFileUploadResults');
     Route::post('/download_results','CourseController@downloadResults');
+
+    Route::get('/download_error','CourseController@showFileUploadError');
+    Route::post('/download_error','CourseController@downloadError');
 
 
     Route::get('/print_report_qa/{lecturer}/lecturer/{sem}/sem/{course}/course','QualityAssuranceController@printView');

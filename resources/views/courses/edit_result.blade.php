@@ -68,7 +68,7 @@
 
         </div>
     </div>
-
+@inject('sys', 'App\Http\Controllers\SystemController')
     <h5>Uploaded Results</h5>
     <div class="uk-width-xLarge-1-1">
         <div class="md-card">
@@ -103,13 +103,14 @@
                         $year1=$year_array[0];
                         $year2=$year_array[1];
                         $year=$year1."_".$year2;
+                        $progName=@$sys->getProgramName($row->programme);
 
 
                         ?>
 
                             <tr align="">
                                 <td> {{ $data->perPage()*($data->currentPage()-1)+($index+1) }} </td>
-                                <td> {{ @$row->programme }}</td>
+                                <td> {{ @$progName }}</td>
                                 <td> {{ @$row->courseMount->course->COURSE_NAME }}</td>
                                 <td> {{ @$row->courseMount->course->COURSE_CODE	 }}</td>
                                 <!--<td> {{ @$row->courseMount->course->programme->PROGRAMME	 }}</td>-->

@@ -106,7 +106,7 @@ class NserviceController extends Controller
             }) ;
         }
         elseif (@\Auth::user()->department=="Finance") {
-            $student = StudentModel::where("STATUS","In School");
+            $student = StudentModel::where("STATUS","In school");
         }
         else{
             $departmentArray=explode(",",@\Auth::user()->department);
@@ -405,7 +405,7 @@ class NserviceController extends Controller
                 $query->GUARDIAN_PHONE = $gphone;
                 $query->GUARDIAN_OCCUPATION = $goccupation;
                 $query->DISABILITY = $disability;
-                $query->STATUS = "In School";
+                $query->STATUS = "In school";
                 $query->SYSUPDATE = "1";
                 $query->NHIS = $nhis;
                 $query->STUDENT_TYPE = $type;
@@ -543,7 +543,7 @@ class NserviceController extends Controller
         //
         if($request->user()->isSupperAdmin || @\Auth::user()->department=="top"  || @\Auth::user()->department=="Tpmid" || @\Auth::user()->department=="Tptop" || @\Auth::user()->role=="HOD" || @\Auth::user()->role=="Support" ||   @\Auth::user()->role=="Dean" || @\Auth::user()->department=="Rector" || @\Auth::user()->department=="Admissions" || @\Auth::user()->department=="Planning"){
 
-            $query = StudentModel::where('ID', $id)->where('STATUS','In School')->first();
+            $query = StudentModel::where('ID', $id)->where('STATUS','In school')->first();
             //dd( $query );
         }
         else{
@@ -708,7 +708,7 @@ class NserviceController extends Controller
                         "GUARDIAN_OCCUPATION"=>strtoupper($goccupation),
                         "DISABILITY"=>strtoupper($disability),
                         "PROGRAMMECODE"=>strtoupper($program),
-                        "STATUS"=>"In School",
+                        "STATUS"=>"In school",
                         "NHIS"=>$nhis,
                         "STUDENT_TYPE"=>strtoupper($type),
                         "TYPE"=>strtoupper($category),
@@ -849,7 +849,7 @@ class NserviceController extends Controller
                         $student->BILL_OWING = $balance;
                         $student->NAME = $name;
                         $student->PROGRAMMECODE = $program;
-                        $student->STATUS = "In School";
+                        $student->STATUS = "In school";
                         $student->SYSUPDATE = "1";
                         $student->ADDRESS= $address;
                         $student->GRADUATING_GROUP = $group;
@@ -863,7 +863,7 @@ class NserviceController extends Controller
                         ]);
                     } else {
 
-                        StudentModel::where('INDEXNO', $indexno)->update(array("STNO"=>$stno,"ADDRESS"=>$address,"LEVEL" => @$level, "YEAR" => $level, "PROGRAMMECODE" => $program, "SYSUPDATE" => "1", "STATUS" => 'In School', "NAME" => $name, "GRADUATING_GROUP" => $group,  "BILL_OWING" => $balance));
+                        StudentModel::where('INDEXNO', $indexno)->update(array("STNO"=>$stno,"ADDRESS"=>$address,"LEVEL" => @$level, "YEAR" => $level, "PROGRAMMECODE" => $program, "SYSUPDATE" => "1", "STATUS" => 'In school', "NAME" => $name, "GRADUATING_GROUP" => $group,  "BILL_OWING" => $balance));
 
                     }
                 } else {
@@ -1028,7 +1028,7 @@ class NserviceController extends Controller
 //                                $student->YEAR=$year;
 //                                $student->NAME=$name;
 //                                $student->PROGRAMMECODE=$program;
-//                                $student->STATUS="In School";
+//                                $student->STATUS="In school";
 //                                $student->SYSUPDATE="1";
 //                                 
 //                                $student->GRADUATING_GROUP=$group;
@@ -1045,7 +1045,7 @@ class NserviceController extends Controller
 //                              }
 //                             else{
 //                                
-//                                         StudentModel::where('INDEXNO', $indexno)->update(array("LEVEL" =>@$level, "YEAR" => $year, "PROGRAMMECODE" => $program, "SYSUPDATE"=>"1", "STATUS" => 'In School',"NAME"=>$name,"GRADUATING_GROUP"=>$group,"BILLS"=>$bill,"BILL_OWING"=>$owing,"SEX"=>$gender,"FIRSTNAME"=>$othername,"TELEPHONENO"=>$phone,"RESIDENT_ADDRESS"=>$resident,"ADDRESS"=>$contact,"SURNAME"=>$surname));
+//                                         StudentModel::where('INDEXNO', $indexno)->update(array("LEVEL" =>@$level, "YEAR" => $year, "PROGRAMMECODE" => $program, "SYSUPDATE"=>"1", "STATUS" => 'In school',"NAME"=>$name,"GRADUATING_GROUP"=>$group,"BILLS"=>$bill,"BILL_OWING"=>$owing,"SEX"=>$gender,"FIRSTNAME"=>$othername,"TELEPHONENO"=>$phone,"RESIDENT_ADDRESS"=>$resident,"ADDRESS"=>$contact,"SURNAME"=>$surname));
 //                                        \DB::commit();
 //                               }
 //                             

@@ -34,7 +34,7 @@ class FeePaymentModel extends Model
 
     protected $table = 'tpoly_feedetails';
 
-     protected static $logAttributes = ['INDEXNO', 'AMOUNT','YEAR'];
+     protected static $logAttributes = ['INDEXNO', 'STUDENT', 'AMOUNT','YEAR'];
 
     protected $primaryKey="ID";
 
@@ -44,7 +44,7 @@ class FeePaymentModel extends Model
 
    public function student(){
 
-        return $this->belongsTo('App\Models\StudentModel', "INDEXNO","INDEXNO");
+        return $this->belongsTo('App\Models\StudentModel', "STUDENT","ID");
 
     }
 

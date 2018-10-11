@@ -75,7 +75,7 @@
                                     </div>
                                     <div class="uk-width-medium-1-2">
                                         <label>Level</label>
-                                        {!!  Form::select('level', array('100NT'=>'DIPLOMA 100','200NT' => 'DIPLOMA 200NT','100H'=>'HND 100','200H' => 'HND 200', '300H' => 'HND 300','100BTT'=>'BTECH TOP UP 100','200BTT'=>'BTECH TOP UP 200','500MT'=>'MASTERS 100','600MT'=>'MASTERS 200'), null, ['placeholder' => 'select level','id'=>'parent','class'=>'md-input parent'],old("level","")); !!}
+                                        {!!  Form::select('level', array('100NT'=>'DIPLOMA 100','200NT' => 'DIPLOMA 200NT','100H'=>'HND 100','200H' => 'HND 200', '300H' => 'HND 300','100BTT'=>'BTECH TOP UP 100','200BTT'=>'BTECH TOP UP 200','100BT'=>'BTECH (4yr) 100','200BT'=>'BTECH (4yr) 200','300BT'=>'BTECH (4yr) 300','400BT'=>'BTECH (4yr) 400','500MT'=>'MASTERS 100','600MT'=>'MASTERS 200'), null, ['placeholder' => 'select level','id'=>'parent','class'=>'md-input parent'],old("level","")); !!}
 
                                     </div>
                                 </div>

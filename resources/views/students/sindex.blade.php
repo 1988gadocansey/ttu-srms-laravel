@@ -156,7 +156,7 @@
                         <div class="uk-width-medium-1-5">
                             <div class="uk-margin-small-top">
 
-                                {!!  Form::select('status', array('Admitted'=>'Admitted','In School'=>'In school','Alumni' => 'Completed','Deferred' => 'Deferred','Dead' => 'Dead','Rusticated' => 'Rusticated','Unknown' => 'Unknown'), null, ['placeholder' => 'select status of student','id'=>'parent','class'=>'md-input parent'],old("level","")); !!}
+                                {!!  Form::select('status', array('Admitted'=>'Admitted','In school'=>'In school','Alumni' => 'Completed','Deferred' => 'Deferred','Dead' => 'Dead','Rusticated' => 'Rusticated','Unknown' => 'Unknown'), null, ['placeholder' => 'select status of student','id'=>'parent','class'=>'md-input parent'],old("level","")); !!}
 
                             </div>
                         </div>
@@ -315,9 +315,14 @@
 
 
                                     @else
-                                        <img style="width:165px;height:auto;margin-left:-5px"
-                                             {!! $sys->picture('{{url("public/albums/students/$row->INDEXNO")}}',210) !!} src='{{url("public/albums/students/$row->INDEXNO".'.JPG')}}'
-                                             alt=" Picture of Student Here"/>
+
+                                    <?php
+                          $pic = $row->INDEXNO;
+                          $filename = url("public/albums/students/$pic.JPG");
+
+                         //for 2 weeks Gad couldn't write the code below. i did i one sunday morning
+                            ?>
+                                       <a onclick="return MM_openBrWindow('{{url("/student_show/$row->ID/id")}}', 'mark', 'width=800,height=500')"><img  style="width:90px;height: auto;" src='{{url("public/albums/students/$pic.JPG")}}' onerror="this.onerror=function my(){return this.src='{{url("public/albums/students/USER.JPG")}}';};this.src='{{url("public/albums/students/$pic.jpg")}}';" /></a>
                     @endif
                 </div>
 

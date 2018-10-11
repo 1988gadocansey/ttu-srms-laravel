@@ -29,7 +29,7 @@
  @endif
  <h3 class="heading_c uk-margin-bottom">Upload Resit Grades (CSV file format only) <a href="{{url('public/uploads/marks/mark.csv')}}">Click to download sample upload template</a></h3>
         
-<div class="uk-width-xLarge-1-10">
+<div class="uk-width-xLarge-1-1">
     
     <div class="md-card">
         <div class="md-card-content" style="">
@@ -37,7 +37,7 @@
              <form  action="{{url('/upload_resit')}}" enctype="multipart/form-data" id="form" accept-charset="utf-8" method="POST" name="applicationForm"  v-form>
                 <input type="hidden" name="_token" value="{!! csrf_token() !!}"> 
                <div class="uk-grid" data-uk-grid-margin>
-                        <div class="uk-width-medium-1-2">
+                        
                             <div class="uk-form-row">
                                 <div class="uk-grid">
                                     <div class="uk-width-medium-1-2">
@@ -73,7 +73,7 @@
                                 
                             </div>
                             
-                        </div>
+                        
                         <div class="uk-width-medium-1-2">
                              
                            <div class="uk-form-row">

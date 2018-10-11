@@ -128,15 +128,7 @@
                                     ['class' => 'md-input parent','id'=>"parent"] )  !!}
                          </div>
                         </div>
-                        <div class="uk-width-medium-1-5">
-                            <div class="uk-margin-small-top">
-                                    {!! Form::select('users', 
-                                (['' => 'Fees collections by cashiers'] +$users ), 
-                                  old("users",""),
-                                    ['class' => 'md-input parent','id'=>"parent"] )  !!}
-                         </div>
-                        </div>
-                         
+                        
                          <div class="uk-width-medium-1-5">
                             <div class="uk-margin-small-top">
                                   {!!  Form::select('filter', array('='=>'Equals','>='=>'Greater than or equal','<='=>'Less than or equal'), null, ['placeholder' => 'select filter','id'=>'parent','class'=>'md-input'], old("type","")); !!}
@@ -219,7 +211,7 @@
                                    
                                       <th>YEAR</th>
                                       <th>BANK</th>
-                                      <th>PAYMENT DETAILS</th>
+                                      
                                     <th>AMOUNT</th>
                                       <th>RECEIPT</th>
                                       
@@ -243,20 +235,16 @@
                                             
                                              <td> {{ @$row->YEAR }}</td>
                                             <td> {{ @$row->bank->NAME }}</td>
-                                            <td> {{ @$row->PAYMENTTYPE }}</td>
+                                            
                                                <td> {{ @$row->AMOUNT }}</td>
                                             <td> {{ @$row->RECEIPTNO }}</td>
                                            
-                                            <td> {{ date('d/m/Y',@strtotime($row->TRANSDATE) )}}</td>
+                                            <td> {{ date('d-M-y',@strtotime($row->TRANSDATE) )}}</td>
                                             <td>
                                                   
                                                       <a onclick="return MM_openBrWindow('{{url("printreceipt/" . trim(@$row->RECEIPTNO))}}', 'mark', 'width=800,height=500')" ><i title='Click to print receipt of this payment .. please allow popups on browser' class="md-icon material-icons">book</i></a> 
                            
-                                                 {!!Form::open(['action' =>['FeeController@destroyPayment', 'id'=>$row->ID], 'method' => 'DELETE','name'=>'myform' ,'style' => 'display: inline;'])  !!}
-
-                                                    <button type="submit" onclick="return confirm('Are you sure you want to delete this payment??')" class="md-btn  md-btn-danger md-btn-small   md-btn-wave-light waves-effect waves-button waves-light" ><i  class="sidebar-menu-icon material-icons md-18">delete</i></button>
-                                                        <input type='hidden'   value='{{$row->ID}}'/>  
-                                                     {!! Form::close() !!}
+                                                 
 
                                                  
                                             </td>

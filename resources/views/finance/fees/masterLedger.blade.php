@@ -176,7 +176,7 @@
                                       <th>YEAR</th>
                                       <th>BANK</th>
                                        <th>AMOUNT</th>
-                                      <th>PAYMENT TYPE</th>
+                                      
                                       <th>RECEIPT</th>
                                      
                                       <th>BANK DATE</th>
@@ -199,12 +199,12 @@
                                             
                                              <td> {{ @$row->YEAR }}</td>
                                             <td> {{ @$row->bank->NAME }}</td>
-                                             <td> {{ @$fee->getTotalPayment($row->INDEXNO,$row->SEMESTER,$row->YEAR) }}</td>
+                                             <td> {{ @$fee->getTotalPayment($row->STUDENT,$row->YEAR) }}</td>
                                           
-                                            <td> {{ @$row->PAYMENTTYPE }}</td>
+                                            
                                             <td> {{ @$row->RECEIPTNO }}</td>
                                            
-                                            <td> {{ @$row->BANK_DATE }}</td>
+                                            <td> {{date("d-M-y",strtotime(@$row->BANK_DATE)) }}</td>
                                             
                                            
                                               

@@ -156,7 +156,7 @@
                         <div class="uk-width-medium-1-5">
                             <div class="uk-margin-small-top">
 
-                                {!!  Form::select('status', array('Admitted'=>'Admitted','In school'=>'In school','Alumni' => 'Completed','Deferred' => 'Deferred','Dead' => 'Dead','Rusticated' => 'Rusticated','Unknown' => 'Unknown'), null, ['placeholder' => 'select status of student','id'=>'parent','value'=>'In school','class'=>'md-input parent'],old("level","")); !!}
+                                {!!  Form::select('status', array('Admitted'=>'Admitted','In school'=>'In school','Alumni' => 'Completed','Deferred' => 'Deferred','Dead' => 'Dead','Rusticated' => 'Rusticated','Withdrawn' => 'Withdrawn','Unknown' => 'Unknown'), null, ['placeholder' => 'select status of student','id'=>'parent','value'=>'In school','class'=>'md-input parent'],old("level","")); !!}
 
                             </div>
                         </div>
@@ -232,21 +232,26 @@
                         <div class="uk-width-medium-1-5">
                             <div class="uk-margin-small-top">
 
+                                {!!  Form::select('qa', array('1'=>'Students who have access their lecturers','0' => 'Students yet to access'), null, ['placeholder' => 'Quality Assurance Status','id'=>'parent','class'=>'md-input parent'],old("qa","")); !!}
+
+                            </div>
+                        </div>
+                        <div class="uk-width-medium-1-5">
+                            <div class="uk-margin-small-top">
+
                                 {!!  Form::select('by', array('INDEXNO'=>'Search by Index Number','STNO'=>'Search by Admission Number','NAME'=>'Search by Name','required'=>''), null, ['placeholder' => 'select search type','class'=>'md-input'], old("","")); !!}
                             </div>
                         </div>
                         <div class="uk-width-medium-1-5">
                             <div class="uk-margin-small-top">
-
-                                {!!  Form::select('qa', array('1'=>'Students who have access their lecturers','0' => 'Students yet to access'), null, ['placeholder' => 'Quality Assurance Status','id'=>'parent','class'=>'md-input parent'],old("qa","")); !!}
-
+                                <input type="text" style=" " required="" name="search" class="md-input"
+                                    placeholder="search student by index number or name">
                             </div>
                         </div>
-
                         <div class="uk-width-medium-1-5">
                             <div class="uk-margin-small-top">
-                                <input type="text" style=" " required="" name="search" class="md-input"
-                                       placeholder="search student by index number or name">
+                                <input type="text" style=" " required="" name="pay" class="md-input"
+                                    placeholder="search student by payment">
                             </div>
                         </div>
 
@@ -256,8 +261,8 @@
                         <div class="uk-width-medium-1-10" style=" ">
                             <div class="uk-margin-small-top">
 
-                                <button class="md-btn  md-btn-small md-btn-success uk-margin-small-top" type="submit"><i
-                                            class="material-icons">search</i></button>
+                                <button class="md-btn  md-btn-small md-btn-success uk-margin-small-top" type="submit">
+                                    <i class="material-icons">search</i></button>
                             </div>
                         </div>
                     </center>
@@ -301,7 +306,8 @@
                             @endif
                             <th>NATIONALITY</th>
                             <th>YEAR BILLS</th>
-                            @if(@\Auth::user()->role=='Dean' || @\Auth::user()->department=="Tpmid" || @\Auth::user()->department=="Tptop" || @\Auth::user()->department=="Finance" || @\Auth::user()->department=="Rector" || @\Auth::user()->role=="Rector" || @\Auth::user()->role=="Accountant"  || @\Auth::user()->department == 'top')
+                            @if(@\Auth::user()->role=='Dean' || @\Auth::user()->department=="Tpmid" || @\Auth::user()->department=="Tptop" || @\Auth::user()->department=="Finance" || @\Auth::user()->department=="Planning" || @\Auth::user()->department=="Rector" || @\Auth::user()->role=="Rector" || @\Auth::user()->role=="Accountant"  || @\Auth::user()->department == 'top')
+                                <th>PAID</th>
                                 <th>OWINGS</th>
                                 <th>PASSWORD</th>
                             @endif
@@ -343,24 +349,24 @@
 
 
 
-                                    @else
+                        @else
+                                        
+                    
 
 
+                         <?php
+                          $pic = $row->INDEXNO;
+                          $filename = url("public/albums/students/$pic.JPG");
 
+                         //for 2 weeks Gad couldn't write the code below. i did i one sunday morning
+                            ?>
 
-                                        <?php
-                                        $pic = $row->INDEXNO;
-                                        $filename = url("public/albums/students/$pic.JPG");
+                             <a onclick="return MM_openBrWindow('{{url("/student_show/$row->ID/id")}}', 'mark', 'width=800,height=500')"><img  style="width:90px;height: auto;" src='{{url("public/albums/students/$pic.JPG")}}' onerror="this.onerror=function my(){return this.src='{{url("public/albums/students/USER.JPG")}}';};this.src='{{url("public/albums/students/$pic.jpg")}}';" /></a>
 
-                                        //for 2 weeks Gad couldn't write the code below. i did i one sunday morning
-                                        ?>
+                                   
+                                   
 
-                                        <a onclick="return MM_openBrWindow('{{url("/student_show/$row->ID/id")}}', 'mark', 'width=800,height=500')"><img  style="width:90px;height: auto;" src='{{url("public/albums/students/$pic.JPG")}}' onerror="this.onerror=function my(){return this.src='{{url("public/albums/students/USER.JPG")}}';};this.src='{{url("public/albums/students/$pic.jpg")}}';" /></a>
-
-
-
-
-                    @endif
+                        @endif
                 </div>
 
 
@@ -382,7 +388,8 @@
                 <td> {{ strtoupper(@$row->COUNTRY) }}</td>
 
                 <td>GHC {{ @$row->BILLS }}</td>
-                @if(@\Auth::user()->role=='Dean' || @\Auth::user()->department=="Tpmid" || @\Auth::user()->department=="Tptop" || @\Auth::user()->department=="Finance" || @\Auth::user()->department=="Rector" || @\Auth::user()->role=="Rector" || @\Auth::user()->role=="Accountant"  || @\Auth::user()->department == 'top')
+                @if(@\Auth::user()->role=='Dean' || @\Auth::user()->department=="Tpmid" || @\Auth::user()->department=="Tptop" || @\Auth::user()->department=="Finance" || @\Auth::user()->department=="Rector" || @\Auth::user()->role=="Rector" || @\Auth::user()->role=="Accountant"  || @\Auth::user()->department=="Planning" || @\Auth::user()->department == 'top')
+                    <td>GHC {{ @$row->PAID }}</td>
                     <td>GHC {{ @$row->BILL_OWING }}</td>
 
 

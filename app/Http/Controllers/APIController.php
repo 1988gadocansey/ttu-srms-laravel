@@ -24,7 +24,7 @@ class APIController extends Controller
         // $this->middleware('auth');
     }
     public function generateBulkPassword(Request $request, SystemController $sys){
-        $student=Models\StudentModel::where("LEVEL","LIKE","%"."100"."%")->where("HAS_PASSWORD","0")->get();
+          $student=Models\StudentModel::where("LEVEL","LIKE","%"."100"."%")->where("HAS_PASSWORD","0")->get();
 
         $password="";
             foreach ($student as $row){
@@ -43,6 +43,7 @@ class APIController extends Controller
             }
 
             return $password;
+
 
     }
     public function getApplicant(Request $request, SystemController $sys){

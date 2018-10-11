@@ -42,17 +42,14 @@
                                     <div class="uk-width-medium-1-5">
                                         <label class="">Semester</label>
                                         <p></p>
-                   {{ Form::select('sem', array(''=>'select semester','2'=>'2'), null, ["required"=>"required",'class' => 'md-input label-fixed','v-model'=>'semester','v-form-ctrl'=>'','v-select'=>'']) }}
+                   {{ Form::select('sem', array(''=>'select semester',$sem=>$sem), null, ["required"=>"required",'class' => 'md-input label-fixed','v-model'=>'semester','v-form-ctrl'=>'','v-select'=>'']) }}
                    
 
                                     </div>
                                     <div class="uk-width-medium-1-5">
                                         <label>Academic year</label>
                                         <p></p>
-                     {!! Form::select('year', 
-                                ($year ), 
-                                  old("year",""),
-                                    ['class' => 'md-input parent','required'=>"required",'placeholder'=>'select year'] )  !!}
+                     {{ Form::select('year', array(''=>'select year',$year=>$year), null, ["required"=>"required",'class' => 'md-input label-fixed','v-model'=>'year','v-form-ctrl'=>'','v-select'=>'']) }}
                                  </div>
                                 
                            <div class="uk-width-medium-1-4">
@@ -95,7 +92,7 @@
                               <p></p>
                               <p></p>
                               <p></p>
-                                <label>CSV File(csv comma delimited)</label>
+                                <label>Excel files only</label>
                                  <p></p>                                  
                                <input type="file"  class="md-input   md-input-success " required=""  name="file"/>
                             </div>
