@@ -23,16 +23,16 @@
     <!-- font awesome -->
     <link rel="stylesheet" href="{!! url('public/assets/css/select2.min.css') !!}" media="all">
     <link rel="stylesheet" href="{!! url('public/assets/css/dropify.css') !!}" media="all">
-    <link rel="stylesheet" href="{!! url( 'public/datatables/css/jquery.dataTables.min.css')  !!}" >
-    <link rel="stylesheet" href="{!! url( 'public/datatables/css/dataTables.uikit.min.css')  !!}" >
+    <link rel="stylesheet" href="{!! url( 'public/datatables/css/jquery.dataTables.min.css')  !!}">
+    <link rel="stylesheet" href="{!! url( 'public/datatables/css/dataTables.uikit.min.css')  !!}">
 
     <!-- style switcher -->
     <link rel="stylesheet" href="{!! url( 'public/assets/css/style_switcher.min.css')  !!}" media="all">
 
     <link href="https://fonts.googleapis.com/icon?family=Material+Icons" rel="stylesheet">
     <style>
-        #header_main .uk-navbar{
-            margin:-1px
+        #header_main .uk-navbar {
+            margin: -1px
         }
     </style>
 
@@ -45,8 +45,9 @@
     <div class="header_main_content">
         <nav class="uk-navbar">
             <div class="main_logo_top">
-                <a href="/dashboard"><img src='{{url("public/assets/img/logo.png")}}' alt="" height="15" width="71"/></a>
-                <span class="" style="color:white"  >URPS-TTU</span>
+                <a href="/dashboard"><img src='{{url("public/assets/img/logo.png")}}' alt="" height="15"
+                                          width="71"/></a>
+                <span class="" style="color:white">URPS-TTU</span>
 
             </div>
 
@@ -54,14 +55,19 @@
                 <!-- main sidebar switch -->
 
                 <ul class="uk-navbar-nav user_actions">
-                    <li><a href="#" id="full_screen_toggle" class="user_action_icon uk-visible-large"><i class="material-icons md-24 md-light">&#xE5D0;</i></a></li>
+                    <li><a href="#" id="full_screen_toggle" class="user_action_icon uk-visible-large"><i
+                                    class="material-icons md-24 md-light">&#xE5D0;</i></a></li>
                     <li data-uk-dropdown="{mode:'click',pos:'bottom-right'}">
-                        <a href="#" class="user_action_icon"><i class="material-icons md-24 md-light">&#xE7F4;</i><span class="uk-badge">16</span></a>
+                        <a href="#" class="user_action_icon"><i class="material-icons md-24 md-light">&#xE7F4;</i><span
+                                    class="uk-badge">16</span></a>
                         <div class="uk-dropdown uk-dropdown-xlarge">
                             <div class="md-card-content">
-                                <ul class="uk-tab uk-tab-grid" data-uk-tab="{connect:'#header_alerts',animation:'slide-horizontal'}">
-                                    <li class="uk-width-1-2 uk-active"><a href="#" class="js-uk-prevent uk-text-small">Messages (12)</a></li>
-                                    <li class="uk-width-1-2"><a href="#" class="js-uk-prevent uk-text-small">Alerts (4)</a></li>
+                                <ul class="uk-tab uk-tab-grid"
+                                    data-uk-tab="{connect:'#header_alerts',animation:'slide-horizontal'}">
+                                    <li class="uk-width-1-2 uk-active"><a href="#" class="js-uk-prevent uk-text-small">Messages
+                                            (12)</a></li>
+                                    <li class="uk-width-1-2"><a href="#" class="js-uk-prevent uk-text-small">Alerts
+                                            (4)</a></li>
                                 </ul>
                                 <ul id="header_alerts" class="uk-switcher uk-margin">
                                     <li>
@@ -77,7 +83,8 @@
                                             </li>
                                             <li>
                                                 <div class="md-list-addon-element">
-                                                    <img class="md-user-image md-list-addon-avatar" src="public/assets/img/avatars/avatar_07_tn.png" alt=""/>
+                                                    <img class="md-user-image md-list-addon-avatar"
+                                                         src="public/assets/img/avatars/avatar_07_tn.png" alt=""/>
                                                 </div>
                                                 <div class="md-list-content">
                                                     <span class="md-list-heading"><a href="pages_mailbox.html">Sunt sequi.</a></span>
@@ -95,7 +102,8 @@
                                             </li>
                                             <li>
                                                 <div class="md-list-addon-element">
-                                                    <img class="md-user-image md-list-addon-avatar" src="public/assets/img/avatars/avatar_02_tn.png" alt=""/>
+                                                    <img class="md-user-image md-list-addon-avatar"
+                                                         src="public/assets/img/avatars/avatar_02_tn.png" alt=""/>
                                                 </div>
                                                 <div class="md-list-content">
                                                     <span class="md-list-heading"><a href="pages_mailbox.html">Similique iure et.</a></span>
@@ -104,7 +112,8 @@
                                             </li>
                                             <li>
                                                 <div class="md-list-addon-element">
-                                                    <img class="md-user-image md-list-addon-avatar" src="public/assets/img/avatars/avatar_09_tn.png" alt=""/>
+                                                    <img class="md-user-image md-list-addon-avatar"
+                                                         src="public/assets/img/avatars/avatar_09_tn.png" alt=""/>
                                                 </div>
                                                 <div class="md-list-content">
                                                     <span class="md-list-heading"><a href="pages_mailbox.html">Repellendus consequuntur.</a></span>
@@ -113,7 +122,8 @@
                                             </li>
                                         </ul>
                                         <div class="uk-text-center uk-margin-top uk-margin-small-bottom">
-                                            <a href="page_mailbox.html" class="md-btn md-btn-flat md-btn-flat-primary js-uk-prevent">Show All</a>
+                                            <a href="page_mailbox.html"
+                                               class="md-btn md-btn-flat md-btn-flat-primary js-uk-prevent">Show All</a>
                                         </div>
                                     </li>
                                     <li>
@@ -163,7 +173,7 @@
                     <li data-uk-dropdown="{mode:'click',pos:'bottom-right'}">
 
                         <a href="#" class="user_action_image">
-                            <span class="" style="color:white"  >Hi {{@Auth::user()->name}}</span>
+                            <span class="" style="color:white">Hi {{@Auth::user()->name}}</span>
 
 
                             <div class="uk-dropdown uk-dropdown-small">
@@ -188,7 +198,8 @@
         @if(@Auth::user()->phone!='')
 
             <ul id="menu_top" class="uk-clearfix">
-                <li class="uk-hidden-small"><a href='{!! url("/dashboard") !!}'><i title='home'class="material-icons">&#xE88A;</i><span>Home</span></a></li>
+                <li class="uk-hidden-small"><a href='{!! url("/dashboard") !!}'><i title='home' class="material-icons">&#xE88A;</i><span>Home</span></a>
+                </li>
                 @if( @Auth::user()->department=='Deans' )
                     <li data-uk-dropdown class="uk-hidden-small">
                         <a href="#"><i class="sidebar-menu-icon material-icons md-18">school</i><span>Students Management</span></a>
@@ -196,14 +207,15 @@
                             <ul class="uk-nav uk-nav-dropdown">
                                 <li><a href='{!! url("/students") !!}'>Students</a></li>
                                 <li><a href="addOffence.php">Book Offences</a></li>
-                                <li><a href="viewOffences.php">View  Offenders</a></li>
+                                <li><a href="viewOffences.php">View Offenders</a></li>
                                 <li><a href="viewOffences.php">Dehalling</a></li>
 
                             </ul>
                         </div>
                     </li>
                     <li data-uk-dropdown="justify:'#top_bar'">
-                        <a href="#"> <i class="sidebar-menu-icon material-icons">home</i><span>Properties Management </span></a>
+                        <a href="#"> <i
+                                    class="sidebar-menu-icon material-icons">home</i><span>Properties Management </span></a>
                         <div class="uk-dropdown uk-dropdown-width-4">
                             <div class="uk-grid uk-dropdown-grid" data-uk-grid-margin>
                                 <div class="uk-width-1-4">
@@ -286,8 +298,8 @@
                                 <li><a href='{!! url("/print/receipt") !!}'>Print Fee Receipt</a></li>
                                 <li><a href='{!! url("/print/password") !!}'>Print Password Receipt</a></li>
                                 <li><a href='{!! url("view_payments") !!}'>Payments Ledger</a></li>
-                                    
-                                    <li><a href='{!! url("view_payments_master") !!}'>Payments (sum)</a></li>
+
+                                <li><a href='{!! url("view_payments_master") !!}'>Payments (sum)</a></li>
                                 <li><a href='{!! url("pay_fees_penalty") !!}'>Late Registration payment</a></li>
                                 <li><a href='{!! url("/attendanceSheet") !!}'>Exam Attendance Sheet</a></li>
                             </ul>
@@ -296,18 +308,25 @@
 
 
                     <li data-uk-dropdown class="uk-hidden-small">
-                        <a href="#"> <i class="sidebar-menu-icon material-icons">view_headline</i><span>Reports</span></a>
+                        <a href="#"> <i
+                                    class="sidebar-menu-icon material-icons">view_headline</i><span>Reports</span></a>
                         <div class="uk-dropdown uk-dropdown-scrollable">
                             <ul class="uk-nav uk-nav-dropdown">
                                 <li><a href='{!! url("/report/registration") !!}'>Registration</a></li>
-                                <li><a href='{!! url("admissions/statistics/comprehensive") !!}'>Applied/Registered</a></li>
+                                <li><a href='{!! url("admissions/statistics/comprehensive") !!}'>Applied/Registered</a>
+                                </li>
 
-                                <li><a href='{!! url("/view_payments_master") !!}'>Fee Payment by Students Report</a></li>
-                                <li><a href='{!! url("/finance/reports/programs") !!}'>Fee Payment by Programs Report</a></li>
+                                <li><a href='{!! url("/view_payments_master") !!}'>Fee Payment by Students Report</a>
+                                </li>
+                                <li><a href='{!! url("/finance/reports/programs") !!}'>Fee Payment by Programs
+                                        Report</a></li>
                                 <li><a href='{!! url("/owing_paid") !!}'>Fees Owings By Students Reports</a></li>
-                                <li><a href='{!! url("/finance/reports/programs") !!}'>Fees Owings By Programs Reports</a></li>
-                                <li><a href='{!! url("/finance/reports/ledger/student") !!}'>Print Student Ledger</a></li>
-                                <li><a href='{!! url("/finance/reports/cummulative") !!}'>Fees Cummulative Reports by Program</a></li>
+                                <li><a href='{!! url("/finance/reports/programs") !!}'>Fees Owings By Programs
+                                        Reports</a></li>
+                                <li><a href='{!! url("/finance/reports/ledger/student") !!}'>Print Student Ledger</a>
+                                </li>
+                                <li><a href='{!! url("/finance/reports/cummulative") !!}'>Fees Cummulative Reports by
+                                        Program</a></li>
 
 
                             </ul>
@@ -333,7 +352,8 @@
                     <li data-uk-dropdown class="uk-hidden-small">
 
 
-                        <a href="#"><i class="sidebar-menu-icon material-icons md-18">perm_identity</i><span>Applicants</span></a>
+                        <a href="#"><i
+                                    class="sidebar-menu-icon material-icons md-18">perm_identity</i><span>Applicants</span></a>
                         <div class="uk-dropdown uk-dropdown-scrollable">
                             <ul class="uk-nav uk-nav-dropdown">
                                 <li><a href='{!! url("outreach/add") !!}'>Add Outreach Applicants</a></li>
@@ -341,10 +361,11 @@
                                 <li><a href='http://applications.ttuportal.com' target="_">Add Applicants</a></li>
 
 
-
                                 <li><a href='{!! url("applicants/view") !!}'>View Applicants</a></li>
-                                <li><a href='{!! url("admissions/applicant/settings") !!}'>Open or Block Applicant</a></li>
-                                <li><a href='{!! url("admissions/letter/bulk") !!}'>Print bulk admission letters</a></li>
+                                <li><a href='{!! url("admissions/applicant/settings") !!}'>Open or Block Applicant</a>
+                                </li>
+                                <li><a href='{!! url("admissions/letter/bulk") !!}'>Print bulk admission letters</a>
+                                </li>
                             <!--   <li><a href='{!! url("/admissions/conditional") !!}'>View Conditional admissions</a></li>
                           
                              <li><a href='{!! url("/admissions/applicants/selected") !!}'>View Qualified applicants</a></li>
@@ -389,18 +410,23 @@
                     <li data-uk-dropdown class="uk-hidden-small">
 
 
-                        <a href="#"><i class="sidebar-menu-icon material-icons md-18">view_headline</i><span>Reports</span></a>
+                        <a href="#"><i
+                                    class="sidebar-menu-icon material-icons md-18">view_headline</i><span>Reports</span></a>
                         <div class="uk-dropdown uk-dropdown-scrollable">
                             <ul class="uk-nav uk-nav-dropdown">
-                                <li><a href='{!! url("/admissions/statistics/admission/type") !!}'>Admission Type</a></li>
-                                <li><a href='{!! url("admissions/statistics/comprehensive") !!}'>Applied/Registered</a></li>
+                                <li><a href='{!! url("/admissions/statistics/admission/type") !!}'>Admission Type</a>
+                                </li>
+                                <li><a href='{!! url("admissions/statistics/comprehensive") !!}'>Applied/Registered</a>
+                                </li>
 
                                 <li><a href='{!! url("/admissions/statistics/hall") !!}'>Hall Statistics</a></li>
 
                                 <li><a href='{!! url("/results") !!}'>Accreditation Board Regular Results</a></li>
                                 <li><a href='{!! url("/results/mature") !!}'>Accreditation Board Mature Results</a></li>
-                                <li><a href='{!! url("/results/technical") !!}'>Accreditation Board Technical Results</a></li>
-                                <li><a href='{!! url("/results/conditional") !!}'>Accreditation Board Conditional Results</a></li>
+                                <li><a href='{!! url("/results/technical") !!}'>Accreditation Board Technical
+                                        Results</a></li>
+                                <li><a href='{!! url("/results/conditional") !!}'>Accreditation Board Conditional
+                                        Results</a></li>
 
                             <!--                           <li><a href='{!! url("/admissions/statistics/faculties") !!}'>Report by Faculties</a></li>
                             <li><a href='{!! url("/admissions/statistics/gender") !!}'>Report by Gender</a></li>
@@ -418,7 +444,8 @@
 
 
                     <li data-uk-dropdown class="uk-hidden-small">
-                        <a href="#"> <span class="menu_icon"><i class="material-icons">lock</i></span><span>My Account</span></a>
+                        <a href="#"> <span class="menu_icon"><i
+                                        class="material-icons">lock</i></span><span>My Account</span></a>
                         <div class="uk-dropdown uk-dropdown-scrollable">
                             <ul class="uk-nav uk-nav-dropdown">
                                 <li><a href='{!! url("/change_password") !!}'>Change Password</a></li>
@@ -430,20 +457,23 @@
                     </li>
                 @else
                     @if(@Auth::user()->department=='Planning' )
-                        <li data-uk-dropdown class="uk-hidden-small">
+                        @if(@Auth::user()->department!='LA')
+                            <li data-uk-dropdown class="uk-hidden-small">
 
 
-                            <a href="#"><i class="sidebar-menu-icon material-icons md-18">attach_file</i><span>File</span></a>
-                            <div class="uk-dropdown uk-dropdown-scrollable">
-                                <ul class="uk-nav uk-nav-dropdown">
-                                    <li><a href='{!! url("/students") !!}'>Students</a></li>
-                                    <li><a href='{!! url("/nservice") !!}'>National Service</a></li>
-                                    <li><a href='{!! url("/attendanceSheet") !!}'>Exam Attendance Sheet</a></li>
-                                    <li><a href='{!! url("/student/resit") !!}'>Resit List</a></li>
-                                    <li><a href='{!! url("/download_id_cards") !!}'>ID Card List</a></li>
-                                </ul>
-                            </div>
-                        </li>
+                                <a href="#"><i
+                                            class="sidebar-menu-icon material-icons md-18">attach_file</i><span>File</span></a>
+                                <div class="uk-dropdown uk-dropdown-scrollable">
+                                    <ul class="uk-nav uk-nav-dropdown">
+                                        <li><a href='{!! url("/students") !!}'>Students</a></li>
+                                        <li><a href='{!! url("/nservice") !!}'>National Service</a></li>
+                                        <li><a href='{!! url("/attendanceSheet") !!}'>Exam Attendance Sheet</a></li>
+                                        <li><a href='{!! url("/student/resit") !!}'>Resit List</a></li>
+                                        <li><a href='{!! url("/download_id_cards") !!}'>ID Card List</a></li>
+                                    </ul>
+                                </div>
+                            </li>
+                        @endif
                         <li data-uk-dropdown class="uk-hidden-small">
 
 
@@ -462,22 +492,25 @@
                             </div>
                         </li>
 
-                        <li data-uk-dropdown class="uk-hidden-small">
+                        @if(@Auth::user()->department!='LA')
+
+                            <li data-uk-dropdown class="uk-hidden-small">
 
 
-                            <a href="#"><i class="sidebar-menu-icon material-icons md-18">view_headline</i><span>Reports</span></a>
-                            <div class="uk-dropdown uk-dropdown-scrollable">
-                                <ul class="uk-nav uk-nav-dropdown">
-                                    <li><a href='{!! url("/transcript") !!}' target="_blank">Transcript</a></li>
-                                  {{--  <li><a href='{!! url("admissions/statistics/comprehensive") !!}'>Applied/Registered</a></li>--}}
-                                    <li><a href='{!! url("/report/registration") !!}'>Registration</a></li>
-                                    <li><a href='{!! url("/broadsheet/noticeboard") !!}'>GPA Academic Board</a></li>
-                                    <li><a href='{!! url("/broadsheet/napbtex") !!}'>Broadsheet Nabptex</a></li>
+                                <a href="#"><i class="sidebar-menu-icon material-icons md-18">view_headline</i><span>Reports</span></a>
+                                <div class="uk-dropdown uk-dropdown-scrollable">
+                                    <ul class="uk-nav uk-nav-dropdown">
+                                        <li><a href='{!! url("/transcript") !!}' target="_blank">Transcript</a></li>
+                                        {{--  <li><a href='{!! url("admissions/statistics/comprehensive") !!}'>Applied/Registered</a></li>--}}
+                                        <li><a href='{!! url("/report/registration") !!}'>Registration</a></li>
+                                        <li><a href='{!! url("/broadsheet/noticeboard") !!}'>GPA Academic Board</a></li>
+                                        <li><a href='{!! url("/broadsheet/napbtex") !!}'>Broadsheet Nabptex</a></li>
 
 
-                                </ul>
-                            </div>
-                        </li>
+                                    </ul>
+                                </div>
+                            </li>
+                        @endif
 
                     @endif
 
@@ -486,7 +519,8 @@
                         <li data-uk-dropdown class="uk-hidden-small">
 
 
-                            <a href="#"><i class="sidebar-menu-icon material-icons md-18">attach_file</i><span>File</span></a>
+                            <a href="#"><i
+                                        class="sidebar-menu-icon material-icons md-18">attach_file</i><span>File</span></a>
                             <div class="uk-dropdown uk-dropdown-scrollable">
                                 <ul class="uk-nav uk-nav-dropdown">
                                     <li><a href='{!! url("/students") !!}'>Students</a></li>
@@ -494,12 +528,10 @@
                                     <li><a href='{!! url("/transcript") !!}' target="_blank">Transcript</a></li>
                                     <li><a href='{!! url("/search_password") !!}'>Search student password</a></li>
                                     <li><a href='{!! url("/download_registered") !!}'>Download Excel Sheet</a></li>
-                                    
+
                                     <li><a href='{!! url("/print/password") !!}'>Print Password Receipt</a></li>
                                     <li><a href='{!! url("/attendanceSheet") !!}'>Exam Attendance Sheet</a></li>
                                     <li><a href='{!! url("/student/resit") !!}'>Resit List</a></li>
-
-                                   
 
 
                                 </ul>
@@ -533,15 +565,16 @@
                         <li data-uk-dropdown class="uk-hidden-small">
 
 
-                            <a href="#"><i class="sidebar-menu-icon material-icons md-18">file_upload</i><span>Upload</span></a>
+                            <a href="#"><i
+                                        class="sidebar-menu-icon material-icons md-18">file_upload</i><span>Upload</span></a>
                             <div class="uk-dropdown uk-dropdown-scrollable">
                                 <ul class="uk-nav uk-nav-dropdown">
                                     <li><a href='{!! url("/upload_students") !!}'>Upload bulk Student data</a></li>
                                     <li><a href='{!! url("/index/upload") !!}'>Upload Index Number</a></li>
-                                   
+
                                     <li><a href='{!! url("/upload/courses") !!}'>Upload Bulk Courses</a></li>
                                     <li><a href='{!! url("/upload/mounted") !!}'>Upload Bulk Mounted Courses</a></li>
-                                    
+
                                     <li><a href='{!! url("/resit") !!}'>Upload Resit</a></li>
                                     <li><a href='{!! url("/getStaffCSV") !!}'>Upload Staff Data</a></li>
 
@@ -556,7 +589,7 @@
                             <a href="#"><i class="sidebar-menu-icon material-icons md-18">control_point</i><span>Mount/Add</span></a>
                             <div class="uk-dropdown uk-dropdown-scrollable">
                                 <ul class="uk-nav uk-nav-dropdown">
-                                    
+
                                     <li><a href='{!! url("/create_grade") !!}'>Create Grading System</a></li>
                                     <li><a href='{!! url("/classes/create") !!}'>Create Classing System</a></li>
                                     <li><a href='{!! url("/registered_courses") !!}'>Enter Semester Marks</a></li>
@@ -565,13 +598,14 @@
                                     <li><a href='{!! url("/create_course") !!}'>Add Courses</a></li>
                                     <li><a href='{!! url("/mount_course") !!}'>Mount Courses</a></li>
                                     <li><a href='{!! url("/system/registration/batch") !!}'>Bulk Registration</a></li>
-                                    
+
                                 </ul>
                             </div>
                         </li>
 
                         <li data-uk-dropdown class="uk-hidden-small">
-                            <a href="#"> <span class="menu_icon"><i class="material-icons">search</i></span><span>Search</span></a>
+                            <a href="#"> <span class="menu_icon"><i
+                                            class="material-icons">search</i></span><span>Search</span></a>
                             <div class="uk-dropdown uk-dropdown-scrollable">
                                 <ul class="uk-nav uk-nav-dropdown">
 
@@ -580,20 +614,24 @@
                             </div>
                         </li>
 
+                        @if(@Auth::user()->department!='LA')
+                            <li data-uk-dropdown class="uk-hidden-small">
+                                <a href="#"> <span class="menu_icon"><i
+                                                class="material-icons">view_headline</i></span><span>Reports</span></a>
+                                <div class="uk-dropdown uk-dropdown-scrollable">
+                                    <ul class="uk-nav uk-nav-dropdown">
+                                        <li><a href='{!! url("/report/registration") !!}'>Registration</a></li>
+                                        <li><a href='{!! url("admissions/statistics/comprehensive") !!}'>Applied/Registered</a>
+                                        </li>
+                                        <li><a href='{!! url("/admissions/statistics/admission/type") !!}'>Report by
+                                                Admission Type</a></li>
+                                        <li><a href='{!! url("/broadsheet/noticeboard") !!}'>GPA Academic Board</a></li>
+                                        <li><a href='{!! url("/broadsheet/napbtex") !!}'>Broadsheet Nabptex</a></li>
 
-                        <li data-uk-dropdown class="uk-hidden-small">
-                            <a href="#"> <span class="menu_icon"><i class="material-icons">view_headline</i></span><span>Reports</span></a>
-                            <div class="uk-dropdown uk-dropdown-scrollable">
-                                <ul class="uk-nav uk-nav-dropdown">
-                                    <li><a href='{!! url("/report/registration") !!}'>Registration</a></li>
-                                    <li><a href='{!! url("admissions/statistics/comprehensive") !!}'>Applied/Registered</a></li>
-                                    <li><a href='{!! url("/admissions/statistics/admission/type") !!}'>Report by Admission Type</a></li>
-                                    <li><a href='{!! url("/broadsheet/noticeboard") !!}'>GPA Academic Board</a></li>
-                                    <li><a href='{!! url("/broadsheet/napbtex") !!}'>Broadsheet Nabptex</a></li>
-
-                                </ul>
-                            </div>
-                        </li>
+                                    </ul>
+                                </div>
+                            </li>
+                        @endif
                     @endif
 
 
@@ -601,14 +639,15 @@
 
 
                         <li data-uk-dropdown class="uk-hidden-small">
-                            <a href="#"> <i class="sidebar-menu-icon material-icons">attach_file</i><span>File</span></a>
+                            <a href="#"> <i
+                                        class="sidebar-menu-icon material-icons">attach_file</i><span>File</span></a>
                             <div class="uk-dropdown uk-dropdown-scrollable">
                                 <ul class="uk-nav uk-nav-dropdown">
 
                                     <li><a href='{!! url("/students") !!}'>Students</a></li>
                                     <li><a href='{!! url("/nservice") !!}'>National Service</a></li>
                                     <li><a href='{!! url("/download_id_cards") !!}'>ID Card List</a></li>
-                                    
+
                                     <li><a href='{!! url("/download_registered") !!}'>Download Excel Sheet</a></li>
                                     <li><a href='{!! url("/download_results") !!}'>Excel NABPTEX</a></li>
                                     <li><a href='{!! url("/download_error") !!}'>Error NABPTEX</a></li>
@@ -653,7 +692,8 @@
                         <li data-uk-dropdown class="uk-hidden-small">
 
 
-                            <a href="#"><i class="sidebar-menu-icon material-icons md-18">attach_money</i><span>Finance</span></a>
+                            <a href="#"><i
+                                        class="sidebar-menu-icon material-icons md-18">attach_money</i><span>Finance</span></a>
                             <div class="uk-dropdown uk-dropdown-scrollable">
                                 <ul class="uk-nav uk-nav-dropdown">
                                     <li><a href='{!! url("/finance/reports/fees/") !!}'>View Fees</a></li>
@@ -661,7 +701,7 @@
                                     <li><a href='{!! url("/upload/fees") !!}'>Bank Fees Upload</a></li>
                                     <li><a href='{!! url("banks") !!}'>View Banks</a></li>
                                     <li><a href='{!! url("view_payments") !!}'>Payments Ledger</a></li>
-                                    
+
                                     <li><a href='{!! url("view_payments_master") !!}'>Payments (sum)</a></li>
                                     <li><a href='{!! url("owing_paid") !!}'>Owing reports</a></li>
                                     <li><a href='{!! url("pay_fees") !!}'>Pay Fees</a></li>
@@ -675,20 +715,21 @@
                             </div>
                         </li>
 
-                        
-
-
-                       
 
 
 
 
-                        
+
+
+
+
+
 
                         <li data-uk-dropdown class="uk-hidden-small">
 
 
-                            <a href="#"><i class="sidebar-menu-icon material-icons md-18">file_upload</i><span>Upload</span></a>
+                            <a href="#"><i
+                                        class="sidebar-menu-icon material-icons md-18">file_upload</i><span>Upload</span></a>
                             <div class="uk-dropdown uk-dropdown-scrollable">
                                 <ul class="uk-nav uk-nav-dropdown">
                                     <li><a href='{!! url("/upload_students") !!}'>Upload bulk Student data</a></li>
@@ -729,23 +770,34 @@
                             </div>
                         </li>
 
-                         <li data-uk-dropdown class="uk-hidden-small">
-                            <a href="#"> <i class="sidebar-menu-icon material-icons">view_headline</i><span>Reports</span></a>
+                        <li data-uk-dropdown class="uk-hidden-small">
+                            <a href="#"> <i
+                                        class="sidebar-menu-icon material-icons">view_headline</i><span>Reports</span></a>
                             <div class="uk-dropdown uk-dropdown-scrollable">
                                 <ul class="uk-nav uk-nav-dropdown">
                                     <li><a href='{!! url("/report/registration") !!}'>Registration</a></li>
-                                    <li><a href='{!! url("admissions/statistics/comprehensive") !!}'>Applied/Registered</a></li>
+                                    <li>
+                                        <a href='{!! url("admissions/statistics/comprehensive") !!}'>Applied/Registered</a>
+                                    </li>
 
-                                    <li><a href='{!! url("/view_payments_master") !!}'>Fee Payment by Students Report</a></li>
-                                    <li><a href='{!! url("/finance/reports/programs") !!}'>Fee Payment by Programs Report</a></li>
+                                    <li><a href='{!! url("/view_payments_master") !!}'>Fee Payment by Students
+                                            Report</a></li>
+                                    <li><a href='{!! url("/finance/reports/programs") !!}'>Fee Payment by Programs
+                                            Report</a></li>
                                     <li><a href='{!! url("/owing_paid") !!}'>Fees Owings By Students Reports</a></li>
-                                    <li><a href='{!! url("/finance/reports/programs") !!}'>Fees Owings By Programs Reports</a></li>
-                                    <li><a href='{!! url("/finance/reports/ledger/student") !!}'>Print Student Ledger</a></li>
-                                    <li><a href='{!! url("/finance/reports/cummulative") !!}'>Fees Cummulative Reports by Program</a></li>
+                                    <li><a href='{!! url("/finance/reports/programs") !!}'>Fees Owings By Programs
+                                            Reports</a></li>
+                                    <li><a href='{!! url("/finance/reports/ledger/student") !!}'>Print Student
+                                            Ledger</a></li>
+                                    <li><a href='{!! url("/finance/reports/cummulative") !!}'>Fees Cummulative Reports
+                                            by Program</a></li>
                                     <li><a href='{!! url("view_payments") !!}'>Payments Ledger</a></li>
                                     <li><a href='{!! url("/report/registration") !!}'>Registration</a></li>
-                                    <li><a href='{!! url("admissions/statistics/comprehensive") !!}'>Applied/Registered</a></li>
-                                    <li><a href='{!! url("/admissions/statistics/admission/type") !!}'>Report by Admission Type</a></li>
+                                    <li>
+                                        <a href='{!! url("admissions/statistics/comprehensive") !!}'>Applied/Registered</a>
+                                    </li>
+                                    <li><a href='{!! url("/admissions/statistics/admission/type") !!}'>Report by
+                                            Admission Type</a></li>
                                     <li><a href='{!! url("/broadsheet/noticeboard") !!}'>GPA Academic Board</a></li>
                                     <li><a href='{!! url("/broadsheet/napbtex") !!}'>Broadsheet Nabptex</a></li>
 
@@ -755,7 +807,8 @@
                         </li>
 
                         <li data-uk-dropdown class="uk-hidden-small">
-                            <a href="#"> <span class="menu_icon"><i class="material-icons">search</i></span><span>Search</span></a>
+                            <a href="#"> <span class="menu_icon"><i
+                                            class="material-icons">search</i></span><span>Search</span></a>
                             <div class="uk-dropdown uk-dropdown-scrollable">
                                 <ul class="uk-nav uk-nav-dropdown">
 
@@ -794,39 +847,44 @@
                         <li data-uk-dropdown class="uk-hidden-small">
 
 
-                            <a href="#"><i class="sidebar-menu-icon material-icons md-18">attach_money</i><span>Finance</span></a>
+                            <a href="#"><i
+                                        class="sidebar-menu-icon material-icons md-18">attach_money</i><span>Finance</span></a>
                             <div class="uk-dropdown uk-dropdown-scrollable">
                                 <ul class="uk-nav uk-nav-dropdown">
                                     <li><a href='{!! url("/finance/reports/fees/") !!}'>View Fees</a></li>
                                     <li><a href='{!! url("banks") !!}'>View Banks</a></li>
                                     <li><a href='{!! url("view_payments") !!}'>Payments Ledger</a></li>
-                                    
+
                                     <li><a href='{!! url("view_payments_master") !!}'>Payments (sum)</a></li>
                                     <li><a href='{!! url("owing_paid") !!}'>Owing reports</a></li>
 
 
-
                                 </ul>
                             </div>
                         </li>
 
-                        <li data-uk-dropdown class="uk-hidden-small">
+                        @if(@Auth::user()->department!='LA')
+
+                            <li data-uk-dropdown class="uk-hidden-small">
 
 
-                            <a href="#"><i class="sidebar-menu-icon material-icons md-18">view_headline</i><span>Reports</span></a>
-                            <div class="uk-dropdown uk-dropdown-scrollable">
-                                <ul class="uk-nav uk-nav-dropdown">
-                                    <li><a href='{!! url("/transcript") !!}' target="_blank">Transcript</a></li>
-                                    <li><a href='{!! url("/report/registration") !!}'>Registration</a></li>
+                                <a href="#"><i class="sidebar-menu-icon material-icons md-18">view_headline</i><span>Reports</span></a>
+                                <div class="uk-dropdown uk-dropdown-scrollable">
+                                    <ul class="uk-nav uk-nav-dropdown">
+                                        <li><a href='{!! url("/transcript") !!}' target="_blank">Transcript</a></li>
+                                        <li><a href='{!! url("/report/registration") !!}'>Registration</a></li>
 
-                                    <li><a href='{!! url("admissions/statistics/comprehensive") !!}'>Applied/Registered</a></li>
-                                    <li><a href='{!! url("/admissions/statistics/admission/type") !!}'>Report by Admission Type</a></li>
-                                    <li><a href='{!! url("/broadsheet/napbtex") !!}'>Broadsheet Nabptex</a></li>
-                                    <li><a href='{!! url("/broadsheet/noticeboard") !!}'>GPA Academic Board</a></li>
+                                        <li><a href='{!! url("admissions/statistics/comprehensive") !!}'>Applied/Registered</a>
+                                        </li>
+                                        <li><a href='{!! url("/admissions/statistics/admission/type") !!}'>Report by
+                                                Admission Type</a></li>
+                                        <li><a href='{!! url("/broadsheet/napbtex") !!}'>Broadsheet Nabptex</a></li>
+                                        <li><a href='{!! url("/broadsheet/noticeboard") !!}'>GPA Academic Board</a></li>
 
-                                </ul>
-                            </div>
-                        </li>
+                                    </ul>
+                                </div>
+                            </li>
+                        @endif
 
 
                     @endif
@@ -834,21 +892,26 @@
 
                     @if( @Auth::user()->role=='Support' || @Auth::user()->role=='Registrar')
 
-                        <li data-uk-dropdown class="uk-hidden-small">
+                        @if(@Auth::user()->department!='LA')
+                            <li data-uk-dropdown class="uk-hidden-small">
 
 
-                            <a href="#"><i class="sidebar-menu-icon material-icons md-18">attach_file</i><span>File</span></a>
-                            <div class="uk-dropdown uk-dropdown-scrollable">
-                                <ul class="uk-nav uk-nav-dropdown">
-                                    
-                                    <li><a href='{!! url("/download_registered") !!}'>Download Excel Sheet</a></li>
-                                    <li><a href='{!! url("/attendanceSheet") !!}'>Exam Attendance Sheet</a></li>
-                                    <li><a href='{!! url("/download_results") !!}'>Excel NABPTEX</a></li>
-                                    <li><a href='{!! url("/student/resit") !!}'>Resit List</a></li>
+                                <a href="#"><i
+                                            class="sidebar-menu-icon material-icons md-18">attach_file</i><span>File</span></a>
+                                <div class="uk-dropdown uk-dropdown-scrollable">
+                                    <ul class="uk-nav uk-nav-dropdown">
 
-                                </ul>
-                            </div>
-                        </li>
+                                        <li><a href='{!! url("/download_registered") !!}'>Download Excel Sheet</a></li>
+                                        <li><a href='{!! url("/attendanceSheet") !!}'>Exam Attendance Sheet</a></li>
+                                        <li><a href='{!! url("/download_results") !!}'>Excel NABPTEX</a></li>
+                                        <li><a href='{!! url("/student/resit") !!}'>Resit List</a></li>
+
+                                    </ul>
+                                </div>
+                            </li>
+                        @endif
+
+
 
                         <li data-uk-dropdown class="uk-hidden-small">
 
@@ -857,40 +920,49 @@
                             <div class="uk-dropdown uk-dropdown-scrollable">
                                 <ul class="uk-nav uk-nav-dropdown">
                                     <li><a href='{!! url("/students") !!}'>Students</a></li>
-                                     <li><a href='{!! url("/nservice") !!}'>National Service</a></li>
-                                    <li><a href='{!! url("/transcript") !!}' target="_blank">Transcript</a></li>
-                                   <li><a href='{!! url("/mounted_view") !!}'>View Mounted Courses</a></li>
+                                    @if( @Auth::user()->department!='LA')
+                                        <li><a href='{!! url("/nservice") !!}'>National Service</a></li>
+                                        <li><a href='{!! url("/transcript") !!}' target="_blank">Transcript</a></li>
+                                        <li><a href='{!! url("/mounted_view") !!}'>View Mounted Courses</a></li>
+                                    @endif
 
                                 </ul>
                             </div>
                         </li>
 
-                        <li data-uk-dropdown class="uk-hidden-small">
+                        @if(@Auth::user()->department!='LA')
+
+                            <li data-uk-dropdown class="uk-hidden-small">
 
 
-                            <a href="#"><i class="sidebar-menu-icon material-icons md-18">view_headline</i><span>Reports</span></a>
-                            <div class="uk-dropdown uk-dropdown-scrollable">
-                                <ul class="uk-nav uk-nav-dropdown">
-                                    <li><a href='{!! url("/transcript") !!}' target="_blank">Transcript</a></li>
-                                    <li><a href='{!! url("/report/registration") !!}'>Registration</a></li>
-                                    <li><a href='{!! url("admissions/statistics/comprehensive") !!}'>Applied/Registered</a></li>
-                                    <li><a href='{!! url("/broadsheet/noticeboard") !!}'>GPA Academic Board</a></li>
-                                    <li><a href='{!! url("/broadsheet/napbtex") !!}'>Broadsheet Nabptex</a></li>
+                                <a href="#"><i class="sidebar-menu-icon material-icons md-18">view_headline</i><span>Reports</span></a>
+                                <div class="uk-dropdown uk-dropdown-scrollable">
+                                    <ul class="uk-nav uk-nav-dropdown">
+                                        <li><a href='{!! url("/transcript") !!}' target="_blank">Transcript</a></li>
+                                        <li><a href='{!! url("/report/registration") !!}'>Registration</a></li>
+                                        <li><a href='{!! url("admissions/statistics/comprehensive") !!}'>Applied/Registered</a>
+                                        </li>
+                                        <li><a href='{!! url("/broadsheet/noticeboard") !!}'>GPA Academic Board</a></li>
+                                        <li><a href='{!! url("/broadsheet/napbtex") !!}'>Broadsheet Nabptex</a></li>
 
 
-                                </ul>
-                            </div>
-                        </li>
+                                    </ul>
+                                </div>
+                            </li>
+                        @endif
 
 
                     @endif
 
                     @if( @Auth::user()->department=='qa' )
 
+
+
                         <li data-uk-dropdown class="uk-hidden-small">
 
 
-                            <a href="#"><i class="sidebar-menu-icon material-icons md-18">attach_file</i><span>File</span></a>
+                            <a href="#"><i
+                                        class="sidebar-menu-icon material-icons md-18">attach_file</i><span>File</span></a>
                             <div class="uk-dropdown uk-dropdown-scrollable">
                                 <ul class="uk-nav uk-nav-dropdown">
                                     <li><a href='{!! url("/students") !!}'>Students</a></li>
@@ -908,9 +980,9 @@
                             <div class="uk-dropdown uk-dropdown-scrollable">
                                 <ul class="uk-nav uk-nav-dropdown">
                                     <li><a href='{!! url("/transcript") !!}' target="_blank">Transcript</a></li>
-                                    
+
                                     <li><a href='{!! url("/mounted_view") !!}'>View Mounted Courses</a></li>
-                                    
+
                                     <li><a href='{!! url("/directory") !!}'>Staff Directory</a></li>
 
 
@@ -922,12 +994,15 @@
                         <li data-uk-dropdown class="uk-hidden-small">
 
 
-                            <a href="#"><i class="sidebar-menu-icon material-icons md-18">view_headline</i><span>Reports</span></a>
+                            <a href="#"><i
+                                        class="sidebar-menu-icon material-icons md-18">view_headline</i><span>Reports</span></a>
                             <div class="uk-dropdown uk-dropdown-scrollable">
                                 <ul class="uk-nav uk-nav-dropdown">
                                     <li><a href='{!! url("/transcript") !!}' target="_blank">Transcript</a></li>
                                     <li><a href='{!! url("/report/registration") !!}'>Registration</a></li>
-                                    <li><a href='{!! url("admissions/statistics/comprehensive") !!}'>Applied/Registered</a></li>
+                                    <li>
+                                        <a href='{!! url("admissions/statistics/comprehensive") !!}'>Applied/Registered</a>
+                                    </li>
                                     <li><a href='{!! url("/broadsheet/noticeboard") !!}'>GPA Academic Board</a></li>
                                     <li><a href='{!! url("/broadsheet/napbtex") !!}'>Broadsheet Nabptex</a></li>
                                     <li><a href='{!! url("qa/report/single") !!}'>Lecturer Assessment Report</a></li>
@@ -945,7 +1020,8 @@
                         <li data-uk-dropdown class="uk-hidden-small">
 
 
-                            <a href="#"><i class="sidebar-menu-icon material-icons md-18">attach_file</i><span>File</span></a>
+                            <a href="#"><i
+                                        class="sidebar-menu-icon material-icons md-18">attach_file</i><span>File</span></a>
                             <div class="uk-dropdown uk-dropdown-scrollable">
                                 <ul class="uk-nav uk-nav-dropdown">
                                     <li><a href='{!! url("/students") !!}'>Students</a></li>
@@ -981,7 +1057,8 @@
                         <li data-uk-dropdown class="uk-hidden-small">
 
 
-                            <a href="#"><i class="sidebar-menu-icon material-icons md-18">attach_money</i><span>Finance</span></a>
+                            <a href="#"><i
+                                        class="sidebar-menu-icon material-icons md-18">attach_money</i><span>Finance</span></a>
                             <div class="uk-dropdown uk-dropdown-scrollable">
                                 <ul class="uk-nav uk-nav-dropdown">
                                     <li><a href='{!! url("fee_summary") !!}'>Fee Summary</a></li>
@@ -994,12 +1071,15 @@
                         <li data-uk-dropdown class="uk-hidden-small">
 
 
-                            <a href="#"><i class="sidebar-menu-icon material-icons md-18">view_headline</i><span>Reports</span></a>
+                            <a href="#"><i
+                                        class="sidebar-menu-icon material-icons md-18">view_headline</i><span>Reports</span></a>
                             <div class="uk-dropdown uk-dropdown-scrollable">
                                 <ul class="uk-nav uk-nav-dropdown">
                                     <li><a href='{!! url("/transcript") !!}' target="_blank">Transcript</a></li>
                                     <li><a href='{!! url("/report/registration") !!}'>Registration</a></li>
-                                    <li><a href='{!! url("admissions/statistics/comprehensive") !!}'>Applied/Registered</a></li>
+                                    <li>
+                                        <a href='{!! url("admissions/statistics/comprehensive") !!}'>Applied/Registered</a>
+                                    </li>
 
 
                                     <li><a href='{!! url("/broadsheet/noticeboard") !!}'>GPA Academic Board</a></li>
@@ -1017,7 +1097,7 @@
                             <div class="uk-dropdown uk-dropdown-scrollable">
                                 <ul class="uk-nav uk-nav-dropdown">
                                     <li><a href='{!! url("/download_registered") !!}'>Download Excel Sheet</a></li>
-                                    
+
 
                                 </ul>
                             </div>
@@ -1046,21 +1126,22 @@
                             </div>
                         </li>
 
+                        @if(@Auth::user()->department!='LA')
+                            <li data-uk-dropdown class="uk-hidden-small">
 
-                        <li data-uk-dropdown class="uk-hidden-small">
 
-
-                            <a href="#"><i class="sidebar-menu-icon material-icons md-18">view_headline</i><span>Reports</span></a>
-                            <div class="uk-dropdown uk-dropdown-scrollable">
-                                <ul class="uk-nav uk-nav-dropdown">
-                                    <li><a href='{!! url("/transcript") !!}' target="_blank">Transcript</a></li>
-                                    <li><a href='{!! url("/broadsheet/noticeboard") !!}'>GPA Academic Board</a></li>
-                                    <li><a href='{!! url("/report/registration") !!}'>Registration</a></li>
-                                    <li><a href='{!! url("/download_results") !!}'>Excel NABPTEX</a></li>
-                                    <li><a href='{!! url("/student/resit") !!}'>Resit List</a></li>
-                                </ul>
-                            </div>
-                        </li>
+                                <a href="#"><i class="sidebar-menu-icon material-icons md-18">view_headline</i><span>Reports</span></a>
+                                <div class="uk-dropdown uk-dropdown-scrollable">
+                                    <ul class="uk-nav uk-nav-dropdown">
+                                        <li><a href='{!! url("/transcript") !!}' target="_blank">Transcript</a></li>
+                                        <li><a href='{!! url("/broadsheet/noticeboard") !!}'>GPA Academic Board</a></li>
+                                        <li><a href='{!! url("/report/registration") !!}'>Registration</a></li>
+                                        <li><a href='{!! url("/download_results") !!}'>Excel NABPTEX</a></li>
+                                        <li><a href='{!! url("/student/resit") !!}'>Resit List</a></li>
+                                    </ul>
+                                </div>
+                            </li>
+                        @endif
 
                         <li data-uk-dropdown class="uk-hidden-small">
 
@@ -1082,21 +1163,24 @@
 
 
                     @if( @Auth::user()->department=='Registrar' )
+                        @if(@Auth::user()->department!='LA')
+                            <li data-uk-dropdown class="uk-hidden-small">
 
-                        <li data-uk-dropdown class="uk-hidden-small">
 
+                                <a href="#"><i
+                                            class="sidebar-menu-icon material-icons md-18">attach_file</i><span>File</span></a>
+                                <div class="uk-dropdown uk-dropdown-scrollable">
+                                    <ul class="uk-nav uk-nav-dropdown">
+                                        <li><a href='{!! url("/students") !!}'>Students</a></li>
+                                        <li><a href='{!! url("staff") !!}'>View Staff</a></li>
+                                        <li><a href='{!! url("/attendanceSheet") !!}'>Exam Attendance Sheet</a></li>
+                                        <li><a href='{!! url("/student/resit") !!}'>Resit List</a></li>
 
-                            <a href="#"><i class="sidebar-menu-icon material-icons md-18">attach_file</i><span>File</span></a>
-                            <div class="uk-dropdown uk-dropdown-scrollable">
-                                <ul class="uk-nav uk-nav-dropdown">
-                                    <li><a href='{!! url("/students") !!}'>Students</a></li>
-                                    <li><a href='{!! url("staff") !!}'>View Staff</a></li>
-                                    <li><a href='{!! url("/attendanceSheet") !!}'>Exam Attendance Sheet</a></li>
-                                    <li><a href='{!! url("/student/resit") !!}'>Resit List</a></li>
+                                    </ul>
+                                </div>
+                            </li>
 
-                                </ul>
-                            </div>
-                        </li>
+                        @endif
 
 
                         <li data-uk-dropdown class="uk-hidden-small">
@@ -1122,7 +1206,8 @@
                         <li data-uk-dropdown class="uk-hidden-small">
 
 
-                            <a href="#"><i class="sidebar-menu-icon material-icons md-18">view_headline</i><span>Reports</span></a>
+                            <a href="#"><i
+                                        class="sidebar-menu-icon material-icons md-18">view_headline</i><span>Reports</span></a>
                             <div class="uk-dropdown uk-dropdown-scrollable">
                                 <ul class="uk-nav uk-nav-dropdown">
                                     <li><a href='{!! url("/transcript") !!}' target="_blank">Transcript</a></li>
@@ -1131,9 +1216,9 @@
                                     <li><a href='{!! url("/broadsheet/napbtex") !!}'>Broadsheet Nabptex</a></li>
                                     <li><a href='{!! url("owing_paid") !!}'>Owing reports</a></li>
                                     <li><a href='{!! url("fee_summary") !!}'>Fee Summary</a></li>
-                                    <li><a href='{!! url("admissions/statistics/comprehensive") !!}'>Applied/Registered</a></li>
-
-
+                                    <li>
+                                        <a href='{!! url("admissions/statistics/comprehensive") !!}'>Applied/Registered</a>
+                                    </li>
 
 
                                 </ul>
@@ -1156,7 +1241,9 @@
                                     <li><a href='{!! url("/students") !!}'>Students</a></li>
                                     <li><a href='{!! url("/programmes") !!}'>View Programmes</a></li>
                                     <li><a href='{!! url("/report/registration") !!}'>Registration</a></li>
-                                    <li><a href='{!! url("admissions/statistics/comprehensive") !!}'>Applied/Registered</a></li>
+                                    <li>
+                                        <a href='{!! url("admissions/statistics/comprehensive") !!}'>Applied/Registered</a>
+                                    </li>
 
                                 </ul>
                             </div>
@@ -1179,14 +1266,20 @@
 
                         @if( @Auth::user()->department=='LA')
                             <li data-uk-dropdown class="uk-hidden-small">
-                                <a href="#"> <i class="sidebar-menu-icon material-icons">work</i><span>Laiason Module</span></a>
+                                <a href="#"> <i
+                                            class="sidebar-menu-icon material-icons">work</i><span>Liaison Module</span></a>
                                 <div class="uk-dropdown uk-dropdown-scrollable">
                                     <ul class="uk-nav uk-nav-dropdown">
+                                        <li><a href='{!! url("/students") !!}'>View Students</a></li>
 
-                                        <li><a href='{!! url("fee_summary") !!}'>View Attachment Data</a></li>
+                                        <li><a href='{!! url("/liaison/assumption") !!}'>Assumption of duty Data</a></li>
 
-                                        <li><a href='{!! url("fee_summary") !!}'>Attachment Reports</a></li>
-                                        <li><a href='{!! url("fee_summary") !!}'>Close or open online system</a></li>
+                                        <li><a href='{!! url("liaison/data") !!}'>Industrial Attachment Data</a></li>
+                                        <li><a href='{!! url("/liaison/create/zones") !!}'>Add Zones</a></li>
+                                        <li><a href='{!! url("liaison/zones") !!}'>Add View Zones</a></li>
+                                        <li><a href='{!! url("liaison/units/create") !!}'>Add Unit heads</a></li>
+                                        <li><a href='{!! url("liaison/units") !!}'>View Unit heads</a></li>
+                                        <li><a href='{!! url("/calender") !!}'>Close or open online system</a></li>
 
                                     </ul>
                                 </div>
@@ -1197,7 +1290,8 @@
 
                     @endif
                     <li data-uk-dropdown class="uk-hidden-small">
-                        <a href="#"> <span class="menu_icon"><i class="material-icons">lock</i></span><span>My Account</span></a>
+                        <a href="#"> <span class="menu_icon"><i
+                                        class="material-icons">lock</i></span><span>My Account</span></a>
                         <div class="uk-dropdown uk-dropdown-scrollable">
                             <ul class="uk-nav uk-nav-dropdown">
 
@@ -1225,7 +1319,8 @@
                                             <div class="uk-dropdown uk-dropdown-scrollable">
                                                 <ul class="uk-nav uk-nav-dropdown">
 
-                                                    <li><a href='{!! url("applicants/view") !!}'>View Applicants</a></li>
+                                                    <li><a href='{!! url("applicants/view") !!}'>View Applicants</a>
+                                                    </li>
                                                     <li><a href='{!! url("/logout") !!}'>Logout</a></li>
                                                 </ul>
                                             </div>
@@ -1233,10 +1328,7 @@
                                         @endif
 
 
-
                                     </ul>
-
-
 
 
                                 </div>
@@ -1253,8 +1345,6 @@
 
 <div id="page_content">
     <div id="page_content_inner">
-
-
 
 
         @yield('content')
@@ -1300,17 +1390,17 @@
 <script src="{!! url('public/assets/js/numscroller.js') !!}"></script>
 
 <script>
-    $(function() {
-        if(isHighDensity) {
+    $(function () {
+        if (isHighDensity) {
             // enable hires images
             altair_helpers.retina_images();
         }
-        if(Modernizr.touch) {
+        if (Modernizr.touch) {
             // fastClick (touch devices)
             FastClick.attach(document.body);
         }
     });
-    $window.load(function() {
+    $window.load(function () {
         // ie fixes
         altair_helpers.ie_fix();
     });
@@ -1365,28 +1455,28 @@
     <div class="uk-visible-large uk-margin-medium-bottom">
         <h4 class="heading_c">Sidebar</h4>
         <p>
-            <input type="checkbox" name="style_sidebar_mini" id="style_sidebar_mini" data-md-icheck />
+            <input type="checkbox" name="style_sidebar_mini" id="style_sidebar_mini" data-md-icheck/>
             <label for="style_sidebar_mini" class="inline-label">Mini Sidebar</label>
         </p>
     </div>
     <div class="uk-visible-large uk-margin-medium-bottom">
         <h4 class="heading_c">Layout</h4>
         <p>
-            <input type="checkbox" name="style_layout_boxed" id="style_layout_boxed" data-md-icheck />
+            <input type="checkbox" name="style_layout_boxed" id="style_layout_boxed" data-md-icheck/>
             <label for="style_layout_boxed" class="inline-label">Boxed layout</label>
         </p>
     </div>
     <div class="uk-visible-large">
         <h4 class="heading_c">Main menu accordion</h4>
         <p>
-            <input type="checkbox" name="accordion_mode_main_menu" id="accordion_mode_main_menu" data-md-icheck />
+            <input type="checkbox" name="accordion_mode_main_menu" id="accordion_mode_main_menu" data-md-icheck/>
             <label for="accordion_mode_main_menu" class="inline-label">Accordion mode</label>
         </p>
     </div>
 </div>
 
 <script>
-    $(function() {
+    $(function () {
         var $switcher = $('#style_switcher'),
             $switcher_toggle = $('#style_switcher_toggle'),
             $theme_switcher = $('#theme_switcher'),
@@ -1396,12 +1486,12 @@
             $body = $('body');
 
 
-        $switcher_toggle.click(function(e) {
+        $switcher_toggle.click(function (e) {
             e.preventDefault();
             $switcher.toggleClass('switcher_active');
         });
 
-        $theme_switcher.children('li').click(function(e) {
+        $theme_switcher.children('li').click(function (e) {
             e.preventDefault();
             var $this = $(this),
                 this_theme = $this.attr('data-app-theme');
@@ -1412,7 +1502,7 @@
                 .removeClass('app_theme_a app_theme_b app_theme_c app_theme_d app_theme_e app_theme_f app_theme_g app_theme_h app_theme_i')
                 .addClass(this_theme);
 
-            if(this_theme == '') {
+            if (this_theme == '') {
                 localStorage.removeItem('altair_theme');
             } else {
                 localStorage.setItem("altair_theme", this_theme);
@@ -1421,8 +1511,8 @@
         });
 
         // hide style switcher
-        $document.on('click keyup', function(e) {
-            if( $switcher.hasClass('switcher_active') ) {
+        $document.on('click keyup', function (e) {
+            if ($switcher.hasClass('switcher_active')) {
                 if (
                     ( !$(e.target).closest($switcher).length )
                     || ( e.keyCode == 27 )
@@ -1433,25 +1523,25 @@
         });
 
         // get theme from local storage
-        if(localStorage.getItem("altair_theme") !== null) {
-            $theme_switcher.children('li[data-app-theme='+localStorage.getItem("altair_theme")+']').click();
+        if (localStorage.getItem("altair_theme") !== null) {
+            $theme_switcher.children('li[data-app-theme=' + localStorage.getItem("altair_theme") + ']').click();
         }
 
 
         // toggle mini sidebar
 
         // change input's state to checked if mini sidebar is active
-        if((localStorage.getItem("altair_sidebar_mini") !== null && localStorage.getItem("altair_sidebar_mini") == '1') || $body.hasClass('sidebar_mini')) {
+        if ((localStorage.getItem("altair_sidebar_mini") !== null && localStorage.getItem("altair_sidebar_mini") == '1') || $body.hasClass('sidebar_mini')) {
             $mini_sidebar_toggle.iCheck('check');
         }
 
         $mini_sidebar_toggle
-            .on('ifChecked', function(event){
+            .on('ifChecked', function (event) {
                 $switcher.removeClass('switcher_active');
                 localStorage.setItem("altair_sidebar_mini", '1');
                 location.reload(true);
             })
-            .on('ifUnchecked', function(event){
+            .on('ifUnchecked', function (event) {
                 $switcher.removeClass('switcher_active');
                 localStorage.removeItem('altair_sidebar_mini');
                 location.reload(true);
@@ -1460,34 +1550,34 @@
 
         // toggle boxed layout
 
-        if((localStorage.getItem("altair_layout") !== null && localStorage.getItem("altair_layout") == 'boxed') || $body.hasClass('boxed_layout')) {
+        if ((localStorage.getItem("altair_layout") !== null && localStorage.getItem("altair_layout") == 'boxed') || $body.hasClass('boxed_layout')) {
             $boxed_layout_toggle.iCheck('check');
             $body.addClass('boxed_layout');
             $(window).resize();
         }
 
         $boxed_layout_toggle
-            .on('ifChecked', function(event){
+            .on('ifChecked', function (event) {
                 $switcher.removeClass('switcher_active');
                 localStorage.setItem("altair_layout", 'boxed');
                 location.reload(true);
             })
-            .on('ifUnchecked', function(event){
+            .on('ifUnchecked', function (event) {
                 $switcher.removeClass('switcher_active');
                 localStorage.removeItem('altair_layout');
                 location.reload(true);
             });
 
         // main menu accordion mode
-        if($sidebar_main.hasClass('accordion_mode')) {
+        if ($sidebar_main.hasClass('accordion_mode')) {
             $accordion_mode_toggle.iCheck('check');
         }
 
         $accordion_mode_toggle
-            .on('ifChecked', function(){
+            .on('ifChecked', function () {
                 $sidebar_main.addClass('accordion_mode');
             })
-            .on('ifUnchecked', function(){
+            .on('ifUnchecked', function () {
                 $sidebar_main.removeClass('accordion_mode');
             });
 
@@ -1498,33 +1588,33 @@
 
 <script type="text/javascript">
     $.ajaxSetup({
-        headers: { 'X-CSRF-Token' : $('meta[name=_token]').attr('content') }
+        headers: {'X-CSRF-Token': $('meta[name=_token]').attr('content')}
     });    </script>
 
 <script src="{!! url('public/assets/js/jquery.form.js') !!}"></script>
 <script src="{!! url('public/assets/js/jquery.validate.min.js') !!}"></script>
 
 <script language="javascript" type="text/javascript">
-    $(document).ready(function(){
-        $('.saves').on('click', function(e){
+    $(document).ready(function () {
+        $('.saves').on('click', function (e) {
 
 
             var name = $(this).closest('tr').find('.name').val();
             var program = $(this).closest('tr').find('.program').val();
-            var level= $(this).closest('tr').find('.level').val();
+            var level = $(this).closest('tr').find('.level').val();
 
             //alert(hall);
             UIkit.modal.confirm("Are you sure you want to add this group "
-                , function(){
+                , function () {
                     modal = UIkit.modal.blockUI("<div class='uk-text-center'>Creating Group <br/><img class='uk-thumbnail uk-margin-top' src='{!! url('public/assets/img/spinners/spinner.gif')  !!}' /></div>");
                     //setTimeout(function(){ modal.hide() }, 500) })()
                     $.ajax({
 
                         type: "POST",
-                        url:"admit",
-                        data: { applicant:student, program:program,hall:hall,admit:admit}, //your form data to post goes
+                        url: "admit",
+                        data: {applicant: student, program: program, hall: hall, admit: admit}, //your form data to post goes
                         dataType: "html",
-                    }).done(function(data){
+                    }).done(function (data) {
                         modal.hide();
 
                         UIkit.modal.alert("Group created successfully");
@@ -1538,6 +1628,7 @@
         });
 
     });
+
     function printDiv(divID) {
         //Get the HTML of div
         var divElements = document.getElementById(divID).innerHTML;
@@ -1554,24 +1645,24 @@
     }
 </script>
 <script>
-    function recalculateSum()
-    {
+    function recalculateSum() {
         var num1 = parseFloat(document.getElementById("pay").value);
-        if(isNaN(num1)){
-        var num1 = 0;
-        }else{
-        var num1 = parseFloat(document.getElementById("pay").value);
+        if (isNaN(num1)) {
+            var num1 = 0;
+        } else {
+            var num1 = parseFloat(document.getElementById("pay").value);
         }
         var num2 = parseFloat(document.getElementById("bill").value);
         var num3 = parseFloat(document.getElementById("totalbill").value);
         var num4 = parseFloat(document.getElementById("financesum").value);
         document.getElementById("amount_left").value = (num3 - num4 - num1);
     }
+
     function MM_openBrWindow(theURL, winName, features) { //v2.0
         window.open(theURL, winName, features);
     }
 
-    function recalculateTranAmt(){
+    function recalculateTranAmt() {
         var copies = document.getElementById("copies").value;
         var price = parseFloat(document.getElementById("price").value);
         document.getElementById("amount").value = (copies * price);
@@ -1580,13 +1671,13 @@
 <script>
 
 
-    $(document).ready(function(){
+    $(document).ready(function () {
 
-        function checkFormElements(){}
+        function checkFormElements() {
+        }
 
 
-
-        $("#insertPaymentRow").bind('click', function(){
+        $("#insertPaymentRow").bind('click', function () {
 
             var numOrgs = $(" table#paymentTable tr[payment_row]").length + 1;
             var newOrg = $("table#paymentTable tr:first ").clone(true);
@@ -1597,7 +1688,7 @@
             $(amountInput).prop('id', 'amt_' + numOrgs);
             $(newOrg).attr('id', 'paymentRow_' + numOrgs);
             $(newOrg).insertAfter($("table#paymentTable tr:last"));
-            $('#removePaymentRow_' + numOrgs).bind("click", function(){
+            $('#removePaymentRow_' + numOrgs).bind("click", function () {
 // $(amountInput).trigger('keyup');
                 $('#paymentRow_' + numOrgs).remove();
                 var count = 0;
@@ -1609,8 +1700,8 @@
 //});
 
 
-            $('#paymentTable .pay_type  :selected').parent().each(function(){
-                if ($(this).prop('selectedIndex') <= 0){
+            $('#paymentTable .pay_type  :selected').parent().each(function () {
+                if ($(this).prop('selectedIndex') <= 0) {
                     //$('#new_payment_individual_form :submit').prop('disabled','disabled');
                     //  $('#alertInfo').css('display','block').html("Please select a payment type!");
                 }
@@ -1618,8 +1709,13 @@
 //console.log($(this).prop('name')+"->"+$('#paymentTable .pay_type  :selected').parent().length);
 
         });
-        $('#save').on('click', function(e) {
-            return (function(modal){ modal = UIkit.modal.blockUI("<div class='uk-text-center'>Processing data<br/><img class='uk-thumbnail uk-margin-top' src='{!! url('public/assets/img/spinners/spinner_success.gif')  !!}' /></div>"); setTimeout(function(){ modal.hide() }, 50000) })();
+        $('#save').on('click', function (e) {
+            return (function (modal) {
+                modal = UIkit.modal.blockUI("<div class='uk-text-center'>Processing data<br/><img class='uk-thumbnail uk-margin-top' src='{!! url('public/assets/img/spinners/spinner_success.gif')  !!}' /></div>");
+                setTimeout(function () {
+                    modal.hide()
+                }, 50000)
+            })();
         });
     });    </script>
 <!-- google web fonts -->
@@ -1632,7 +1728,7 @@
             ]
         }
     };
-    (function() {
+    (function () {
         var wf = document.createElement('script');
         wf.src = ('https:' == document.location.protocol ? 'https' : 'http') +
             '://ajax.googleapis.com/ajax/libs/webfont/1/webfont.js';

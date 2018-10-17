@@ -313,6 +313,11 @@ class SystemController extends Controller
                 ->lists('DEPARTMENT', 'DEPTCODE');
             return $department;
         }
+        elseif(@\Auth::user()->department=='LA'){
+            $department = \DB::table('tpoly_department')->orderBy("DEPARTMENT")
+                ->lists('DEPARTMENT', 'DEPTCODE');
+            return $department;
+        }
         else{
             $department = \DB::table('tpoly_department')->orderBy("DEPARTMENT")
                 ->lists('DEPARTMENT', 'DEPTCODE');
@@ -821,7 +826,7 @@ $total_course_assessed= $datac[0];*/
                 ->lists('PROGRAMME', 'PROGRAMMECODE');
             return $program;
         }
-        elseif( @\Auth::user()->department=='top' || @\Auth::user()->department=='Tptop' || @\Auth::user()->department=="Tpmid" || @\Auth::user()->department=="Tptop" || @\Auth::user()->department=="Finance" || @\Auth::user()->department=="Rector" || @\Auth::user()->role=="Rector" || @\Auth::user()->department=="Registrar" || @\Auth::user()->department=="Admissions" ||  @\Auth::user()->department=="Planning"  || @\Auth::user()->role=="Accountant" || @\Auth::user()->department == 'Examination' || @\Auth::user()->role == 'Admin' || @\Auth::user()->role == 'Lecturer'|| @\Auth::user()->department=="qa"){
+        elseif( @\Auth::user()->department=='top' || @\Auth::user()->department=='Tptop' || @\Auth::user()->department=="Tpmid" || @\Auth::user()->department=="Tptop" || @\Auth::user()->department=="Finance" || @\Auth::user()->department=="Rector" || @\Auth::user()->role=="Rector" || @\Auth::user()->department=="Registrar" || @\Auth::user()->department=="Admissions" ||  @\Auth::user()->department=="Planning"  || @\Auth::user()->role=="Accountant" || @\Auth::user()->department == 'Examination' || @\Auth::user()->role == 'Admin' || @\Auth::user()->role == 'Lecturer'|| @\Auth::user()->department=="qa"||  @\Auth::user()->department=="LA"){
             $program = \DB::table('tpoly_programme')->orderby("PROGRAMME")
                 ->lists('PROGRAMME', 'PROGRAMMECODE');
             return $program;

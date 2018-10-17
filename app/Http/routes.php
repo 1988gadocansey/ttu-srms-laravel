@@ -27,8 +27,11 @@
  */
 Route::get('student/{indexno}/qa', 'APIController@qualityAssurance')->where('indexno', '(.*)');;
 Route::get('delete/wrong', 'StudentController@showWrong');
+//Route::get('http://45.33.4.164/portal/liaison/form/attachment/print/{indexno}', 'StudentController@showWrong')->where('indexno', '(.*)');
 
-Route::get('student/{indexno}/liaison', 'APIController@liaison')->where('indexno', '(.*)');;
+
+
+Route::get('student/{indexno}/liaison', 'APIController@liaison')->where('indexno', '(.*)');
 Route::post('api/receivePayment', 'APIController@payFeeLive');
 Route::post('/api/hall', 'APIController@getStudentHall');
 Route::post('/api/local', 'APIController@getLocalData');
@@ -113,7 +116,17 @@ Route::group(['middleware' => ['web']], function () {
     Route::get('students', 'StudentController@index');
     Route::get('nservice', 'StudentController@nservice');
     Route::post('/sms', 'StudentController@sms');
+
     Route::get('/add_students', 'StudentController@create');
+    Route::get('/liaison/zones', 'LiaisonController@zones');
+
+    Route::match(array("get", "post"), '/liaison/create/zones','LiaisonController@createZones');
+
+    Route::match(array("get", "post"), '/liaison/units/create','LiaisonController@createUnit');
+
+    Route::get('/liaison/units', 'LiaisonController@units');
+
+
     Route::get('/upload_students', 'StudentController@showUploadForm');
     Route::post('/upload_students', 'StudentController@uploadData');
     Route::get('/upload_applicants', 'StudentController@applicantUploadForm');
@@ -229,6 +242,10 @@ Route::group(['middleware' => ['web']], function () {
     Route::get('/classes/create','ProgrammeController@createClass');
     Route::post('/classes/create','ProgrammeController@storeClass');
     Route::get('/classes/view','ProgrammeController@viewClasses');
+
+    Route::get('/liaison/data','LiaisonController@index');
+    Route::get('/liaison/assumption','AssumptionController@index');
+
 
     Route::get('/create_grade','GradeController@create');
     Route::post('/create_grade','GradeController@store');

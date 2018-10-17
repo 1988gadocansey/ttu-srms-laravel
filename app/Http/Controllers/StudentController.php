@@ -93,6 +93,12 @@ class StudentController extends Controller
                 ]);}
         }
     }
+
+    /**
+     * @param Request $request
+     * @param SystemController $sys
+     * @return $this
+     */
     public function index(Request $request, SystemController $sys) {
 
         if($request->has('status') && trim($request->input('status')) != ""){
@@ -102,7 +108,7 @@ class StudentController extends Controller
              $status= "In school";
         }
 
-        if($request->user()->isSupperAdmin || @\Auth::user()->role=="FO"  || @\Auth::user()->department=="Tpmid" || @\Auth::user()->department=="Tptop" || @\Auth::user()->department=="Rector" || @\Auth::user()->role=="Rector" || @\Auth::user()->department=="Registrar" || @\Auth::user()->department=="Admissions" ||  @\Auth::user()->department=="Planning" ||  @\Auth::user()->department=="top"  || @\Auth::user()->department == 'Examination'||  @\Auth::user()->department=="qa"){
+        if($request->user()->isSupperAdmin || @\Auth::user()->role=="FO"  || @\Auth::user()->department=="Tpmid" || @\Auth::user()->department=="Tptop" || @\Auth::user()->department=="Rector" || @\Auth::user()->role=="Rector" || @\Auth::user()->department=="Registrar" || @\Auth::user()->department=="Admissions" ||  @\Auth::user()->department=="Planning" ||  @\Auth::user()->department=="top"  || @\Auth::user()->department == 'Examination'||  @\Auth::user()->department=="qa"|| @\Auth::user()->department=="LA"){
             $student = StudentModel::query()->where("STATUS",$status);
         }
         elseif (@\Auth::user()->role=="Registrar") {
@@ -164,6 +170,14 @@ class StudentController extends Controller
         }
         if ($request->has('qa') && trim($request->input('qa')) != "") {
             $student->where("QUALITY_ASSURANCE", $request->input("qa", ""));
+        }
+
+        if ($request->has('la') && trim($request->input('la')) != "") {
+            $student->where("LIAISON", $request->input("la", ""));
+        }
+
+        if ($request->has('as') && trim($request->input('as')) != "") {
+            $student->where("ASSUMPTION_DUTY", $request->input("as", ""));
         }
 
         if ($request->has('status') && trim($request->input('status')) != "") {

@@ -46,13 +46,17 @@
                                 <th class="filter-false remove sorter-false">NO</th>
                                 <th>Year</th>
                                 <th>Sem</th>
+                                @if( @Auth::user()->department!='LA')
                                 <th>Register</th>
                                 <th>Exam</th>
                                 <th>Exam</th>
-                                <th>Attachment</th>
+
                                 <th>Assesment</th>
                                 <th>Assesment</th>
                                 <th>Result View</th>
+                                @endif
+
+                                    <th>Attachment</th>
                 
                                 <th  class="filter-false remove sorter-false uk-text-center">ACTION</th>   
                      
@@ -64,7 +68,8 @@
  
                             <tr align="">
                                 <td> {{ $data->perPage()*($data->currentPage()-1)+($index+1) }} </td>
-                                <td> 
+
+                                <td>
                                     <div class="uk-input-group">
 
                                         <div class="md-input-wrapper md-input-filled"><input type="text" id="year" name="year" v-form-ctrl  class="md-input uk-text-primary uk-text-bold"    v-model="year" value="{{ @$row->YEAR}}"/><span class="md-input-bar"></span>
@@ -78,6 +83,7 @@
 
                                     </div>
                                 </td>
+                                @if( @Auth::user()->department!='LA')
                         
                                 <td class="uk-text-center">
                                     @if($row->STATUS==1)<span class="uk-badge uk-badge-success">Opened</span>
@@ -97,9 +103,7 @@
                                 <td class="uk-text-center">@if($row->ENTER_RESULT==1)<span class="uk-badge uk-badge-success">Opened</span><span> <a href='{{url("fireCalender/$row->ID/id/closeMark/action")}}' ><i title='Click to close entering of marks' onclick="return confirm('Are you sure you want to close entering of marks?' );" class="md-icon material-icons uk-text-danger">power_settings_new</i></span> @else <span class="uk-badge uk-badge-danger">Closed</span><span> <a href='{{url("fireCalender/$row->ID/id/openMark/action")}}' ><i onclick="return confirm('Are you sure you want to open entering of marks?' );" title='Click to open online registration'  class="md-icon material-icons uk-text-success">power_settings_new</i></span> @endif
                                 </td>
 
-                                <td class="uk-text-center">@if($row->LIAISON==1)<span class="uk-badge uk-badge-success">Opened</span><span> <a href='{{url("fireCalender/$row->ID/id/closeLia/action")}}' ><i title='Click to close registration for attachment' onclick="return confirm('Are you sure you want to close registration for attachment?' );" class="md-icon material-icons uk-text-danger">power_settings_new</i></span> 
-                                @else <span class="uk-badge uk-badge-danger">Closed</span><span> <a href='{{url("fireCalender/$row->ID/id/openLia/action")}}' ><i onclick="return confirm('Are you sure you want to open registration for attachment?' );" title='Click to open registration for attachment'  class="md-icon material-icons uk-text-success">power_settings_new</i></span> @endif
-                                </td>
+
 
                                 <td> 
                                     <div class="uk-input-group col-md-4">
@@ -123,6 +127,12 @@
                                 <td class="uk-text-center">
                                     <input type="submit" value="Save" id='save'v-show="applicationForm.$valid"  class="md-btn   md-btn-success uk-margin-small-top">
                                 </td>
+
+                                @endif
+
+                                    <td class="uk-text-center">@if($row->LIAISON==1)<span class="uk-badge uk-badge-success">Opened</span><span> <a href='{{url("fireCalender/$row->ID/id/closeLia/action")}}' ><i title='Click to close registration for attachment' onclick="return confirm('Are you sure you want to close registration for attachment?' );" class="md-icon material-icons uk-text-danger">power_settings_new</i></span>
+                                        @else <span class="uk-badge uk-badge-danger">Closed</span><span> <a href='{{url("fireCalender/$row->ID/id/openLia/action")}}' ><i onclick="return confirm('Are you sure you want to open registration for attachment?' );" title='Click to open registration for attachment'  class="md-icon material-icons uk-text-success">power_settings_new</i></span> @endif
+                                    </td>
                             </tr>
                             @endforeach
                         </tbody>

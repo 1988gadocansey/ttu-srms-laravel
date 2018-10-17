@@ -296,8 +296,8 @@
                   
                    
                 @endif
-                
-                <div>
+                  @if( !@Auth::user()->department=='LA')
+                  <div>
                     <div class="md-card md-card-hover md-card-overlay">
                         <div class="md-card-content">
                             <a  href='{{url("/transcript")}}'>  <img src="{{url('public/assets/img/dashboard/transcript.png')}}"/></a>
@@ -313,9 +313,9 @@
                         </div>
                     </div>
                 </div>
-                 
-                
-                   @if( @Auth::user()->department=='top')  
+                 @endif
+
+                   @if( @Auth::user()->department=='top')
                         <div>
                             <div class="md-card md-card-hover md-card-overlay">
                                 <div class="md-card-content">

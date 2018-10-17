@@ -236,6 +236,23 @@
 
                             </div>
                         </div>
+                        @if(@\Auth::user()->department=='LA')
+                        <div class="uk-width-medium-1-5">
+                            <div class="uk-margin-small-top">
+
+                                {!!  Form::select('as', array('1'=>'Students who filled assumption of duty','0' => 'Students yet to fill assumption'), null, ['placeholder' => 'Assumption of duty status','id'=>'parent','class'=>'md-input parent'],old("as","")); !!}
+
+                            </div>
+                        </div>
+                        <div class="uk-width-medium-1-5">
+                            <div class="uk-margin-small-top">
+
+                                {!!  Form::select('la', array('1'=>'Printed attachment letter','0' => 'Students yet to print letter'), null, ['placeholder' => 'Industrial Attachment Letter','id'=>'parent','class'=>'md-input parent'],old("la","")); !!}
+
+                            </div>
+                        </div>
+
+                        @endif
                         <div class="uk-width-medium-1-5">
                             <div class="uk-margin-small-top">
 
@@ -301,17 +318,21 @@
                             <th>AGE</th>
 
 
-                            @if(@\Auth::user()->role=='Dean' || @\Auth::user()->department=="Tpmid" || @\Auth::user()->department=="Tptop" || @\Auth::user()->department=="Rector" || @\Auth::user()->role=="Rector" || @\Auth::user()->role=="Accountant"  || @\Auth::user()->department == 'top')
+                            @if(@\Auth::user()->role=='Dean' || @\Auth::user()->department=="Tpmid" || @\Auth::user()->department=="Tptop" || @\Auth::user()->department=="Rector" || @\Auth::user()->role=="Rector" || @\Auth::user()->role=="Accountant"  || @\Auth::user()->department == 'top' ||  @\Auth::user()->department=="LA")
                                 <th>PHONE</th>
                             @endif
                             <th>NATIONALITY</th>
                             <th>YEAR BILLS</th>
-                            @if(@\Auth::user()->role=='Dean' || @\Auth::user()->department=="Tpmid" || @\Auth::user()->department=="Tptop" || @\Auth::user()->department=="Finance" || @\Auth::user()->department=="Planning" || @\Auth::user()->department=="Rector" || @\Auth::user()->role=="Rector" || @\Auth::user()->role=="Accountant"  || @\Auth::user()->department == 'top')
+                            @if(@\Auth::user()->role=='Dean' || @\Auth::user()->department=="Tpmid" || @\Auth::user()->department=="Tptop" || @\Auth::user()->department=="Finance" || @\Auth::user()->department=="Planning" || @\Auth::user()->department=="Rector" || @\Auth::user()->role=="Rector" || @\Auth::user()->role=="Accountant"  || @\Auth::user()->department == 'top' ||  @\Auth::user()->department=="LA")
                                 <th>PAID</th>
                                 <th>OWINGS</th>
                                 <th>PASSWORD</th>
                             @endif
                             <th>YEAR GROUP</th>
+                            @if( @\Auth::user()->department=="LA")
+                                <th>ATTACHMENT FORM</th>
+                                <th>ASSUMPTION OF DUTY</th>
+                                @endif
                             <th>QUALITY ASSURANCE</th>
 
 
@@ -358,7 +379,7 @@
                           $pic = $row->INDEXNO;
                           $filename = url("public/albums/students/$pic.JPG");
 
-                         //for 2 weeks Gad couldn't write the code below. i did i one sunday morning
+
                             ?>
 
                              <a onclick="return MM_openBrWindow('{{url("/student_show/$row->ID/id")}}', 'mark', 'width=800,height=500')"><img  style="width:90px;height: auto;" src='{{url("public/albums/students/$pic.JPG")}}' onerror="this.onerror=function my(){return this.src='{{url("public/albums/students/USER.JPG")}}';};this.src='{{url("public/albums/students/$pic.jpg")}}';" /></a>
@@ -381,14 +402,14 @@
                 <td> {{ strtoupper(@$row->SEX) }}</td>
                 <td> {{ @$row->AGE }}yrs</td>
 
-                @if(@\Auth::user()->role=='Dean' || @\Auth::user()->department=="Tpmid" || @\Auth::user()->department=="Tptop" || @\Auth::user()->department=="Rector" || @\Auth::user()->role=="Rector" || @\Auth::user()->role=="Accountant"  || @\Auth::user()->department == 'top')
+                @if(@\Auth::user()->role=='Dean' || @\Auth::user()->department=="Tpmid" || @\Auth::user()->department=="Tptop" || @\Auth::user()->department=="Rector" || @\Auth::user()->role=="Rector" || @\Auth::user()->role=="Accountant"  || @\Auth::user()->department == 'top' ||  @\Auth::user()->department=="LA")
 
                     <td> {{ @$row->TELEPHONENO }}</td>
                 @endif
                 <td> {{ strtoupper(@$row->COUNTRY) }}</td>
 
                 <td>GHC {{ @$row->BILLS }}</td>
-                @if(@\Auth::user()->role=='Dean' || @\Auth::user()->department=="Tpmid" || @\Auth::user()->department=="Tptop" || @\Auth::user()->department=="Finance" || @\Auth::user()->department=="Rector" || @\Auth::user()->role=="Rector" || @\Auth::user()->role=="Accountant"  || @\Auth::user()->department=="Planning" || @\Auth::user()->department == 'top')
+                @if(@\Auth::user()->role=='Dean' || @\Auth::user()->department=="Tpmid" || @\Auth::user()->department=="Tptop" || @\Auth::user()->department=="Finance" || @\Auth::user()->department=="Rector" || @\Auth::user()->role=="Rector" || @\Auth::user()->role=="Accountant"  || @\Auth::user()->department=="Planning" || @\Auth::user()->department == 'top' ||  @\Auth::user()->department=="LA")
                     <td>GHC {{ @$row->PAID }}</td>
                     <td>GHC {{ @$row->BILL_OWING }}</td>
 
@@ -396,6 +417,26 @@
                     <td> {{ @$sys->getStudentPassword(@$row->INDEXNO) }}</td>
                 @endif
                 <td> {{ @$row->GRADUATING_GROUP }}</td>
+               @if( @\Auth::user()->department=="LA")
+                <td>
+                    @if($row->LIAISON=='1')
+                        Form filled
+                    @else
+                        Form pending
+                    @endif
+
+
+                </td>
+                    <td>
+                        @if($row->ASSUMPTION_DUTY=='1')
+                            Assumed duty
+                        @else
+                           Assumption of duty pending
+                        @endif
+
+
+                    </td>
+                @endif
                 <td>
                     @if($row->QUALITY_ASSURANCE=='1')
                         Yes
