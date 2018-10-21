@@ -249,14 +249,14 @@
                             <th>LEVEL</th>
 
                             <th>GENDER</th>
-
-
                             <th>PHONE</th>
-                            <th>COMPANY NAME</th>
-                            <th>COMPANY LOCATION</th>
+
+
+
+
+
                             <th>COMPANY ADDRESS</th>
-                            <th>MANAGER NAME</th>
-                            <th>MANAGER PHONE</th>
+
                             <th>STATUS</th>
 
 
@@ -322,11 +322,9 @@
 
 
                 <td> <?php echo e(@$row->studentDetials->TELEPHONENO); ?></td>
-                <td> <?php echo e(@$row->company_name); ?></td>
-                <td> <?php echo e(@$row->company_location); ?></td>
                 <td> <?php echo e(@$row->company_address); ?></td>
-                <td> <?php echo e(@$row->company_supervisor); ?></td>
-                <td> <?php echo e(@$row->company_phone); ?></td>
+
+
                 <td>Assumption of duty pending</td>
 
 
@@ -334,7 +332,7 @@
 
                     <td>
 
-                        <a onclick="return MM_openBrWindow('<?php echo e(url("http://45.33.4.164/portal/liaison/form/attachment/print/$row->indexno")); ?>', 'mark', 'width=800,height=500')">View attachment letter</a>
+                        <a onclick="return MM_openBrWindow('<?php echo e(url("http://localhost/portal/liaison/form/attachment/print/$row->indexno")); ?>', 'mark', 'width=800,height=500')">View attachment letter</a>
 
                     </td>
                     <?php endif; ?>

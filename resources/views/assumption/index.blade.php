@@ -332,7 +332,7 @@
 
                     <td>
 
-                        <a onclick="return MM_openBrWindow('{{url("http://45.33.4.164/portal/liaison/form/attachment/print/$row->indexno")}}', 'mark', 'width=800,height=500')">View assumption of duty form</a>
+                        <a onclick="return MM_openBrWindow('{{url("http://localhost/portal/liaison/form/assumption/print//$row->indexno")}}', 'mark', 'width=800,height=500')">View assumption of duty form</a>
 
                     </td>
                     @endif

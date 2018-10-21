@@ -235,7 +235,7 @@
 
                 <div class="uk-overflow-container" id='print'>
                     <center><span class="uk-text-success uk-text-bold"><?php echo $records->total(); ?> Records</span></center>
-                    <table class="uk-table uk-table-hover uk-table-align-vertical uk-table-nowrap tablesorter tablesorter-altair uk-table-responsive"
+                    <table class="uk-table uk-table-hover uk-table-align-vertical uk-table-nowrap tablesorter tablesorter-altair"
                            id="ts_pager_filter">
                         <thead>
                         <tr>
@@ -342,7 +342,7 @@
 
                     <td>
 
-                        <a onclick="return MM_openBrWindow('<?php echo e(url("http://45.33.4.164/portal/liaison/form/attachment/print/$row->indexno")); ?>', 'mark', 'width=800,height=500')">View assumption of duty form</a>
+                        <a onclick="return MM_openBrWindow('<?php echo e(url("http://localhost/portal/liaison/form/assumption/print//$row->indexno")); ?>', 'mark', 'width=800,height=500')">View assumption of duty form</a>
 
                     </td>
                     <?php endif; ?>
