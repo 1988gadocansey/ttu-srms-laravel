@@ -207,10 +207,6 @@ class LiaisonController extends Controller
             $data->where("status", $request->input("as", ""));
         }
 
-        if ($request->has('zone') && trim($request->input('zone')) != "") {
-            $data->where("company_subzone", $request->input("zone", ""));
-        }
-
 
         if ($request->has('search') && trim($request->input('search')) != "" && trim($request->input('by')) != "") {
             // dd($request);

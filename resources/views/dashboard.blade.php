@@ -296,8 +296,8 @@
                   
                    
                 @endif
-                  @if( !@Auth::user()->department=='LA')
-                  <div>
+                
+                <div>
                     <div class="md-card md-card-hover md-card-overlay">
                         <div class="md-card-content">
                             <a  href='{{url("/transcript")}}'>  <img src="{{url('public/assets/img/dashboard/transcript.png')}}"/></a>
@@ -313,9 +313,9 @@
                         </div>
                     </div>
                 </div>
-                 @endif
-
-                   @if( @Auth::user()->department=='top')
+                 
+                
+                   @if( @Auth::user()->department=='top')  
                         <div>
                             <div class="md-card md-card-hover md-card-overlay">
                                 <div class="md-card-content">
@@ -639,80 +639,7 @@
 
             </div>
 
-
-
-
             <div class="uk-grid" data-uk-grid-margin data-uk-grid-match="{target:'.md-card-content'}">
-                <div class="uk-width-medium-2-5">
-                    <div class="md-card">
-                        <div class="md-card-content">
-                            <div class="uk-overflow-container">
-                                <table class="uk-table">
-                                    <thead>
-                                        <tr style="background-color: #ffffff;">
-                                            <th colspan="5" style="color: #888888;" class="uk-text-nowrap" >AVERAGE PERFORMANCE</th>
-
-                                        </tr>
-                                        
-                                    </thead>
-                                    <tbody>
-
-                                    <tr>
-                                        <td>
-                                            <div style = 'min-height: 40vh'>
-                                        <canvas id="lineChartGender"></canvas>
-                                    </div>
-
-                                        </td>
-                                    </tr>                                    
-                                    <tr>
-                                        <td>
-                                            pre = previous year &nbsp;&nbsp;&nbsp;&nbsp;cur = current year
-
-
-                                        </td>
-                                    </tr>                                           
-                                    </tbody>
-                                </table>
-
-                            </div>
-                        </div>
-                    </div>
-                </div>
-
-                <div class="uk-width-medium-3-5">
-                    <div class="md-card">
-                        <div class="md-card-content">
-                            <div class="uk-overflow-container">
-                                <table class="uk-table">
-                                    <thead>
-                                        <tr style="background-color: #ffffff;">
-                                            <th colspan="5" style="color: #888888;" class="uk-text-nowrap" >CLASS BY PROGRAMME IN %</th>
-
-                                        </tr>
-                                        
-                                    </thead>
-                                    <tbody>
-
-                                    <tr>
-                                        <td>
-                                            <div style = 'min-height: 45vh'>
-                                        <canvas id="lineChart"></canvas>
-                                    </div>
-
-                                        </td>
-                                    </tr>                                    
-                                                                            
-                                    </tbody>
-                                </table>
-
-                            </div>
-                        </div>
-                    </div>
-                </div>
-                
-            </div>
-        <div class="uk-grid" data-uk-grid-margin data-uk-grid-match="{target:'.md-card-content'}">
                 
                 <div class="uk-width-medium-1-4">
                     <div class="md-card">
@@ -984,6 +911,79 @@
                 </div>
 
             </div>
+
+
+            <div class="uk-grid" data-uk-grid-margin data-uk-grid-match="{target:'.md-card-content'}">
+                <div class="uk-width-medium-2-5">
+                    <div class="md-card">
+                        <div class="md-card-content">
+                            <div class="uk-overflow-container">
+                                <table class="uk-table">
+                                    <thead>
+                                        <tr style="background-color: #ffffff;">
+                                            <th colspan="5" style="color: #888888;" class="uk-text-nowrap" >AVERAGE PERFORMANCE</th>
+
+                                        </tr>
+                                        
+                                    </thead>
+                                    <tbody>
+
+                                    <tr>
+                                        <td>
+                                            <div style = 'min-height: 40vh'>
+                                        <canvas id="lineChartGender"></canvas>
+                                    </div>
+
+                                        </td>
+                                    </tr>                                    
+                                    <tr>
+                                        <td>
+                                            pre = previous year &nbsp;&nbsp;&nbsp;&nbsp;cur = current year
+
+
+                                        </td>
+                                    </tr>                                           
+                                    </tbody>
+                                </table>
+
+                            </div>
+                        </div>
+                    </div>
+                </div>
+
+                <div class="uk-width-medium-3-5">
+                    <div class="md-card">
+                        <div class="md-card-content">
+                            <div class="uk-overflow-container">
+                                <table class="uk-table">
+                                    <thead>
+                                        <tr style="background-color: #ffffff;">
+                                            <th colspan="5" style="color: #888888;" class="uk-text-nowrap" >CLASS BY PROGRAMME IN %</th>
+
+                                        </tr>
+                                        
+                                    </thead>
+                                    <tbody>
+
+                                    <tr>
+                                        <td>
+                                            <div style = 'min-height: 45vh'>
+                                        <canvas id="lineChart"></canvas>
+                                    </div>
+
+                                        </td>
+                                    </tr>                                    
+                                                                            
+                                    </tbody>
+                                </table>
+
+                            </div>
+                        </div>
+                    </div>
+                </div>
+                
+            </div>
+        
                        
           
 @endsection

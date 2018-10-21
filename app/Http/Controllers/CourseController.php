@@ -940,7 +940,7 @@ if(@\Auth::user()->department=='Tptop' || @\Auth::user()->department=='Tptop'){
                             $cgpa= number_format(@(( $credit*$gradePoint)/$credit), 3, '.', ',');
                             $newCgpa=@$sys->getCGPA($indexNo);
                                     $class=@$sys->getClass($newCgpa);
-                                    Models\StudentModel::where("INDEXNO",$indexNo)->update(array("CGPA"=>$newCgpa,"CLASS"=>$class,"STATUS"=>'In school'));
+                                    Models\StudentModel::where("INDEXNO",$indexNo)->update(array("CGPA"=>$newCgpa,"CLASS"=>$class));
                             \DB::commit();
 
                         }
@@ -969,7 +969,7 @@ if(@\Auth::user()->department=='Tptop' || @\Auth::user()->department=='Tptop'){
                             );
                            $newCgpa=@$sys->getCGPA($indexNo);
                                     $class=@$sys->getClass($newCgpa);
-                                    Models\StudentModel::where("INDEXNO",$indexNo)->update(array("CGPA"=>$newCgpa,"CLASS"=>$class,"STATUS"=>'In school'));
+                                    Models\StudentModel::where("INDEXNO",$indexNo)->update(array("CGPA"=>$newCgpa,"CLASS"=>$class));
 
                              \DB::commit();
                         }
@@ -2191,12 +2191,15 @@ if(@\Auth::user()->department=='Tptop' || @\Auth::user()->department=='Tptop'){
             ->get();
 
 
-            $dataResit = Models\AcademicRecordsModel::where("programme", $program)
-            ->where('yrgp',$year)
-            ->where('grade','!=','E')     
-            ->orderBy("indexno")
-            ->select('id', \DB::raw('case when resit = "no" and grade = "F" and total < 50 then CONCAT(indexno,resit) end'), \DB::raw('GROUP_CONCAT(if((resit = "no" and grade = "F" and total < 50),code, null))'))
-            ->groupBy('indexno')
+            $dataResit = Models\AcademicRecordsModel::join('tpoly_students', 'tpoly_academic_record.indexno', '=', 'tpoly_students.INDEXNO')
+            ->where("tpoly_students.PROGRAMMECODE", $program)
+            ->where('tpoly_students.GRADUATING_GROUP',$year) 
+            ->where('tpoly_academic_record.resit','no')
+            ->where('tpoly_academic_record.grade','F')
+            ->where('tpoly_academic_record.total','<',50)    
+            ->orderBy("tpoly_academic_record.indexno")
+            ->select('tpoly_academic_record.id', \DB::raw('case when tpoly_academic_record.resit = "no" and tpoly_academic_record.grade = "F" and tpoly_academic_record.total < 50 then CONCAT(tpoly_academic_record.indexno,tpoly_academic_record.resit) end as tt'), \DB::raw('GROUP_CONCAT(if((tpoly_academic_record.resit = "no" and tpoly_academic_record.grade = "F" and tpoly_academic_record.total < 50),tpoly_academic_record.code, null)) as yy'), "tpoly_academic_record.indexno")
+            ->groupBy('tpoly_academic_record.indexno')
             ->get();
 
                             
@@ -2366,12 +2369,15 @@ if(@\Auth::user()->department=='Tptop' || @\Auth::user()->department=='Tptop'){
             ->select('tpoly_academic_record.id', 'tpoly_academic_record.course', 'tpoly_academic_record.code', 'tpoly_academic_record.credits', 'tpoly_academic_record.student', 'tpoly_academic_record.indexno', 'tpoly_academic_record.total as mm', 'tpoly_academic_record.grade', 'tpoly_academic_record.gpoint', 'tpoly_academic_record.year', 'tpoly_academic_record.sem', \DB::raw('substr(tpoly_academic_record.level, 1, 3) as level'), 'tpoly_academic_record.yrgp', 'tpoly_academic_record.groups', 'tpoly_academic_record.lecturer', 'tpoly_academic_record.resit', 'tpoly_academic_record.dateRegistered', 'tpoly_academic_record.createdAt', 'tpoly_academic_record.updates', 'tpoly_academic_record.programme', \DB::raw('concat(tpoly_academic_record.code, tpoly_academic_record.indexno)'), 'tpoly_academic_record.total as tt', \DB::raw('concat(tpoly_academic_record.code, tpoly_academic_record.indexno, tpoly_academic_record.resit)'), 'tpoly_academic_record.total as yes', \DB::raw('concat(tpoly_students.INDEXNO, tpoly_students.STATUS)'), 'tpoly_students.STATUS')
             ->get();
 
-            $dataResit = Models\AcademicRecordsModel::where("programme", $program)
-            ->where('yrgp',$year)
-            ->where('grade','!=','E')     
-            ->orderBy("indexno")
-            ->select('id', \DB::raw('case when resit = "no" and grade = "F" and total < 50 then CONCAT(indexno,resit) end'), \DB::raw('GROUP_CONCAT(if((resit = "no" and grade = "F" and total < 50),code, null))'))
-            ->groupBy('indexno')
+            $dataResit = Models\AcademicRecordsModel::join('tpoly_students', 'tpoly_academic_record.indexno', '=', 'tpoly_students.INDEXNO')
+            ->where("tpoly_students.PROGRAMMECODE", $program)
+            ->where('tpoly_students.GRADUATING_GROUP',$year) 
+            ->where('tpoly_academic_record.resit','no')
+            ->where('tpoly_academic_record.grade','F')
+            ->where('tpoly_academic_record.total','<',50)    
+            ->orderBy("tpoly_academic_record.indexno")
+            ->select('tpoly_academic_record.id', \DB::raw('case when tpoly_academic_record.resit = "no" and tpoly_academic_record.grade = "F" and tpoly_academic_record.total < 50 then CONCAT(tpoly_academic_record.indexno,tpoly_academic_record.resit) end as tt'), \DB::raw('GROUP_CONCAT(if((tpoly_academic_record.resit = "no" and tpoly_academic_record.grade = "F" and tpoly_academic_record.total < 50),tpoly_academic_record.code, null)) as yy'), "tpoly_academic_record.indexno")
+            ->groupBy('tpoly_academic_record.indexno')
             ->get();
 
 
@@ -2454,7 +2460,10 @@ if(@\Auth::user()->department=='Tptop' || @\Auth::user()->department=='Tptop'){
                 $sheet->prependRow(1, array(' '.' '.' '.' '.' TAKORADI TECHNICAL UNIVERSITY'
                 ));
 
-                $sheet->setCellValue('D2','');
+                $kojoResitCount = count($dataResit);
+
+                $sheet->setCellValue('B2',$kojoResitCount);
+				$sheet->setCellValue('D2','');
                 $sheet->setCellValue('D3','');
                 $sheet->setCellValue('D4','Year Group :');
                 $sheet->setCellValue('D5','');
@@ -2476,7 +2485,9 @@ if(@\Auth::user()->department=='Tptop' || @\Auth::user()->department=='Tptop'){
             $data = Models\StudentModel::where("PROGRAMMECODE",$program)
             ->where("GRADUATING_GROUP",$year)
             ->where("STATUS","!=","Admitted")
-            ->orderBy("STATUS")
+            ->orderBy(\DB::raw('FIELD(STATUS, "Alumni", "In school", "Abandoned", "Withdrawn", "Rusticated", "Deffered")'))
+            ->orderBy("TRAIL")
+            //ORDER BY FIELD(priority, "core", "board", "other")
             ->orderBy("INDEXNO")
             ->select('INDEXNO', \DB::raw('concat(SURNAME,", ",FIRSTNAME," ",OTHERNAMES) NAME'))
             ->get();
@@ -2628,6 +2639,8 @@ if(@\Auth::user()->department=='Tptop' || @\Auth::user()->department=='Tptop'){
                             //$sheet->setCellValue('AD'.$k.'','=IF(AC'.$k.'>6,"",IF(AC'.$k.'>3.994,"CD",IF(AC'.$k.'>2.994,"CM",IF(AC'.$k.'>1.994,"C",IF(AC'.$k.'>=0,"NC","")))))');
 
                             $sheet->setCellValue('AD'.$k.'','=IFERROR(VLOOKUP($A'.$k.'&"Abandoned",TP!$Y$8:TP!$Z$'.$kojoSen2.',2,FALSE),IFERROR(VLOOKUP($A'.$k.'&"Deffered",TP!$Y$8:TP!$Z$'.$kojoSen2.',2,FALSE),IFERROR(VLOOKUP($A'.$k.'&"Rusticated",TP!$Y$8:TP!$Z$'.$kojoSen2.',2,FALSE),IFERROR(VLOOKUP($A'.$k.'&"Withdrawn",TP!$Y$8:TP!$Z$'.$kojoSen2.',2,FALSE),IFERROR(VLOOKUP($A'.$k.'&"no",TP2!$B$8:TP2!$C$'.$kojoSen2.',2,FALSE),IF(AC'.$k.'>6,"",IF(AC'.$k.'>3.994,"CD",IF(AC'.$k.'>2.994,"CM",IF(AC'.$k.'>1.994,"C",IF(AC'.$k.'>=0,"NC",""))))))))))');
+
+                           $sheet->getStyle('AD'.$k.'')->getAlignment()->setWrapText(true);
 
 
                         }
@@ -2864,30 +2877,30 @@ if(@\Auth::user()->department=='Tptop' || @\Auth::user()->department=='Tptop'){
                     $sheet->setWidth(array(
                         'A'     =>  15,
                         'B'     =>  35,
-                        'C'     =>  4.7,
-                        'D'     =>  4.7,
-                        'E'     =>  4.7,
-                        'F'     =>  4.7,
-                        'G'     =>  4.7,
-                        'H'     =>  4.7,
-                        'I'     =>  4.7,
-                        'J'     =>  4.7,
-                        'K'     =>  4.7,
-                        'L'     =>  4.7,
-                        'M'     =>  4.7,
-                        'N'     =>  4.7,
-                        'O'     =>  4.7,
-                        'P'     =>  4.7,
-                        'Q'     =>  4.7,
-                        'R'     =>  4.7,
-                        'S'     =>  4.7,
-                        'T'     =>  4.7,
-                        'U'     =>  4.7,
-                        'V'     =>  4.7,
-                        'W'     =>  4.7,
-                        'X'     =>  4.7,
-                        'Y'     =>  4.7,
-                        'Z'     =>  4.7,
+                        'C'     =>  2.9,
+                        'D'     =>  5.7,
+                        'E'     =>  4.5,
+                        'F'     =>  2.9,
+                        'G'     =>  5.7,
+                        'H'     =>  4.5,
+                        'I'     =>  4.5,
+                        'J'     =>  2.9,
+                        'K'     =>  5.7,
+                        'L'     =>  4.5,
+                        'M'     =>  4.5,
+                        'N'     =>  2.9,
+                        'O'     =>  5.7,
+                        'P'     =>  4.5,
+                        'Q'     =>  4.5,
+                        'R'     =>  2.9,
+                        'S'     =>  5.7,
+                        'T'     =>  4.5,
+                        'U'     =>  4.5,
+                        'V'     =>  2.9,
+                        'W'     =>  5.7,
+                        'X'     =>  4.5,
+                        'Y'     =>  4.0,
+                        'Z'     =>  5.7,
                         'AA'     =>  4.7,
                         'AB'     =>  25
                         ));
@@ -2907,7 +2920,7 @@ if(@\Auth::user()->department=='Tptop' || @\Auth::user()->department=='Tptop'){
                             // manipulate the cell
                             ////$cell->setAlignment('center');
                                 $cells->setFont(array(
-                                'size'       => '10'//,
+                                'size'       => '9'//,
                             //'bold'       =>  true
                                 ));
                             });
@@ -2935,7 +2948,7 @@ if(@\Auth::user()->department=='Tptop' || @\Auth::user()->department=='Tptop'){
                             $sheet->setCellValue('C'.$k.'','=SUM(SUMIFS(TP!D8:TP!D'.$kojoSen2.',TP!F8:TP!F'.$kojoSen2.',A'.$k.',TP!K8:TP!K'.$kojoSen2.',1,TP!L8:TP!L'.$kojoSen2.',{"100","500"}))');
 
                             $sheet->setCellValue('D'.$k.'','=SUM(SUMIFS(TP!I8:TP!I'.$kojoSen2.',TP!F8:TP!F'.$kojoSen2.',A'.$k.',TP!K8:TP!K'.$kojoSen2.',1,TP!L8:TP!L'.$kojoSen2.',{"100","500"}))');
-
+                            $sheet->getStyle('D'.$k.'')->getNumberFormat()->setFormatCode('0.00');
                             
 
                             $sheet->setCellValue('E'.$k.'','=IFERROR(D'.$k.'/C'.$k.',"")');
@@ -2944,6 +2957,7 @@ if(@\Auth::user()->department=='Tptop' || @\Auth::user()->department=='Tptop'){
                             $sheet->setCellValue('F'.$k.'','=SUM(SUMIFS(TP!D8:TP!D'.$kojoSen2.',TP!F8:TP!F'.$kojoSen2.',A'.$k.',TP!K8:TP!K'.$kojoSen2.',2,TP!L8:TP!L'.$kojoSen2.',{"100","500"}))');
 
                             $sheet->setCellValue('G'.$k.'','=SUM(SUMIFS(TP!I8:TP!I'.$kojoSen2.',TP!F8:TP!F'.$kojoSen2.',A'.$k.',TP!K8:TP!K'.$kojoSen2.',2,TP!L8:TP!L'.$kojoSen2.',{"100","500"}))');
+                            $sheet->getStyle('G'.$k.'')->getNumberFormat()->setFormatCode('0.00');
 
                             $sheet->setCellValue('H'.$k.'','=IFERROR(G'.$k.'/F'.$k.',"")');
                             $sheet->getStyle('H'.$k.'')->getNumberFormat()->setFormatCode('0.00');
@@ -2954,6 +2968,7 @@ if(@\Auth::user()->department=='Tptop' || @\Auth::user()->department=='Tptop'){
                             $sheet->setCellValue('J'.$k.'','=SUM(SUMIFS(TP!D8:TP!D'.$kojoSen2.',TP!F8:TP!F'.$kojoSen2.',A'.$k.',TP!K8:TP!K'.$kojoSen2.',1,TP!L8:TP!L'.$kojoSen2.',{"200","600"}))');
 
                             $sheet->setCellValue('K'.$k.'','=SUM(SUMIFS(TP!I8:TP!I'.$kojoSen2.',TP!F8:TP!F'.$kojoSen2.',A'.$k.',TP!K8:TP!K'.$kojoSen2.',1,TP!L8:TP!L'.$kojoSen2.',{"200","600"}))');
+                            $sheet->getStyle('K'.$k.'')->getNumberFormat()->setFormatCode('0.00');
 
                             $sheet->setCellValue('L'.$k.'','=IFERROR(K'.$k.'/J'.$k.',"")');
                             $sheet->getStyle('L'.$k.'')->getNumberFormat()->setFormatCode('0.00');
@@ -2964,6 +2979,7 @@ if(@\Auth::user()->department=='Tptop' || @\Auth::user()->department=='Tptop'){
                             $sheet->setCellValue('N'.$k.'','=SUM(SUMIFS(TP!D8:TP!D'.$kojoSen2.',TP!F8:TP!F'.$kojoSen2.',A'.$k.',TP!K8:TP!K'.$kojoSen2.',2,TP!L8:TP!L'.$kojoSen2.',{"200","600"}))');
 
                             $sheet->setCellValue('O'.$k.'','=SUM(SUMIFS(TP!I8:TP!I'.$kojoSen2.',TP!F8:TP!F'.$kojoSen2.',A'.$k.',TP!K8:TP!K'.$kojoSen2.',2,TP!L8:TP!L'.$kojoSen2.',{"200","600"}))');
+                            $sheet->getStyle('O'.$k.'')->getNumberFormat()->setFormatCode('0.00');
 
                             $sheet->setCellValue('P'.$k.'','=IFERROR(O'.$k.'/N'.$k.',"")');
                             $sheet->getStyle('P'.$k.'')->getNumberFormat()->setFormatCode('0.00');
@@ -2974,6 +2990,7 @@ if(@\Auth::user()->department=='Tptop' || @\Auth::user()->department=='Tptop'){
                             $sheet->setCellValue('R'.$k.'','=SUMIFS(TP!D8:TP!D'.$kojoSen2.',TP!F8:TP!F'.$kojoSen2.',A'.$k.',TP!K8:TP!K'.$kojoSen2.',1,TP!L8:TP!L'.$kojoSen2.',"300")');
 
                             $sheet->setCellValue('S'.$k.'','=SUMIFS(TP!I8:TP!I'.$kojoSen2.',TP!F8:TP!F'.$kojoSen2.',A'.$k.',TP!K8:TP!K'.$kojoSen2.',1,TP!L8:TP!L'.$kojoSen2.',"300")');
+                            $sheet->getStyle('S'.$k.'')->getNumberFormat()->setFormatCode('0.00');
 
                             $sheet->setCellValue('T'.$k.'','=IFERROR(S'.$k.'/R'.$k.',"")');
                             $sheet->getStyle('T'.$k.'')->getNumberFormat()->setFormatCode('0.00');
@@ -2984,6 +3001,7 @@ if(@\Auth::user()->department=='Tptop' || @\Auth::user()->department=='Tptop'){
                             $sheet->setCellValue('V'.$k.'','=SUMIFS(TP!D8:TP!D'.$kojoSen2.',TP!F8:TP!F'.$kojoSen2.',A'.$k.',TP!K8:TP!K'.$kojoSen2.',2,TP!L8:TP!L'.$kojoSen2.',"300")');
 
                             $sheet->setCellValue('W'.$k.'','=SUMIFS(TP!I8:TP!I'.$kojoSen2.',TP!F8:TP!F'.$kojoSen2.',A'.$k.',TP!K8:TP!K'.$kojoSen2.',2,TP!L8:TP!L'.$kojoSen2.',"300")');
+                            $sheet->getStyle('W'.$k.'')->getNumberFormat()->setFormatCode('0.00');
 
                             $sheet->setCellValue('X'.$k.'','=IFERROR(W'.$k.'/V'.$k.',"")');
                             $sheet->getStyle('X'.$k.'')->getNumberFormat()->setFormatCode('0.00');
@@ -2993,12 +3011,16 @@ if(@\Auth::user()->department=='Tptop' || @\Auth::user()->department=='Tptop'){
                             $sheet->setCellValue('Y'.$k.'','=F'.$k.'+C'.$k.'+J'.$k.'+N'.$k.'+R'.$k.'+V'.$k);
 
                             $sheet->setCellValue('Z'.$k.'','=G'.$k.'+D'.$k.'+K'.$k.'+O'.$k.'+S'.$k.'+W'.$k);
+                            $sheet->getStyle('Z'.$k.'')->getNumberFormat()->setFormatCode('0.00');
 
                             $sheet->setCellValue('AA'.$k.'','=IFERROR(Z'.$k.'/Y'.$k.',"")');
                             $sheet->getStyle('AA'.$k.'')->getNumberFormat()->setFormatCode('0.00');
                             
 
                             $sheet->setCellValue('AB'.$k.'','=IFERROR(VLOOKUP($A'.$k.'&"Abandoned",TP!$Y$8:TP!$Z$'.$kojoSen2.',2,FALSE),IFERROR(VLOOKUP($A'.$k.'&"Deffered",TP!$Y$8:TP!$Z$'.$kojoSen2.',2,FALSE),IFERROR(VLOOKUP($A'.$k.'&"Rusticated",TP!$Y$8:TP!$Z$'.$kojoSen2.',2,FALSE),IFERROR(VLOOKUP($A'.$k.'&"Withdrawn",TP!$Y$8:TP!$Z$'.$kojoSen2.',2,FALSE),IFERROR(VLOOKUP($A'.$k.'&"no",TP2!$B$8:TP2!$C$'.$kojoSen2.',2,FALSE),IF(AA'.$k.'>5,"",IF(AA'.$k.'>3.994,"First Class",IF(AA'.$k.'>2.994,"Second Class Upper Division",IF(AA'.$k.'>1.994,"Second Class Lower Division",IF(AA'.$k.'>1.494,"Pass",IF(AA'.$k.'<=1.494,"Fail","")))))))))))');
+
+                            $sheet->getStyle('AB'.$k.'')->getAlignment()->setWrapText(true);
+
 
 
                         }
@@ -3233,6 +3255,504 @@ if(@\Auth::user()->department=='Tptop' || @\Auth::user()->department=='Tptop'){
                 
             //});
             });
+
+			$excel->sheet('NABPTEX', function ($sheet) use ($data,$kojoSense,$kojoSen2,$program,$year,$programme,$dpt3,$fac3,$lectname) 
+                    {
+                    //CGPA format begins here
+                    $sheet->setWidth(array(
+                        'A'     =>  15,
+                        'B'     =>  35,
+                        'C'     =>  2.9,
+                        'D'     =>  5.7,
+                        'E'     =>  4.5,
+                        'F'     =>  2.9,
+                        'G'     =>  5.7,
+                        'H'     =>  4.5,
+                        'I'     =>  4.5,
+                        'J'     =>  2.9,
+                        'K'     =>  5.7,
+                        'L'     =>  4.5,
+                        'M'     =>  4.5,
+                        'N'     =>  2.9,
+                        'O'     =>  5.7,
+                        'P'     =>  4.5,
+                        'Q'     =>  4.5,
+                        'R'     =>  2.9,
+                        'S'     =>  5.7,
+                        'T'     =>  4.5,
+                        'U'     =>  4.5,
+                        'V'     =>  2.9,
+                        'W'     =>  5.7,
+                        'X'     =>  4.5,
+                        'Y'     =>  4.0,
+                        'Z'     =>  5.7,
+                        'AA'     =>  4.7,
+                        'AB'     =>  25
+                        ));
+
+                        $sheet->prependRow(1, array('prepended', 'prepended', 'CR', 'GP', 'GPA', 'CR', 'GP', 'GPA', 'CGPA', 'CR', 'GP', 'GPA', 'CGPA', 'CR', 'GP', 'GPA', 'CGPA', 'CR', 'GP', 'GPA', 'CGPA', 'CR', 'GP', 'GPA', 'CR', 'GP', 'CGPA', 'REMARKS'));
+
+                
+                
+                        //$sheet->prependRow(1, array('assignment', 'quiz', 'midsem', 'exam', 'total'));
+
+                        $sheet->fromArray($data);
+                
+                        $kojoCellBeauty = $kojoSense+6;
+                        $sheet->cells('A1:AD'.$kojoSense.'', function($cells) 
+                            {
+
+                            // manipulate the cell
+                            ////$cell->setAlignment('center');
+                                $cells->setFont(array(
+                                'size'       => '9'//,
+                            //'bold'       =>  true
+                                ));
+                            });
+
+                            //$sheet->setCellsValue('C2:F'.$kojoSense.'','0');
+                            //$sheet->cells('C2:C5', function($cells) {
+                            // $cells->setValue('0');
+                            //});
+                            //$sheet->cells('C2:C5', function($cell) {
+
+                            //manipulate the cell
+                            //$cell->setValue('0');
+                            //});
+                            // $sheet->setCellValue('G5','=SUM(C5:F5)');
+
+                            //=SUMIFS(TP!D1:TP!D25000,TP!F1:TP!F25000,A3,TP!K1:TP!K25000,1,TP!L1:TP!L25000,"100H")
+                            //=SUMIFS(TP!G1:TP!G25000,TP!F1:TP!F25000,A3,TP!K1:TP!K25000,1,TP!L1:TP!L25000,"100H")
+
+                        for($k=2;$k<$kojoSense+1;$k++)
+                            {
+                            //$sheet->setCellValue('C'.$k.'','0');
+                            //$sheet->setCellValue('D'.$k.'','0');
+                            //$sheet->setCellValue('E'.$k.'','0');
+                            //$sheet->setCellValue('F'.$k.'','0');
+                            $sheet->setCellValue('C'.$k.'','=SUM(SUMIFS(TP!D8:TP!D'.$kojoSen2.',TP!F8:TP!F'.$kojoSen2.',A'.$k.',TP!K8:TP!K'.$kojoSen2.',1,TP!L8:TP!L'.$kojoSen2.',{"100","500"}))');
+
+                            $sheet->setCellValue('D'.$k.'','=SUM(SUMIFS(TP!I8:TP!I'.$kojoSen2.',TP!F8:TP!F'.$kojoSen2.',A'.$k.',TP!K8:TP!K'.$kojoSen2.',1,TP!L8:TP!L'.$kojoSen2.',{"100","500"}))');
+                            $sheet->getStyle('D'.$k.'')->getNumberFormat()->setFormatCode('0.00');
+                            
+
+                            $sheet->setCellValue('E'.$k.'','=IFERROR(D'.$k.'/C'.$k.',"")');
+                            $sheet->getStyle('E'.$k.'')->getNumberFormat()->setFormatCode('0.00');
+
+                            $sheet->setCellValue('F'.$k.'','=SUM(SUMIFS(TP!D8:TP!D'.$kojoSen2.',TP!F8:TP!F'.$kojoSen2.',A'.$k.',TP!K8:TP!K'.$kojoSen2.',2,TP!L8:TP!L'.$kojoSen2.',{"100","500"}))');
+
+                            $sheet->setCellValue('G'.$k.'','=SUM(SUMIFS(TP!I8:TP!I'.$kojoSen2.',TP!F8:TP!F'.$kojoSen2.',A'.$k.',TP!K8:TP!K'.$kojoSen2.',2,TP!L8:TP!L'.$kojoSen2.',{"100","500"}))');
+                            $sheet->getStyle('G'.$k.'')->getNumberFormat()->setFormatCode('0.00');
+
+                            $sheet->setCellValue('H'.$k.'','=IFERROR(G'.$k.'/F'.$k.',"")');
+                            $sheet->getStyle('H'.$k.'')->getNumberFormat()->setFormatCode('0.00');
+
+                            $sheet->setCellValue('I'.$k.'','=(G'.$k.'+D'.$k.')/(F'.$k.'+C'.$k.')');
+                            $sheet->getStyle('I'.$k.'')->getNumberFormat()->setFormatCode('0.00');
+
+                            $sheet->setCellValue('J'.$k.'','=SUM(SUMIFS(TP!D8:TP!D'.$kojoSen2.',TP!F8:TP!F'.$kojoSen2.',A'.$k.',TP!K8:TP!K'.$kojoSen2.',1,TP!L8:TP!L'.$kojoSen2.',{"200","600"}))');
+
+                            $sheet->setCellValue('K'.$k.'','=SUM(SUMIFS(TP!I8:TP!I'.$kojoSen2.',TP!F8:TP!F'.$kojoSen2.',A'.$k.',TP!K8:TP!K'.$kojoSen2.',1,TP!L8:TP!L'.$kojoSen2.',{"200","600"}))');
+                            $sheet->getStyle('K'.$k.'')->getNumberFormat()->setFormatCode('0.00');
+
+                            $sheet->setCellValue('L'.$k.'','=IFERROR(K'.$k.'/J'.$k.',"")');
+                            $sheet->getStyle('L'.$k.'')->getNumberFormat()->setFormatCode('0.00');
+
+                            $sheet->setCellValue('M'.$k.'','=(G'.$k.'+D'.$k.'+K'.$k.')/(F'.$k.'+C'.$k.'+J'.$k.')');
+                            $sheet->getStyle('M'.$k.'')->getNumberFormat()->setFormatCode('0.00');
+                            
+                            $sheet->setCellValue('N'.$k.'','=SUM(SUMIFS(TP!D8:TP!D'.$kojoSen2.',TP!F8:TP!F'.$kojoSen2.',A'.$k.',TP!K8:TP!K'.$kojoSen2.',2,TP!L8:TP!L'.$kojoSen2.',{"200","600"}))');
+
+                            $sheet->setCellValue('O'.$k.'','=SUM(SUMIFS(TP!I8:TP!I'.$kojoSen2.',TP!F8:TP!F'.$kojoSen2.',A'.$k.',TP!K8:TP!K'.$kojoSen2.',2,TP!L8:TP!L'.$kojoSen2.',{"200","600"}))');
+                            $sheet->getStyle('O'.$k.'')->getNumberFormat()->setFormatCode('0.00');
+
+                            $sheet->setCellValue('P'.$k.'','=IFERROR(O'.$k.'/N'.$k.',"")');
+                            $sheet->getStyle('P'.$k.'')->getNumberFormat()->setFormatCode('0.00');
+
+                            $sheet->setCellValue('Q'.$k.'','=(G'.$k.'+D'.$k.'+K'.$k.'+O'.$k.')/(F'.$k.'+C'.$k.'+J'.$k.'+N'.$k.')');
+                            $sheet->getStyle('Q'.$k.'')->getNumberFormat()->setFormatCode('0.00');
+
+                            $sheet->setCellValue('R'.$k.'','=SUMIFS(TP!D8:TP!D'.$kojoSen2.',TP!F8:TP!F'.$kojoSen2.',A'.$k.',TP!K8:TP!K'.$kojoSen2.',1,TP!L8:TP!L'.$kojoSen2.',"300")');
+
+                            $sheet->setCellValue('S'.$k.'','=SUMIFS(TP!I8:TP!I'.$kojoSen2.',TP!F8:TP!F'.$kojoSen2.',A'.$k.',TP!K8:TP!K'.$kojoSen2.',1,TP!L8:TP!L'.$kojoSen2.',"300")');
+                            $sheet->getStyle('S'.$k.'')->getNumberFormat()->setFormatCode('0.00');
+
+                            $sheet->setCellValue('T'.$k.'','=IFERROR(S'.$k.'/R'.$k.',"")');
+                            $sheet->getStyle('T'.$k.'')->getNumberFormat()->setFormatCode('0.00');
+
+                            $sheet->setCellValue('U'.$k.'','=(G'.$k.'+D'.$k.'+K'.$k.'+O'.$k.'+S'.$k.')/(F'.$k.'+C'.$k.'+J'.$k.'+N'.$k.'+R'.$k.')');
+                            $sheet->getStyle('U'.$k.'')->getNumberFormat()->setFormatCode('0.00');
+
+                            $sheet->setCellValue('V'.$k.'','=SUMIFS(TP!D8:TP!D'.$kojoSen2.',TP!F8:TP!F'.$kojoSen2.',A'.$k.',TP!K8:TP!K'.$kojoSen2.',2,TP!L8:TP!L'.$kojoSen2.',"300")');
+
+                            $sheet->setCellValue('W'.$k.'','=SUMIFS(TP!I8:TP!I'.$kojoSen2.',TP!F8:TP!F'.$kojoSen2.',A'.$k.',TP!K8:TP!K'.$kojoSen2.',2,TP!L8:TP!L'.$kojoSen2.',"300")');
+                            $sheet->getStyle('W'.$k.'')->getNumberFormat()->setFormatCode('0.00');
+
+                            $sheet->setCellValue('X'.$k.'','=IFERROR(W'.$k.'/V'.$k.',"")');
+                            $sheet->getStyle('X'.$k.'')->getNumberFormat()->setFormatCode('0.00');
+
+                            //$sheet->setCellValue('Y'.$k.'','=(G'.$k.'+D'.$k.'+K'.$k.'+O'.$k.'+S'.$k.'+W'.$k.')/(F'.$k.'+C'.$k.'+J'.$k.'+N'.$k.'+R'.$k.'+V'.$k.')');
+
+                            $sheet->setCellValue('Y'.$k.'','=F'.$k.'+C'.$k.'+J'.$k.'+N'.$k.'+R'.$k.'+V'.$k);
+
+                            $sheet->setCellValue('Z'.$k.'','=G'.$k.'+D'.$k.'+K'.$k.'+O'.$k.'+S'.$k.'+W'.$k);
+                            $sheet->getStyle('Z'.$k.'')->getNumberFormat()->setFormatCode('0.00');
+
+                            $sheet->setCellValue('AA'.$k.'','=IFERROR(Z'.$k.'/Y'.$k.',"")');
+                            $sheet->getStyle('AA'.$k.'')->getNumberFormat()->setFormatCode('0.00');
+                            
+
+                            $sheet->setCellValue('AB'.$k.'','=IFERROR(VLOOKUP($A'.$k.'&"Abandoned",TP!$Y$8:TP!$Z$'.$kojoSen2.',2,FALSE),IFERROR(VLOOKUP($A'.$k.'&"Deffered",TP!$Y$8:TP!$Z$'.$kojoSen2.',2,FALSE),IFERROR(VLOOKUP($A'.$k.'&"Rusticated",TP!$Y$8:TP!$Z$'.$kojoSen2.',2,FALSE),IFERROR(VLOOKUP($A'.$k.'&"Withdrawn",TP!$Y$8:TP!$Z$'.$kojoSen2.',2,FALSE),IFERROR(VLOOKUP($A'.$k.'&"no",TP2!$B$8:TP2!$C$'.$kojoSen2.',2,FALSE),IF(AA'.$k.'>5,"",IF(AA'.$k.'>3.994,"First Class",IF(AA'.$k.'>2.994,"Second Class Upper Division",IF(AA'.$k.'>1.994,"Second Class Lower Division",IF(AA'.$k.'>1.494,"Pass",IF(AA'.$k.'<=1.494,"Fail","")))))))))))');
+
+                            $sheet->getStyle('AB'.$k.'')->getAlignment()->setWrapText(true);
+
+
+
+                        }
+
+                       
+
+                            $cheat = 25+$k;
+                            $cheat2 = $cheat + 3;
+                            $cheat3 = $cheat2 + 1;
+
+                            $sheet->prependRow(1, array('', '', 'SEMESTER 1', '', '', 'SEMESTER 2', '', '', '', 'SEMESTER 3', '', '', '', 'SEMESTER 4', '', '', '', 'SEMESTER 5', '', '', '', 'SEMESTER 6', '', '', 'CUMMULATIVE', '', '', ''));
+                            $sheet->prependRow(1, array(' '.' CUMULATIVE GRADE POINT FOR HIGHER NATIONAL DIPLOMA PROGRAMMES IN THE UNIVERSITY'
+                            ));
+                            $sheet->prependRow(1, array(' '.$programme
+                            ));
+                            $sheet->prependRow(1, array(' '.$dpt3.' DEPARTMENT'
+                            ));
+                            $sheet->prependRow(1, array(' '.$fac3
+                            ));
+                            $sheet->prependRow(1, array(' TAKORADI TECHNICAL UNIVERSITY || '.$year.' YEAR GROUP'
+                            ));
+
+                                                       
+                            $sheet->cells('A7:AB7', function($cells) {
+                            // manipulate the cell
+                                ////$cell->setAlignment('center');
+                            $cells->setFont(array(
+                                'size'       => '10',
+                                'bold'       =>  true
+                            ));
+
+                            });
+                
+
+
+                            for($lisa=1;$lisa<5;$lisa++)
+                                {
+                               $sheet->mergeCells('A'.$lisa.':AB'.$lisa);
+                                $sheet->cells('A'.$lisa.':AB'.$lisa.'', function($celcenter1) {
+
+                                // manipulate the cell
+                                $celcenter1->setAlignment('center');
+                                //$cells->setFont(array(
+                                //'size'       => '10'//,
+                                //'bold'       =>  true
+                        
+
+                            }); 
+                                
+                                //$sheet->cell('A'.$lisa, function($cell) {
+                                $sheet->cells('A1:Z5', function($cells) {
+
+                                // manipulate the cell
+                                 ////$cell->setAlignment('center');
+                                    $cells->setFont(array(
+                                    'size'       => '12',
+                                    'bold'       =>  true
+                                    ));
+
+                                    });
+                                }
+                                                              
+
+                            $sheet->cells('C1:J6', function($cells) {
+
+                            $cells->setBackground('#ffffff');
+                            });
+
+                            $sheet->cells('N1:R6', function($cells) {
+
+                            $cells->setBackground('#ffffff');
+                            });
+
+                            $sheet->mergeCells('A5:AB5');
+
+                            $sheet->cell('A5', function($cell) {
+
+                            $cell->setAlignment('center');
+                            });
+
+
+                            $sheet->mergeCells('A6:B6');
+                            $sheet->mergeCells('C6:E6');
+                            $sheet->mergeCells('F6:I6');
+                            $sheet->mergeCells('J6:M6');
+                            $sheet->mergeCells('N6:Q6');
+                            $sheet->mergeCells('R6:U6');
+                            $sheet->mergeCells('V6:X6');
+                            $sheet->mergeCells('Y6:AB6');
+                                   
+
+                            
+                                            
+                            $sheet->setHeight(array(
+                                '1'     =>  22,
+                                '2'     =>  22,
+                                '3'     =>  22,
+                                '4'     =>  22,
+                                '5'     =>  22
+                                
+                            ));
+
+                            
+
+                            //$sheet->setFreeze('A8'); 
+
+                            $sheet->cells('C6:AB'.$kojoCellBeauty.'', function($celcenter) {
+
+                                // manipulate the cell
+                                $celcenter->setAlignment('center');
+                      
+                            }); 
+
+                            $sheet->setBorder('A6:AB'.$kojoCellBeauty.'', 'thin'); 
+
+                            $sheet->cells('I6:I'.$kojoCellBeauty.'', function($celB) {
+
+                                // manipulate the cell
+                                 $celB->setBorder('','medium','thin','');
+                                   
+                            });
+                            $sheet->cells('B6:B'.$kojoCellBeauty.'', function($celB) {
+
+                                // manipulate the cell
+                                 $celB->setBorder('','medium','thin','');
+                                   
+                            });
+                            $sheet->cells('E6:E'.$kojoCellBeauty.'', function($celB) {
+
+                                // manipulate the cell
+                                 $celB->setBorder('','medium','thin','');
+                                   
+                            });
+                            $sheet->cells('M6:M'.$kojoCellBeauty.'', function($celB) {
+
+                                // manipulate the cell
+                                 $celB->setBorder('','medium','thin','');
+                                   
+                            });
+                            $sheet->cells('Q6:Q'.$kojoCellBeauty.'', function($celB) {
+
+                                // manipulate the cell
+                                 $celB->setBorder('','medium','thin','');
+                                   
+                            });
+                            $sheet->cells('U6:U'.$kojoCellBeauty.'', function($celB) {
+
+                                // manipulate the cell
+                                 $celB->setBorder('','medium','thin','');
+                                   
+                            });
+                            $sheet->cells('X6:X'.$kojoCellBeauty.'', function($celB) {
+
+                                // manipulate the cell
+                                 $celB->setBorder('','medium','thin','');
+                                   
+                            }); 
+                            $sheet->cells('AB6:AB'.$kojoCellBeauty.'', function($celB) {
+
+                                // manipulate the cell
+                                 $celB->setBorder('','medium','thin','');
+                                   
+                            });
+                            $sheet->cell('A6', function($celB) {
+
+                                // manipulate the cell
+                                 $celB->setBorder('thin','medium','thin','thin');
+                                   
+                            });
+                            $sheet->cell('C6', function($celB) {
+
+                                // manipulate the cell
+                                 $celB->setBorder('thin','medium','thin','thin');
+                                   
+                            });
+                            $sheet->cell('F6', function($celB) {
+
+                                // manipulate the cell
+                                 $celB->setBorder('thin','medium','thin','thin');
+                                   
+                            });
+                            $sheet->cell('J6', function($celB) {
+
+                                // manipulate the cell
+                                 $celB->setBorder('thin','medium','thin','thin');
+                                   
+                            });
+                            $sheet->cell('N6', function($celB) {
+
+                                // manipulate the cell
+                                 $celB->setBorder('thin','medium','thin','thin');
+                                   
+                            });
+                            $sheet->cell('R6', function($celB) {
+
+                                // manipulate the cell
+                                 $celB->setBorder('thin','medium','thin','thin');
+                                   
+                            });
+                            $sheet->cell('V6', function($celB) {
+
+                                // manipulate the cell
+                                 $celB->setBorder('thin','medium','thin','thin');
+                                   
+                            });
+                            
+                            $sheet->cells('A7:AB7', function($celB) {
+
+                                // manipulate the cell
+                                 $celB->setBorder('thin','thin','thick','thin');
+                                   
+                            });
+
+                            $sheet->cells('C5:AB5', function($celB) {
+
+                                // manipulate the cell
+                                 $celB->setBorder('none','none','medium','none');
+                                   
+                            });
+                             $range = "A33:AB33";
+                            $sheet->prependRow(33, array('INDEXNO', 'NAME', 'CR', 'GP', 'GPA', 'CR', 'GP', 'GPA', 'CGPA', 'CR', 'GP', 'GPA', 'CGPA', 'CR', 'GP', 'GPA', 'CGPA', 'CR', 'GP', 'GPA', 'CGPA', 'CR', 'GP', 'GPA', 'CR', 'GP', 'CGPA', 'REMARKS'));
+                            	//dd($newHeaderRow);
+                            	$sheet->prependRow(33, array('', '', 'SEMESTER 1', '', '', 'SEMESTER 2', '', '', '', 'SEMESTER 3', '', '', '', 'SEMESTER 4', '', '', '', 'SEMESTER 5', '', '', '', 'SEMESTER 6', '', '', 'CUMMULATIVE', '', '', ''));
+                            	//$sheet->mergeCells('A33:B33');
+                            $sheet->mergeCells('C33:E33');
+                            $sheet->mergeCells('F33:I33');
+                            $sheet->mergeCells('J33:M33');
+                            $sheet->mergeCells('N33:Q33');
+                            $sheet->mergeCells('R33:U33');
+                            $sheet->mergeCells('V33:X33');
+                            $sheet->mergeCells('Y33:AB33');
+
+                            $sheet->cells('C33:AB'.$kojoCellBeauty.'', function($celcenter) {
+
+                                // manipulate the cell
+                                $celcenter->setAlignment('center');
+                      
+                            }); 
+                            	$sheet->prependRow(33, array('','','','','','','','','','','','','','','','','','','','','','','','','','','','Page 2'));
+                            	$sheet->prependRow(33, array('',''));
+                            //}
+                			
+$sheet->setBorder($range, 'none');
+                             //$range = "A33:AB33";
+                			$sheet->prependRow(33, array('',''));
+                            $sheet->setBorder($range, 'none');
+                			$sheet->prependRow(33, array(' External Examiner____________________________','','','','','','','','','','','Signature_______________________','','','','','','','','','','','Date_______________________'
+
+                            ));
+                           
+							$sheet->setBorder($range, 'none');
+
+                            $sheet->prependRow(33, array('',''));
+                            $sheet->setBorder($range, 'none');
+
+                            $sheet->prependRow(33, array(' Vice Chancellor____________________________','','','','','','','','','','','Signature_______________________','','','','','','','','','','','Date_______________________'
+
+                            ));
+                            $sheet->setBorder($range, 'none');
+                            $sheet->prependRow(33, array('',''));
+                            $sheet->setBorder($range, 'none');
+
+                            $sheet->prependRow(33, array(' Head of Department____________________________','','','','','','','','','','','Signature_______________________','','','','','','','','','','','Date_______________________'
+
+                            ));
+                            $sheet->setBorder($range, 'none');
+            	
+            				$sheet->prependRow(33, array('',''));
+            				$sheet->setBorder($range, 'none');
+                            $sheet->prependRow(33, array('',''));
+                            $sheet->setBorder($range, 'none');
+
+
+                            	// $sheet->prependRow(41, array('INDEXNO', 'NAME', 'CR', 'GP', 'GPA', 'CR', 'GP', 'GPA', 'CGPA', 'CR', 'GP', 'GPA', 'CGPA', 'CR', 'GP', 'GPA', 'CGPA', 'CR', 'GP', 'GPA', 'CGPA', 'CR', 'GP', 'GPA', 'CR', 'GP', 'CGPA', 'REMARKS'));
+                            	
+                            	// $sheet->prependRow(41, array('', '', 'SEMESTER 1', '', '', 'SEMESTER 2', '', '', '', 'SEMESTER 3', '', '', '', 'SEMESTER 4', '', '', '', 'SEMESTER 5', '', '', '', 'SEMESTER 6', '', '', 'CUMMULATIVE', '', '', ''));
+                            	// $sheet->prependRow(41, array('','','','','','','','','','','','','','','','','','','','','','','','','','','','Page 2'));
+                            	// $sheet->prependRow(41, array('','')); 
+                            $pageNo = 1;
+                            $newHeaderRow = 0;	
+                            $newHeaderAdd = 42;
+                            for ($i=1; $i < $kojoSense; $i+=$newHeaderAdd) { 
+                            	$newHeaderRow+=$newHeaderAdd;
+                            	$pageNo += 1;
+                            	$range = "A".$newHeaderRow.":AB".$newHeaderRow;
+                            if ($i > $newHeaderAdd) {
+                            	
+
+                            	$sheet->prependRow($newHeaderRow, array('INDEXNO', 'NAME', 'CR', 'GP', 'GPA', 'CR', 'GP', 'GPA', 'CGPA', 'CR', 'GP', 'GPA', 'CGPA', 'CR', 'GP', 'GPA', 'CGPA', 'CR', 'GP', 'GPA', 'CGPA', 'CR', 'GP', 'GPA', 'CR', 'GP', 'CGPA', 'REMARKS'));
+                            	//dd($newHeaderRow);
+                            	$sheet->prependRow($newHeaderRow, array('', '', 'SEMESTER 1', '', '', 'SEMESTER 2', '', '', '', 'SEMESTER 3', '', '', '', 'SEMESTER 4', '', '', '', 'SEMESTER 5', '', '', '', 'SEMESTER 6', '', '', 'CUMMULATIVE', '', '', ''));
+
+                            	$sheet->mergeCells('C'.$newHeaderRow.':E'.$newHeaderRow);
+                            $sheet->mergeCells('F'.$newHeaderRow.':I'.$newHeaderRow);
+                            $sheet->mergeCells('J'.$newHeaderRow.':M'.$newHeaderRow);
+                            $sheet->mergeCells('N'.$newHeaderRow.':Q'.$newHeaderRow);
+                            $sheet->mergeCells('R'.$newHeaderRow.':U'.$newHeaderRow);
+                            $sheet->mergeCells('V'.$newHeaderRow.':X'.$newHeaderRow);
+                            $sheet->mergeCells('Y'.$newHeaderRow.':AB'.$newHeaderRow);
+
+                            $sheet->cells('C'.$newHeaderRow.':AB'.$kojoCellBeauty.'', function($celcenter) {
+
+                                // manipulate the cell
+                                $celcenter->setAlignment('center');
+                      
+                            }); 
+                            	//$sheet->setBorder($range, 'none');
+                            	$sheet->prependRow($newHeaderRow, array('','','','','','','','','','','','','','','','','','','','','','','','','','','','Page '.$pageNo));
+                            	$sheet->setBorder($range, 'none');
+                            	$sheet->prependRow($newHeaderRow, array('',''));
+                            }
+                            $sheet->setBorder($range, 'none');
+                			$sheet->prependRow($newHeaderRow, array('',''));
+                            $sheet->setBorder($range, 'none');
+                			$sheet->prependRow($newHeaderRow, array(' External Examiner____________________________','','','','','','','','','','','Signature_______________________','','','','','','','','','','','Date_______________________'
+
+                            ));
+                           
+							$sheet->setBorder($range, 'none');
+
+                            $sheet->prependRow($newHeaderRow, array('',''));
+                            $sheet->setBorder($range, 'none');
+
+                            $sheet->prependRow($newHeaderRow, array(' Vice Chancellor____________________________','','','','','','','','','','','Signature_______________________','','','','','','','','','','','Date_______________________'
+
+                            ));
+                            $sheet->setBorder($range, 'none');
+                            $sheet->prependRow($newHeaderRow, array('',''));
+                            $sheet->setBorder($range, 'none');
+
+                            $sheet->prependRow($newHeaderRow, array(' Head of Department____________________________','','','','','','','','','','','Signature_______________________','','','','','','','','','','','Date_______________________'
+
+                            ));
+                            $sheet->setBorder($range, 'none');
+            	
+            				$sheet->prependRow($newHeaderRow, array('',''));
+            				$sheet->setBorder($range, 'none');
+                            $sheet->prependRow($newHeaderRow, array('',''));
+                            $sheet->setBorder($range, 'none');
+                            	
+                            	
+                            
+                            //$newHeaderRowCGPA=$newHeaderRow + 2;
+                            }
+                           
+            });
+			
 }
         //$arraycc = $sys->getSemYear();
         //$yearcc = $arraycc[0]->YEAR;
@@ -8607,6 +9127,201 @@ $datafuck = Models\AcademicRecordsModel::join('tpoly_students', 'tpoly_academic_
 
     }
 
+
+    public function downloadRegList(Request $request, SystemController $sys )
+
+    {
+
+        $this->validate($request, [
+
+
+            'program' => 'required',
+            'sem' => 'required',
+           // 'year' => 'required',
+            'level' => 'required',
+        ]);
+
+        $kojoSense = 0;
+        $array = $sys->getSemYear();
+        $year2 = $array[0]->YEAR;
+        $sem = $request->input("sem");
+        $year = $request->input("year");
+        $level = $request->input("level");
+        $program = $request->input("program");
+        //$course = $request->input("course");
+        $lecturer = @\Auth::user()->fund;
+        $lectname = @\Auth::user()->name;
+        $programme2 = \DB::table('tpoly_programme')->where('PROGRAMMECODE',$program)->first();
+        $programme = $programme2->PROGRAMME;
+        $dpt1 = $programme2->DEPTCODE;
+        $dpt2 = \DB::table('tpoly_department')->where('DEPTCODE',$dpt1)->first();
+        $dpt3 = $dpt2->DEPARTMENT;
+        $fac1 = $dpt2->FACCODE;
+        $fac2 = \DB::table('tpoly_faculty')->where('FACCODE',$fac1)->first();
+        $fac3 = $fac2->FACULTY;
+        //$courcec = \DB::table('tpoly_courses')->where('COURSE_CODE',$course)->first();
+        //$courced = $courcec->COURSE_NAME;
+
+
+        /* $data = Models\AcademicRecordsModel::
+         join('tpoly_students', 'tpoly_academic_record.student', '=', 'tpoly_students.ID')
+             ->where('tpoly_academic_record.code', $course)
+             ->where('tpoly_academic_record.lecturer', $lecturer)
+             ->where('tpoly_academic_record.year', $year)
+             ->where('tpoly_academic_record.sem', $sem)
+             ->select('tpoly_students.INDEXNO', 'tpoly_students.NAME', 'tpoly_academic_record.quiz1', 'tpoly_academic_record.quiz2', 'tpoly_academic_record.midsem1', 'tpoly_academic_record.exam', 'tpoly_academic_record.total')
+             ->orderBy("tpoly_students.INDEXNO")
+             ->get();*/
+             //$rownr=0;
+
+        $data = Models\StudentModel::where("PROGRAMMECODE",$program)
+            ->where("LEVEL",$level)
+            ->where("STATUS","In school")
+            ->where("REGISTERED",1)
+            ->orderBy("INDEXNO")
+            //->set('SET @rownr=0'))//->orderBy("REGISTERED", "DESC")
+            ->select('INDEXNO', \DB::raw('concat(SURNAME,", ",FIRSTNAME," ",OTHERNAMES) NAME'))
+            ->get();
+
+        $kojoSense = count($data)+1;
+
+        return Excel::create($level.'_'.$programme, function ($excel) use ($data,$program,$level,$programme,$kojoSense,$dpt3,$fac3,$lectname,$year2){
+
+            $excel->sheet($program, function ($sheet) use ($data,$kojoSense,$program,$level,$programme,$dpt3,$fac3,$lectname,$year2) {
+                $sheet->setWidth(array(
+                    'A'     =>  5,
+                    'B'     =>  15,
+                    'C'     =>  40,
+                    
+                ));
+
+                $sheet->prependRow(1, array('prepended', 'prepended'));
+                 //$sheet->prependRow(1, array('assignment', 'quiz', 'midsem', 'exam', 'total'));
+
+                $sheet->fromArray($data, Null, 'B1');
+                $sheet->setBorder('A1:C'.$kojoSense.'', 'thin');
+                //$sheet->setCellsValue('C2:F'.$kojoSense.'','0');
+                //$sheet->cells('C2:C5', function($cells) {
+
+                $sheet->setCellValue('A1','ID');
+                for($k=1;$k<$kojoSense;$k++){
+                	$kID = $k;
+                	$kIdCount = $kID + 1;
+                    $sheet->setCellValue('A'.$kIdCount.'',$k);
+                    
+
+
+                }
+
+                $current_time = \Carbon\Carbon::now()->toDateTimeString();
+                           // $sheet->setCellValue('A2',$current_time);
+
+                $cheat = 25+$k;
+                $cheat2 = $cheat + 3;
+                $cheat3 = $cheat2 + 1;
+
+                $sheet->prependRow(1, array(' '.' '.' '.''
+                ));
+                $sheet->prependRow(1, array(' '.' '.' '.' '.' REGISTERED STUDENTS - '.$level.' ('.$current_time.')'
+                ));
+                $sheet->prependRow(1, array(' '.' '.' '.' '.' '.$programme
+                ));
+                $sheet->prependRow(1, array(' '.' '.' '.' '.' '.$dpt3.' DEPARTMENT'
+                ));
+                $sheet->prependRow(1, array(' '.' '.' '.' '.' '.$fac3
+                ));
+                $sheet->prependRow(1, array(' '.' '.' '.' '.' TAKORADI TECHNICAL UNIVERSITY - '.$year2
+                ));
+
+               
+                //$sheet->setCellValue('D5','Course Code :');
+
+                
+                //$sheet->setCellValue('F5',$course);
+                //$sheet->setCellValue('J3','STATISTICS');
+                //$sheet->setCellValue('J4','Max :');
+                //$sheet->setCellValue('J5','Min :');
+                //$sheet->setCellValue('J6','Avg :');
+
+                //$sheet->setCellValue('J8','A+ :');
+                //$sheet->setCellValue('J9','A :');
+                //$sheet->setCellValue('J10','B+ :');
+                //$sheet->setCellValue('J11','B :');
+                //$sheet->setCellValue('J12','C+ :');
+                //$sheet->setCellValue('J13','C :');
+                //$sheet->setCellValue('J14','D+ :');
+                //$sheet->setCellValue('J15','D :');
+                //$sheet->setCellValue('J16','F :');
+                //$sheet->setCellValue('J17','Sum :');
+
+                
+                //$sheet->setCellValue('B'.$cheat2,$lectname);
+                //$sheet->setCellValue('C'.$cheat2,'___________');
+                //$sheet->setCellValue('E'.$cheat2,'___________');
+                //$sheet->setCellValue('B'.$cheat3,'(Lecturer)');
+                //$sheet->setCellValue('C'.$cheat3,'(Signature)');
+                //$sheet->setCellValue('E'.$cheat3,'(Date)');
+
+
+                //=COUNTIF(H8:H11, "A+")
+               // $sheet->setCellValue('G'.$k.'','=SUM(C'.$k.':F'.$k.')');
+
+                for($lisa=1;$lisa<6;$lisa++){
+                    $sheet->mergeCells('A'.$lisa.':C'.$lisa);
+                    
+                    
+                    //$sheet->cell('A'.$lisa, function($cell) {
+                    $sheet->cells('A1:A5', function($cells) {
+
+                    // manipulate the cell
+                     ////$cell->setAlignment('center');
+                        $cells->setFont(array(
+                        'size'       => '12',
+                        'bold'       =>  true
+                        ));
+
+                });
+                    	$kojoSenseSel = $kojoSense + 6;
+                    $sheet->cells('A8:B'.$kojoSenseSel, function($cells) {
+
+                    // manipulate the cell
+                     $cells->setAlignment('center');
+                        //$cells->setFont(array(
+                        //'size'       => '12',
+                        //'bold'       =>  true
+                        //));
+
+                });
+                    //$sheet->mergeCells('J2':'K2');
+                    $sheet->cells('A1:D6', function($cells) {
+
+                   $cells->setBackground('#ffffff');
+                });
+                    
+
+                }
+
+                
+                                
+                $sheet->setHeight(array(
+                    '1'     =>  22,
+                    '2'     =>  22,
+                    '3'     =>  22,
+                    '4'     =>  22,
+                    '5'     =>  22
+                    
+                ));
+
+                
+                $sheet->setFreeze('A8');            
+//});
+            });
+
+        })->download('xlsx');
+
+
+    }
+
     public function downloadidCards(Request $request, SystemController $sys )
 
     {
@@ -8904,6 +9619,19 @@ $datafuck = Models\AcademicRecordsModel::join('tpoly_students', 'tpoly_academic_
             $course=$sys->getMountedCourseList3();
 
             return view('courses.downloadRegistered')->with('programme', $programme)->with('courses',$course)
+                ->with('level', $sys->getLevelList())->with('year',$sys->years());
+        }
+        else{
+            throw new HttpException(Response::HTTP_UNAUTHORIZED, 'This action is unauthorized.');
+        }
+    }
+
+    public function showFileUploadRegList(SystemController $sys){
+        if(@\Auth::user()->role=='HOD' || @\Auth::user()->department=='Tpmid' || @\Auth::user()->role=='Support' || @\Auth::user()->department=='Tptop'|| @\Auth::user()->role=='Dean' || @\Auth::user()->role=='Lecturer'){
+            $programme=$sys->getProgramList5();
+            $course=$sys->getMountedCourseList3();
+
+            return view('courses.downloadRegList')->with('programme', $programme)->with('courses',$course)
                 ->with('level', $sys->getLevelList())->with('year',$sys->years());
         }
         else{
