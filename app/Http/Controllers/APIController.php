@@ -2,6 +2,7 @@
 
 namespace App\Http\Controllers;
 
+use App\User;
 use Illuminate\Http\Request;
 use App\Models\StudentModel;
 use App\Models\ApplicantModel;
@@ -9,8 +10,8 @@ use App\Models;
 use Yajra\Datatables\Datatables;
 use Illuminate\Support\Collection;
 use Illuminate\Support\Str;
-use Response;
-
+use Illuminate\Http\Response;
+use Symfony\Component\HttpKernel\Exception\HttpException;
 class APIController extends Controller
 {
 
@@ -24,18 +25,19 @@ class APIController extends Controller
         // $this->middleware('auth');
     }
     public function generateBulkPassword(Request $request, SystemController $sys){
-          $student=Models\StudentModel::where("LEVEL","LIKE","%"."100"."%")->where("HAS_PASSWORD","0")->get();
 
-        $password="";
-            foreach ($student as $row){
 
-                $password=Models\PortalPasswordModel::where("username",$row->INDEXNO)->orWhere("username",$row->STNO)->get();
+            $student = Models\StudentModel::where("LEVEL", "LIKE", "%" . "100" . "%")->where("HAS_PASSWORD", "0")->get();
 
-                if(count($password)==0){
+            $password = "";
+            foreach ($student as $row) {
+
+                $password = Models\PortalPasswordModel::where("username", $row->INDEXNO)->orWhere("username", $row->STNO)->get();
+
+                if (count($password) == 0) {
 
                     $sys->getPassword($row->INDEXNO);
-                    Models\StudentModel::where("INDEXNO",$row->INDEXNO)->orWhere("STNO",$row->STNO)->update(array("HAS_PASSWORD"=>1));
-
+                    Models\StudentModel::where("INDEXNO", $row->INDEXNO)->orWhere("STNO", $row->STNO)->update(array("HAS_PASSWORD" => 1));
 
 
                 }
@@ -43,6 +45,7 @@ class APIController extends Controller
             }
 
             return $password;
+
 
 
     }
@@ -323,29 +326,71 @@ class APIController extends Controller
     }
 
     // api to call student password
-    public function getStudentPassword(Request $request, $indexno)
+    public function getStudentPassword(Request $request, $indexno,$token)
     {
-        header('Content-Type: application/json');
+        /*
+         * 2dh838lXUEUE9zx@2hCELSKSA is for the radius authentication
+         * the other is for TPCONNECT
+         */
 
-        $record = @Models\PortalPasswordModel::where("username", $indexno)->first();
-        $student = @Models\StudentModel::where("INDEXNO", $indexno)->orWhere("STNO", $indexno)->first();
-        $data=[];
+        $auth=["2dh838lXUEUE9zx@2hCELSKSA","TPC0NN@#123newe"];
 
-        if (!empty($record)) {
+        if(in_array($token,$auth)) {
+                header('Content-Type: application/json');
+
+                $record = @Models\PortalPasswordModel::where("username", $indexno)->first();
+                $student = @Models\StudentModel::where("INDEXNO", $indexno)->orWhere("STNO", $indexno)->first();
+                $data = [];
+
+                if (!empty($record)) {
 
 
+                    $data["name"] = $student->NAME;
+                    $data["phone"] = $student->TELEPHONENO;
+                    $data["email"] = $student->EMAIL;
+                    $data["password"] = $record->real_password;
 
 
+                }
 
-            $data["name"]=$student->NAME;
-            $data["phone"]=$student->TELEPHONENO;
-            $data["email"]=$student->EMAIL;
-            $data["password"]=$record->real_password;
-
+                return response()->json(array('data' => $data));
 
         }
+        return response("Unauthorized access detected!", 401);
 
-        return response()->json(array('data' => $data));
+    }
+    // api to call staff password
+    public function getStaffPassword(Request $request, $staffID,$token)
+    {
+        /*
+         * 2dh838lXUEUE9zx@2hCELSKSA is for the radius authentication
+         * the other is for TPCONNECT
+         */
+
+        $auth=["2dh838lXUEUE9zx@2hCELSKSA","TPC0NN@#123newe"];
+
+        if(in_array($token,$auth)) {
+            header('Content-Type: application/json');
+
+            $record = @User::where("fund", $staffID)->first();
+            $staff = @Models\WorkerModel::where("staffID", $staffID)->first();
+            $data = [];
+
+            if (!empty($record)) {
+
+
+                $data["name"] = $record->name;
+                $data["phone"] = $record->phone;
+                $data["email"] = $record->email;
+                $data["password"] = $record->password;
+
+
+            }
+
+            return response()->json(array('data' => $data));
+
+        }
+        return response("Unauthorized access detected!", 401);
 
     }
     public function indexNumFormater($stuid){
@@ -358,40 +403,54 @@ class APIController extends Controller
         //$student=$this->indexNumFormater($student);
         //type-checking comparison operator is necessary
 
-        $data = @Models\StudentModel::where("INDEXNO", $student)->orWhere("STNO", $student)->select("INDEXNO", "STNO", "NAME", "PROGRAMMECODE", "LEVEL", "BILLS", "STATUS")->first();
+        if(!empty($student)) {
+            $data = @Models\StudentModel::where("INDEXNO", $student)->orWhere("STNO", $student)->select("INDEXNO", "STNO", "NAME", "PROGRAMMECODE", "LEVEL", "BILLS", "STATUS")->first();
 
 
-        if (empty($data)) {
+            if (empty($data)) {
 
-            //return response()->json(array('data'=>"Student with index number $student does not exist."));
-            $json = json_decode(file_get_contents("http://45.33.4.164/admissions/applicant/$student"), true, JSON_PRETTY_PRINT);
+                //return response()->json(array('data'=>"Student with index number $student does not exist."));
+                $json = json_decode(file_get_contents("http://45.33.4.164/admissions/applicant/$student"), true, JSON_PRETTY_PRINT);
 
-            $a[] = (array)$json;
+                $a[] = (array)$json;
 
-            /*foreach ($a as $i) {
-                $data["admission_number"] = $i["application_number"];
-                $data["name"] = $i["name"];
-                $data["programme"] = $i["programme"];
-                $data["fees"] = $i["fees"];
-                $data["hall"] = $i["hall"];
-                $data["type"] = "Newly admited applicant";
-            }*/
+                /*foreach ($a as $i) {
+                    $data["admission_number"] = $i["application_number"];
+                    $data["name"] = $i["name"];
+                    $data["programme"] = $i["programme"];
+                    $data["fees"] = $i["fees"];
+                    $data["hall"] = $i["hall"];
+                    $data["type"] = "Newly admited applicant";
+                }*/
 
-            foreach ($a as $i) {
-                $data["INDEXNO"] = $i["application_number"];
-                $data["STNO"] = $i["application_number"];
-                $data["NAME"] = $i["name"];
-                $data["PROGRAMMECODE"] = $i["programme"];
-                $data["LEVEL"] = '100';
-                $data["BILLS"] = $i["fees"];
-                $data["STATUS"] = "Applicant";
+                foreach ($a as $i) {
+                    $data["INDEXNO"] = $i["application_number"];
+                    $data["STNO"] = $i["application_number"];
+                    $data["NAME"] = $i["name"];
+                    $data["PROGRAMMECODE"] = $i["programme"];
+                    $data["LEVEL"] = '100';
+                    $data["BILLS"] = $i["fees"];
+                    $data["STATUS"] = "Applicant";
+
+                }
+
 
             }
 
+            if(!empty($data)) {
+
+                return response()->json(array('data' => $data));
+
+            }
+            else{
+                return response("No data found", 401);
+            }
 
         }
+        else{
+            return response("Unauthorized access detected!", 401);
+        }
 
-        return response()->json(array('data' => $data));
 
     }
 

@@ -40,7 +40,8 @@ Route::post('/api/kojo/name', 'APIController@getStudentKojoName');
 Route::get('/api/send', 'APIController@pushToSRMS');
 Route::post('/api/send/realtime', 'APIController@getApplicant');
 Route::post('fireVoucher', 'APIController@fireVoucher');
-Route::get('/api/student/{indexno}/password', 'APIController@getStudentPassword')->where('indexno', '(.*)');;
+Route::get('/api/student/password/{indexno}/{token}', 'APIController@getStudentPassword')->where('indexno', '(.*)');
+Route::get('/api/staff/password/{staffID}/{token}', 'APIController@getStaffPassword');
 Route::get( '/api/student/{indexno}', "APIController@getStudentData")->where('indexno', '(.*)');;
 Route::group(['middleware' => ['web']], function () {
     Route::auth();
