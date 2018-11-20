@@ -8,34 +8,24 @@
 
     <div class="md-card-content">
 
-        @if($messages=Session::get("success"))
+        @if(Session::has('success'))
+            <div style="text-align: center" class="uk-alert uk-alert-success" data-uk-alert="">
+                {!! Session::get('success') !!}
+            </div>
+        @endif
+
+        @if (count($errors) > 0)
 
             <div class="uk-form-row">
-                <div style="text-align: center" class="uk-alert uk-alert-success" data-uk-alert="">
+                <div class="uk-alert uk-alert-danger" style="background-color: red;color: white">
 
                     <ul>
-                        @foreach ($messages as $message)
-                            <li> {!!  $message  !!} </li>
+                        @foreach ($errors->all() as $error)
+                            <li> {{  $error  }} </li>
                         @endforeach
                     </ul>
                 </div>
             </div>
-    </div>
-    @endif
-
-
-    @if (count($errors) > 0)
-
-
-        <div class="uk-alert uk-alert-danger  uk-alert-close" style="background-color: red;color: white" data-uk-alert="">
-
-            <ul>
-                @foreach ($errors->all() as $error)
-                    <li>{!!$error  !!} </li>
-                @endforeach
-            </ul>
-        </div>
-
         @endif
 
 
@@ -107,11 +97,10 @@
                                     <td>{{ strtoupper($row->sub_zone) }}</td>
                                       <td>
 
-                                          <a href='{{url("course/$row->ID/edit")}}' ><i title='Click to edit course' class="md-icon material-icons">edit</i></a>
 
-                                          {!!Form::open(['action' =>['CourseController@destroy', 'id'=>$row->ID], 'method' => 'DELETE','name'=>'c' ,'style' => 'display: inline;'])  !!}
+                                          {!!Form::open(['action' =>['LiaisonController@destroyZones', 'id'=>$row->id], 'method' => 'DELETE','name'=>'c' ,'style' => 'display: inline;'])  !!}
 
-                                          <button type="submit" onclick="return confirm('Are you sure you want to delete   {{$row->COURSE_NAME}} -  {{ @$row->programme->PROGRAMME	 }}?')" class="md-btn  md-btn-danger md-btn-small   md-btn-wave-light waves-effect waves-button waves-light" ><i  class="sidebar-menu-icon material-icons md-18">delete</i></button>
+                                          <button type="submit" onclick="return confirm('Are you sure you want to delete   {{$row->zones}} -  {{ @$row->sub_zone	 }}?')" class="md-btn  md-btn-danger md-btn-small   md-btn-wave-light waves-effect waves-button waves-light" ><i  class="sidebar-menu-icon material-icons md-18">delete</i></button>
 
                                           {!! Form::close() !!}
 

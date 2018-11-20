@@ -16,6 +16,7 @@ class AddressModel extends Model
     protected $table = 'liaison_address';
 
     protected $primaryKey="id";
+    public $timestamps = false;
 
 
 }

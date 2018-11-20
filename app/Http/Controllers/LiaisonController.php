@@ -87,7 +87,7 @@ class LiaisonController extends Controller
     public function units(Request $request, SystemController $sys)
     {
 
-        $data=Models\UnitModel::paginate();
+        $data=Models\AddressModel::paginate();
 
         return view("liaison.unit")->with("data",$data);
 
@@ -118,7 +118,7 @@ class LiaisonController extends Controller
 
                 for ($i = 0; $i < $total; $i++) {
                     $data = new Models\AddressModel();
-                    $data->name = $units[$i];
+                    $data->addresses = $units[$i];
 
                     $data->save();
                     \DB::commit();
@@ -232,6 +232,38 @@ class LiaisonController extends Controller
             ->with('school', $sys->getSchoolList())
             ->with('programme', $sys->getProgramList())
             ->with('type', $sys->getProgrammeTypes());
+
+    }
+
+    /**
+     * Destroy the given task.
+     *
+     * @param  Request  $request
+     */
+    public function destroyAddress(Request $request)
+    {
+         Models\AddressModel::where('id', $request->input("id"))->delete();
+
+
+
+
+
+
+            return redirect()->back()->with("success", "<span style='font-weight:bold;font-size:13px;'>Authority(s) successfully deleted </span> ");
+
+
+    }
+    public function destroyZones(Request $request)
+    {
+        Models\ZonesModel::where('id', $request->input("id"))->delete();
+
+
+
+
+
+
+            return redirect()->back()->with("success", "<span style='font-weight:bold;font-size:13px;'>Zone successfully deleted </span> ");
+
 
     }
 

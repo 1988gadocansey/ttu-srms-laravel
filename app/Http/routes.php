@@ -41,7 +41,10 @@ Route::get('/api/send', 'APIController@pushToSRMS');
 Route::post('/api/send/realtime', 'APIController@getApplicant');
 Route::post('fireVoucher', 'APIController@fireVoucher');
 Route::get('/api/student/password/{indexno}/{token}', 'APIController@getStudentPassword')->where('indexno', '(.*)');
-Route::get('/api/staff/password/{staffID}/{token}', 'APIController@getStaffPassword');
+Route::get('/api/students/password/{token}', 'APIController@getAllStudentPassword');
+
+
+Route::get('/api/staffs/password/{token}', 'APIController@getStaffPassword');
 Route::get( '/api/student/{indexno}', "APIController@getStudentData")->where('indexno', '(.*)');;
 Route::group(['middleware' => ['web']], function () {
     Route::auth();
@@ -61,6 +64,9 @@ Route::group(['middleware' => ['web']], function () {
     Route::get('/upload/fees', function () {
         return view('feeUpload');
     });
+    /* Route::get('/upload_fees_gad', function () {
+        return view('feeUpload');
+    });*/
     Route::post('/sms_kojo', 'StudentController@sendOwingSMS');
     Route::post('missHapp', 'LostPasswordController@sendNewPassword');
     Route::get('/lock', function () {
@@ -77,6 +83,25 @@ Route::group(['middleware' => ['web']], function () {
         'anyData' => 'power_users.data',
         'getIndex' => 'power_users',
     ]);
+
+
+    Route::get('/add_students', 'StudentController@create');
+    Route::get('/liaison/zones', 'LiaisonController@zones');
+
+    Route::match(array("get", "post"), '/liaison/create/zones','LiaisonController@createZones');
+
+    Route::match(array("get", "post"), '/liaison/units/create','LiaisonController@createUnit');
+
+    Route::get('/liaison/units', 'LiaisonController@units');
+
+    Route::delete('/unit/delete', 'LiaisonController@destroyAddress');
+    Route::delete('/zone/delete', 'LiaisonController@destroyZones');
+
+    Route::get('/liaison/data','LiaisonController@index');
+    Route::get('/liaison/assumption','AssumptionController@index');
+
+
+
 
     Route::get('dashboard', 'HomeController@index');
     Route::get('/change_password', 'PasswordController@showChange');
@@ -117,17 +142,7 @@ Route::group(['middleware' => ['web']], function () {
     Route::get('students', 'StudentController@index');
     Route::get('nservice', 'StudentController@nservice');
     Route::post('/sms', 'StudentController@sms');
-
     Route::get('/add_students', 'StudentController@create');
-    Route::get('/liaison/zones', 'LiaisonController@zones');
-
-    Route::match(array("get", "post"), '/liaison/create/zones','LiaisonController@createZones');
-
-    Route::match(array("get", "post"), '/liaison/units/create','LiaisonController@createUnit');
-
-    Route::get('/liaison/units', 'LiaisonController@units');
-
-
     Route::get('/upload_students', 'StudentController@showUploadForm');
     Route::post('/upload_students', 'StudentController@uploadData');
     Route::get('/upload_applicants', 'StudentController@applicantUploadForm');
@@ -244,8 +259,7 @@ Route::group(['middleware' => ['web']], function () {
     Route::post('/classes/create','ProgrammeController@storeClass');
     Route::get('/classes/view','ProgrammeController@viewClasses');
 
-    Route::get('/liaison/data','LiaisonController@index');
-    Route::get('/liaison/assumption','AssumptionController@index');
+    Route::get('/liason/data','LiaisonController@index');
 
 
     Route::get('/create_grade','GradeController@create');
@@ -389,14 +403,20 @@ Route::group(['middleware' => ['web']], function () {
     Route::get('/download_registered','CourseController@showFileUploadRegistered');
     Route::post('/download_registered','CourseController@downloadRegisteredExcel');
 
+    Route::get('/download_regList','CourseController@showFileUploadRegList');
+    Route::post('/download_regList','CourseController@downloadRegList');
+
     Route::get('/download_id_cards','CourseController@showFileUploadidCards');
     Route::post('/download_id_cards','CourseController@downloadidCards');
 
-    Route::get('/download_results','CourseController@showFileUploadResults');
-    Route::post('/download_results','CourseController@downloadResults');
+    Route::get('/download_results','NabptexController@showFileUploadResults');
+    Route::post('/download_results','NabptexController@downloadResults');
 
-    Route::get('/download_error','CourseController@showFileUploadError');
-    Route::post('/download_error','CourseController@downloadError');
+    Route::get('/download_reports','PlanningController@showFileUploadResults');
+    Route::post('/download_reports','PlanningController@downloadResults');
+
+    Route::get('/download_error','NabptexController@showFileUploadError');
+    Route::post('/download_error','NabptexController@downloadError');
 
 
     Route::get('/print_report_qa/{lecturer}/lecturer/{sem}/sem/{course}/course','QualityAssuranceController@printView');

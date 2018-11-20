@@ -359,38 +359,89 @@ class APIController extends Controller
         return response("Unauthorized access detected!", 401);
 
     }
+    public  function getAllStudentPassword(Request $request,$token,SystemController $sys)
+    {
+        $auth = ["2dh838lXUEUE9zx@2hCELSKSA", "TPC0NN@#123newe"];
+
+        if (in_array($token, $auth)) {
+            header('Content-Type: application/json');
+
+            //$record = @Models\PortalPasswordModel::get();
+            $student = @Models\StudentModel::where("STATUS", 'In school')->get();
+
+
+            $data = [];
+            $a=[];
+
+
+            if (!empty($student)) {
+
+                foreach($student as $row) {
+
+
+                    $data["indexno"] = $row->INDEXNO;
+                    $data["name"] = $row->NAME;
+                    $data["phone"] = $row->TELEPHONENO;
+                    $data["email"] = $row->EMAIL;
+                    $data["password"] = $sys->getStudentPassword($row->INDEXNO);
+                    array_push($a,$data);
+                }
+
+
+
+            }
+
+
+            return response()->json(array('data' => $a));
+        }
+        else {
+            return response("Unauthorized access detected!", 401);
+        }
+    }
     // api to call staff password
-    public function getStaffPassword(Request $request, $staffID,$token)
+    public function getStaffPassword(Request $request,$token)
     {
         /*
          * 2dh838lXUEUE9zx@2hCELSKSA is for the radius authentication
          * the other is for TPCONNECT
          */
 
-        $auth=["2dh838lXUEUE9zx@2hCELSKSA","TPC0NN@#123newe"];
+        $auth = ["2dh838lXUEUE9zx@2hCELSKSA", "TPC0NN@#123newe"];
 
-        if(in_array($token,$auth)) {
+        if (in_array($token, $auth)) {
             header('Content-Type: application/json');
 
-            $record = @User::where("fund", $staffID)->first();
-            $staff = @Models\WorkerModel::where("staffID", $staffID)->first();
+            //$record = @Models\PortalPasswordModel::get();
+            $student = @User::get();
+
+
             $data = [];
+            $a=[];
 
-            if (!empty($record)) {
+
+            if (!empty($student)) {
+
+                foreach($student as $row) {
 
 
-                $data["name"] = $record->name;
-                $data["phone"] = $record->phone;
-                $data["email"] = $record->email;
-                $data["password"] = $record->password;
+                    $data["name"] = $row->name;
+                    $data["phone"] = $row->phone;
+                    $data["email"] = $row->email;
+                    $data["fund"] = $row->fund;
+                    $data["password"] = $row->password;
+                    array_push($a,$data);
+                }
+
 
 
             }
 
-            return response()->json(array('data' => $data));
 
+            return response()->json(array('data' => $a));
         }
-        return response("Unauthorized access detected!", 401);
+        else {
+            return response("Unauthorized access detected!", 401);
+        }
 
     }
     public function indexNumFormater($stuid){

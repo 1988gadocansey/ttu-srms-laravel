@@ -33,5 +33,9 @@ class StudentModel extends Model
     public function academic(){
         return $this->hasMany('App\Models\AcademicRecordsModel', "indexno","INDEXNO");
     }
+
+    public function password(){
+        return $this->belongsTo('App\Models\ProgrammeModel', "PROGRAMMECODE","PROGRAMMECODE");
+    }
      
 }
