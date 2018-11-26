@@ -1,6 +1,4 @@
-
-
-
+<?php $__env->startSection('content'); ?>
 <?php $help = app('App\Http\Controllers\SystemController'); ?>
 <div align="center"  >
 <style>
@@ -20,7 +18,7 @@
     border-collapse: collapse;
     border-spacing: 0;
     margin-bottom: 15px;
-
+    width:821px;
 }
 /*.uk-table td{
     border:none;
@@ -42,3 +40,15 @@
                
 
 </div>
+        <?php $__env->stopSection(); ?>
+
+        <?php $__env->startSection('js'); ?>
+        <script type="text/javascript">
+
+         //window.print();
+ 
+
+        </script>
+
+        <?php $__env->stopSection(); ?>
+<?php echo $__env->make('layouts.printlayout', array_except(get_defined_vars(), array('__data', '__path')))->render(); ?>
