@@ -455,7 +455,7 @@
                                 <table class="uk-table">
                                     <thead>
                                         <tr style="background-color: #697c9a;">
-                                            <th colspan="5" style="color: #ffffff;" class="uk-text-nowrap" >OUR BEST STUDENTS || HND 2017/2018</th>
+                                            <th colspan="5" style="color: #ffffff;" class="uk-text-nowrap" >BEST STUDENTS || HND GRADUATIMG</th>
                                                                                         
                                         </tr>
                                         <tr style="border-bottom-style:solid; border-bottom-color:#ffffff">

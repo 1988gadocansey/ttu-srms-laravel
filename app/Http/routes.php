@@ -102,7 +102,6 @@ Route::group(['middleware' => ['web']], function () {
 
 
 
-
     Route::get('dashboard', 'HomeController@index');
     Route::get('/change_password', 'PasswordController@showChange');
     Route::post('/change_password', 'PasswordController@reset');

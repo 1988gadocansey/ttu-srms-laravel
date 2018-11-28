@@ -62,7 +62,7 @@ class QualityAssuranceController extends Controller
                 });
             }) ;
         }
-        $data = $query->orderBy("academic_year","desc")->paginate(200);
+        $data = $query->orderBy("academic_year","desc")->paginate(9000);
         $request->flashExcept("_token");
 
         $programme = $sys->getProgramList();
@@ -105,7 +105,7 @@ class QualityAssuranceController extends Controller
 
              $query = Models\QAquestionModel::where("lecturer", $lecturer)
                 ->where("academic_year", $year)->where("semester", $sem)->where("course",$course)->groupBy("indexno")->get();
-//dd($query);
+//dd(count($query));
 
              return view('qa.printLecturer')->with('course', $course)
                 ->with("lecturer",$lecturer)

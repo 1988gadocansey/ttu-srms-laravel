@@ -963,16 +963,23 @@ $total_course_assessed= $datac[0];*/
 
 
     public function getMountedCourseList3() {
+        $currentResult=$this->getSemYear();
+        $currentResultsArray=$currentResult[0]->RESULT_DATE;
+       // dd($resultb);
+
+        $currentResultsArray1 = explode(',',$currentResultsArray);
+        $year = $currentResultsArray1[0];
+        $sem = $currentResultsArray1[1];
 
         if(@\Auth::user()->role=='Lecturer'){
             $course=@\DB::table('tpoly_mounted_courses')
-                ->join('tpoly_courses','tpoly_courses.COURSE_CODE', '=', 'tpoly_mounted_courses.COURSE_CODE')->where('tpoly_mounted_courses.Lecturer',@\Auth::user()->fund )->where('tpoly_mounted_courses.COURSE_SEMESTER','=', '2')->where('tpoly_mounted_courses.COURSE_YEAR','=', '2017/2018')->select('tpoly_courses.COURSE_NAME', 'tpoly_mounted_courses.COURSE_CODE','tpoly_mounted_courses.COURSE_SEMESTER')->groupby('tpoly_mounted_courses.COURSE_CODE')->get();
+                ->join('tpoly_courses','tpoly_courses.COURSE_CODE', '=', 'tpoly_mounted_courses.COURSE_CODE')->where('tpoly_mounted_courses.Lecturer',@\Auth::user()->fund )->where('tpoly_mounted_courses.COURSE_SEMESTER','=', $sem)->where('tpoly_mounted_courses.COURSE_YEAR','=', $year)->select('tpoly_courses.COURSE_NAME', 'tpoly_mounted_courses.COURSE_CODE','tpoly_mounted_courses.COURSE_SEMESTER')->groupby('tpoly_mounted_courses.COURSE_CODE')->get();
             return $course;
 
         }
         else {
             $course=@\DB::table('tpoly_mounted_courses')
-                ->join('tpoly_courses','tpoly_courses.COURSE_CODE', '=', 'tpoly_mounted_courses.COURSE_CODE')->where('tpoly_mounted_courses.COURSE_SEMESTER','=', '2')->select('tpoly_courses.COURSE_NAME', 'tpoly_mounted_courses.COURSE_CODE','tpoly_mounted_courses.COURSE_SEMESTER')->get();
+                ->join('tpoly_courses','tpoly_courses.COURSE_CODE', '=', 'tpoly_mounted_courses.COURSE_CODE')->where('tpoly_mounted_courses.COURSE_SEMESTER','=', $sem)->select('tpoly_courses.COURSE_NAME', 'tpoly_mounted_courses.COURSE_CODE','tpoly_mounted_courses.COURSE_SEMESTER')->groupby('tpoly_mounted_courses.COURSE_CODE')->get();
             return $course;
         }
     }
@@ -1382,10 +1389,10 @@ $total_course_assessed= $datac[0];*/
         $resultyear = $currentResultsArray1[0];
         $resultsem = $currentResultsArray1[1];
 
-        $year = $array[0]->YEAR;
-        if ($array[0]->YEAR != $resultyear) {
-            $year = $resultyear;
-        }
+        $year = $array[0]->GRAD;
+       // if ($array[0]->YEAR != $resultyear) {
+           // $year = $resultyear;
+        //}
         //$sem=$array[0]->SEMESTER;
 
         $total = \DB::table('tpoly_students')

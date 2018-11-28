@@ -1,46 +1,45 @@
-@extends('layouts.app')
+<?php $__env->startSection('style'); ?>
 
-
-@section('style')
-
-@endsection
-@section('content')
+<?php $__env->stopSection(); ?>
+<?php $__env->startSection('content'); ?>
 <div class="md-card-content">
-    @if(Session::has('success'))
+    <?php if(Session::has('success')): ?>
     <div style="text-align: center" class="uk-alert uk-alert-success" data-uk-alert="">
-        {!! Session::get('success') !!}
-    </div>
-    @endif
-    @if(Session::has('error'))
-    <div style="text-align: center" class="uk-alert uk-alert-danger" data-uk-alert="">
-        {!! Session::get('error') !!}
-    </div>
-    @endif
+        <?php echo Session::get('success'); ?>
 
-    @if (count($errors) > 0)
+    </div>
+    <?php endif; ?>
+    <?php if(Session::has('error')): ?>
+    <div style="text-align: center" class="uk-alert uk-alert-danger" data-uk-alert="">
+        <?php echo Session::get('error'); ?>
+
+    </div>
+    <?php endif; ?>
+
+    <?php if(count($errors) > 0): ?>
 
     <div class="uk-form-row">
         <div class="uk-alert uk-alert-danger" style="background-color: red;color: white">
 
             <ul>
-                @foreach ($errors->all() as $error)
-                <li> {{  $error  }} </li>
-                @endforeach
+                <?php foreach($errors->all() as $error): ?>
+                <li> <?php echo e($error); ?> </li>
+                <?php endforeach; ?>
             </ul>
         </div>
     </div>
-    @endif
+    <?php endif; ?>
 </div>
 
 <h3 class="heading_b uk-margin-bottom">Lecturers Assessment Report | Single printout</h3>
 <div style="" class="">
     <!--    <div class="uk-margin-bottom" style="margin-left:910px" >-->
     <div class="uk-margin-bottom" style="">
-        @if(@\Auth::user()->department=="Tpmid" || @\Auth::user()->department=="Tptop")
+        <?php if(@\Auth::user()->department=="Tpmid" || @\Auth::user()->department=="Tptop"): ?>
             <a href="#new_task" data-uk-modal="{ center:true }"> <i title="click to send sms to students"
                                                                     class="material-icons md-36 uk-text-success">phonelink_ring
                     message</i></a>
-        @endif
+        <?php endif; ?>
 
         <a href="#" class="md-btn md-btn-small md-btn-success uk-margin-right" id="printTable">Print Table</a>
         <div class="uk-button-dropdown" data-uk-dropdown="{mode:'click'}">
@@ -59,7 +58,7 @@
 
                     <li class="uk-nav-divider"></li>
                     <li><a href="#" onClick="$('#ts_pager_filter').tableExport({type:'excel',escape:'false'});"><img
-                                    src='{!! url("public/assets/icons/xls.png")!!}' width="24"/> Excel</a></li>
+                                    src='<?php echo url("public/assets/icons/xls.png"); ?>' width="24"/> Excel</a></li>
                     <li class="uk-nav-divider"></li>
 
                 </ul>
@@ -78,55 +77,62 @@
         <div class="md-card-content">
 
             <form action=" "  method="get" accept-charset="utf-8" novalidate id="group">
-                {!!  csrf_field()  !!}
+                <?php echo csrf_field(); ?>
+
                 <div class="uk-grid" data-uk-grid-margin="">
 
                     <div class="uk-width-medium-1-5">
                         <div class="uk-margin-small-top">
-                            {!! Form::select('year',
+                            <?php echo Form::select('year',
                             (['' => 'All academic years'] +$year ),
                             old("program",""),
-                            ['class' => 'md-input parent','id'=>"parent",'placeholder'=>'select academic year'] )  !!}
+                            ['class' => 'md-input parent','id'=>"parent",'placeholder'=>'select academic year'] ); ?>
+
                         </div>
                     </div>
                     <div class="uk-width-medium-1-5">
                         <div class="uk-margin-small-top">
-                            {!! Form::select('level',
+                            <?php echo Form::select('level',
                             (['' => 'All levels'] +$level ),
                             old("level",""),
-                            ['class' => 'md-input parent','id'=>"parent",'placeholder'=>'select level'] )  !!}
+                            ['class' => 'md-input parent','id'=>"parent",'placeholder'=>'select level'] ); ?>
+
                         </div>
                     </div>
 
                     <div class="uk-width-medium-1-5">
                         <div class="uk-margin-small-top">
 
-                            {!!  Form::select('semester', array('1'=>'1st sem','2'=>'2nd sem','3' => '3rd sem'), null, ['placeholder' => 'select semester','id'=>'parent','class'=>'md-input parent'],old("semester","")); !!}
+                            <?php echo Form::select('semester', array('1'=>'1st sem','2'=>'2nd sem','3' => '3rd sem'), null, ['placeholder' => 'select semester','id'=>'parent','class'=>'md-input parent'],old("semester",""));; ?>
+
 
                         </div>
                     </div>
                     <div class="uk-width-medium-1-5">
                         <div class="uk-margin-small-top">
-                            {!! Form::select('department',
+                            <?php echo Form::select('department',
                             (['' => 'departments'] +$department  ),
                             old("department",""),
-                            ['class' => 'md-input parent','id'=>"parent"] )  !!}
+                            ['class' => 'md-input parent','id'=>"parent"] ); ?>
+
                         </div>
                     </div>
                     <div class="uk-width-medium-1-5">
                         <div class="uk-margin-small-top">
-                            {!! Form::select('lecturer',
+                            <?php echo Form::select('lecturer',
                             (['' => 'lecturer'] +$lecturer  ),
                             old("lecturer",""),
-                            ['class' => 'md-input parent','id'=>"parent"] )  !!}
+                            ['class' => 'md-input parent','id'=>"parent"] ); ?>
+
                         </div>
                     </div>
                     <div class="uk-width-medium-1-5">
                         <div class="uk-margin-small-top">
-                            {!! Form::select('program',
+                            <?php echo Form::select('program',
                             (['' => 'All programs'] +$program ),
                             old("program",""),
-                            ['class' => 'md-input parent','id'=>"parent",'placeholder'=>'select program'] )  !!}
+                            ['class' => 'md-input parent','id'=>"parent",'placeholder'=>'select program'] ); ?>
+
                         </div>
                     </div>
 
@@ -139,7 +145,8 @@
                     <div class="uk-width-medium-1-5">
                         <div class="uk-margin-small-top">
 
-                            {!!  Form::select('by', array('COURSE_CODE'=>'Course Code','COURSE_NAME'=>'Course Name' ), null, ['placeholder' => 'select criteria','class'=>'md-input'],old("by","")); !!}
+                            <?php echo Form::select('by', array('COURSE_CODE'=>'Course Code','COURSE_NAME'=>'Course Name' ), null, ['placeholder' => 'select criteria','class'=>'md-input'],old("by",""));; ?>
+
 
                         </div>
                     </div>
@@ -167,7 +174,7 @@
     <div class="md-card">
         <div class="md-card-content">
             <div class="uk-overflow-container" id='print'>
-                <center><span class="uk-text-success uk-text-bold">{!! $data->total()!!} Records</span></center>
+                <center><span class="uk-text-success uk-text-bold"><?php echo $data->total(); ?> Records</span></center>
                 <table class="uk-table uk-table-hover uk-table-condensed uk-table-align-vertical uk-table-nowrap tablesorter tablesorter-altair" id="ts_pager_filter">
                     <thead>
                     <tr>
@@ -189,48 +196,49 @@
                     <tbody>
 
                     <?php $n=0;?>
-                    @foreach($data as   $row)
+                    <?php foreach($data as   $row): ?>
                         <?php $n++;?>
 
 
 
                         <tr align="">
                             <td><?php echo $n;?></td>
-                            <td>{{@strtoupper($row->coursecode)}}</td>
-                            <td>{{@strtoupper($row->courseDetails->course->COURSE_NAME)}}</td>
-                            <td>{{@strtoupper($row->courseDetails->course->programme->PROGRAMME)}}</td>
-                            <td>{{@strtoupper($row->courseDetails->course->COURSE_CREDIT)}}</td>
-                            <td>{{@strtoupper($row->courseDetails->course->COURSE_LEVEL)}}</td>
-                            <td>{{@strtoupper($row->courseDetails->course->COURSE_SEMESTER)}}</td>
-                            <td>{{@strtoupper($row->academic_year)}}</td>
-                            <td>{{@strtoupper($row->lecturerDetails->fullName)}}</td>
+                            <td><?php echo e(@strtoupper($row->coursecode)); ?></td>
+                            <td><?php echo e(@strtoupper($row->courseDetails->course->COURSE_NAME)); ?></td>
+                            <td><?php echo e(@strtoupper($row->courseDetails->course->programme->PROGRAMME)); ?></td>
+                            <td><?php echo e(@strtoupper($row->courseDetails->course->COURSE_CREDIT)); ?></td>
+                            <td><?php echo e(@strtoupper($row->courseDetails->course->COURSE_LEVEL)); ?></td>
+                            <td><?php echo e(@strtoupper($row->courseDetails->course->COURSE_SEMESTER)); ?></td>
+                            <td><?php echo e(@strtoupper($row->academic_year)); ?></td>
+                            <td><?php echo e(@strtoupper($row->lecturerDetails->fullName)); ?></td>
                             <td>
 
 
-                                <a onclick="return MM_openBrWindow('{{url("print_report_qa/$row->lecturer/lecturer/$row->semester/sem/$row->course/course")}} ', 'mark', 'width=800,height=500')">Print Lecturer Report</a>
+                                <a onclick="return MM_openBrWindow('<?php echo e(url("print_report_qa/$row->lecturer/lecturer/$row->semester/sem/$row->course/course")); ?> ', 'mark', 'width=800,height=500')">Print Lecturer Report</a>
 
                             </td>
 
 
                         </tr>
 
-                    @endforeach
+                    <?php endforeach; ?>
                     </tbody>
 
                 </table>
-                {!! (new Landish\Pagination\UIKit($data->appends(old())))->render() !!}
+                <?php echo (new Landish\Pagination\UIKit($data->appends(old())))->render(); ?>
+
             </div>
         </div>
         <div class="md-fab-wrapper">
-            <a class="md-fab md-fab-small md-fab-accent md-fab-wave" href="{!! url('/create_course') !!}">
+            <a class="md-fab md-fab-small md-fab-accent md-fab-wave" href="<?php echo url('/create_course'); ?>">
                 <i class="material-icons md-18">&#xE145;</i>
             </a>
         </div>
     </div>
 </div>
 
-@endsection
-@section('js')
+<?php $__env->stopSection(); ?>
+<?php $__env->startSection('js'); ?>
 <script type="text/javascript">
 
     $(document).ready(function(){
@@ -243,7 +251,7 @@
     });
 
 </script>
-<script src="{!! url('public/assets/js/select2.full.min.js') !!}"></script>
+<script src="<?php echo url('public/assets/js/select2.full.min.js'); ?>"></script>
 <script>
     $(document).ready(function(){
         $('select').select2({ width: "resolve" });
@@ -255,4 +263,5 @@
 </script>
 <!--  notifications functions -->
 <script src="public/assets/js/components_notifications.min.js"></script>
-@endsection
+<?php $__env->stopSection(); ?>
+<?php echo $__env->make('layouts.app', array_except(get_defined_vars(), array('__data', '__path')))->render(); ?>

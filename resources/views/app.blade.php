@@ -661,8 +661,6 @@
                                     <li><a href='{!! url("/finance/chapro") !!}'>Update Program</a></li>
                                     <li><a href='{!! url("/updatePassword") !!}'>Reset Staff Password</a></li>
                                     <li><a href='{!! url("/calender") !!}'>Academic Calender</a></li>
-                                    
-                                    <li><a href='{!! url("qa/report/single") !!}'>Lecturer Assessment Report</a></li>
                                 </ul>
                             </div>
                         </li>

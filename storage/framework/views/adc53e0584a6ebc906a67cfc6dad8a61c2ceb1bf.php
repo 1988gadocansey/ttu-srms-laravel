@@ -661,6 +661,8 @@
                                     <li><a href='<?php echo url("/finance/chapro"); ?>'>Update Program</a></li>
                                     <li><a href='<?php echo url("/updatePassword"); ?>'>Reset Staff Password</a></li>
                                     <li><a href='<?php echo url("/calender"); ?>'>Academic Calender</a></li>
+                                    
+                                    <li><a href='<?php echo url("qa/report/single"); ?>'>Lecturer Assessment Report</a></li>
                                 </ul>
                             </div>
                         </li>

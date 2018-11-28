@@ -24,6 +24,9 @@ class QAquestionModel extends Model
     public function courseDetails(){
         return $this->belongsTo('App\Models\MountedCourseModel', "course","ID");
     }
+    public function courseDetailsQA(){
+        return $this->belongsTo('App\Models\MountedCourseModel', "course","ID",'PROGRAMME');
+    }
     public function lecturerDetails(){
         return $this->belongsTo('App\Models\WorkerModel', "lecturer","staffID");
     }
