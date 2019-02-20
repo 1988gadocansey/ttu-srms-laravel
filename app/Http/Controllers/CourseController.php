@@ -39,7 +39,7 @@ class CourseController extends Controller
         );
     }
     public function printCards(Request $request,SystemController $sys){
-        if(@\Auth::user()->role=='HOD' || @\Auth::user()->department=='top' || @\Auth::user()->department=='Tptop'|| @\Auth::user()->role=='Dean' || @\Auth::user()->role=='Lecturer' || @\Auth::user()->department=='Tpmid' || @\Auth::user()->department=='Tptop'){
+        if($sys->getUserLevel((@\Auth::user()->department),"print_card") == '1' || $sys->getUserLevel((@\Auth::user()->role),"print_card") == '1'){
             if ($request->isMethod("get")) {
                 $program=$sys->getProgramList();
 
@@ -120,11 +120,8 @@ class CourseController extends Controller
     }
     public function processCourseUploads(Request $request,SystemController $sys) {
 
-
+        if ($sys->getUserLevel((@\Auth::user()->department),"courses_upload") == '1' || $sys->getUserLevel((@\Auth::user()->role),"courses_upload") == '1') {
         set_time_limit(36000);
-
-
-
 
         $valid_exts = array('csv','xls','xlsx'); // valid extensions
         $file = $request->file('file');
@@ -205,9 +202,10 @@ class CourseController extends Controller
         return redirect('/courses')->with("success", " <span style='font-weight:bold;font-size:13px;'>$total Courses uploaded successfully</span> ");
 
     }
+    }
     public function processMountedUpload(Request $request,SystemController $sys) {
 
-        if (@\Auth::user()->role == 'HOD' || @\Auth::user()->role == 'Support' || @\Auth::user()->role == 'Admin'|| @\Auth::user()->role == 'Registrar' || @\Auth::user()->department == 'top' || @\Auth::user()->department=='Tpmid' || @\Auth::user()->department=='Tptop') {
+        if ($sys->getUserLevel((@\Auth::user()->department),"mounted_upload") == '1' || $sys->getUserLevel((@\Auth::user()->role),"mounted_upload") == '1') {
 
 
 
@@ -314,7 +312,7 @@ class CourseController extends Controller
     }
 
     public function processCourseUpload(Request $request,SystemController $sys) {
-
+            if ($sys->getUserLevel((@\Auth::user()->department),"courses_upload") == '1' || $sys->getUserLevel((@\Auth::user()->role),"courses_upload") == '1') {
 
         set_time_limit(36000);
 
@@ -400,9 +398,10 @@ class CourseController extends Controller
         return redirect('/mounted_view')->with("success", " <span style='font-weight:bold;font-size:13px;'>$total Courses mounted successfully</span> ");
 
     }
+    }
     public function uploadMounted(Request $request,SystemController $sys){
 
-        if (@\Auth::user()->role == 'HOD' || @\Auth::user()->role == 'Support' || @\Auth::user()->role == 'Admin'|| @\Auth::user()->role == 'Registrar' || @\Auth::user()->department == 'top' || @\Auth::user()->department=='Tpmid' || @\Auth::user()->department=='Tptop') {
+        if ($sys->getUserLevel((@\Auth::user()->department),"mounted_upload") == '1' || $sys->getUserLevel((@\Auth::user()->role),"mounted_upload") == '1') {
 
 
 
@@ -417,6 +416,7 @@ class CourseController extends Controller
         }
     }
     public function processUpdateMounted(SystemController $sys,Request $request) {
+         if ($sys->getUserLevel((@\Auth::user()->department),"mounted_upload") == '1' || $sys->getUserLevel((@\Auth::user()->role),"mounted_upload") == '1') {
         \DB::beginTransaction();
         try {
 
@@ -454,8 +454,9 @@ class CourseController extends Controller
             \DB::rollback();
         }
     }
+}
     public function updateMounted(SystemController $sys,Request $request, $id) {
-        if (@\Auth::user()->role == 'HOD' || @\Auth::user()->role == 'Support'|| @\Auth::user()->role == 'Admin'|| @\Auth::user()->role == 'Registrar' || @\Auth::user()->department == 'top' || @\Auth::user()->department=='Tpmid' || @\Auth::user()->department=='Tptop') {
+         if ($sys->getUserLevel((@\Auth::user()->department),"mounted_upload") == '1' || $sys->getUserLevel((@\Auth::user()->role),"mounted_upload") == '1') {
 
 
             $lecturers=$sys->getLectureList_All();
@@ -589,16 +590,22 @@ class CourseController extends Controller
                             $resitCount=Models\AcademicRecordsModel::where("indexno",$indexNo)->where("total","<","50")->where("grade","F")->where("resit","no")->get()->toArray();
                         if (count($resitCount) > 0) {
                             $trail = "yes";
+                            $sup = 0;
+                            $newCgpa=@$sys->getCGPA($indexNo);
+                                    $class=@$sys->getClass($newCgpa);
+                                    Models\StudentModel::where("INDEXNO",$indexNo)->update(array("CGPA"=>$newCgpa,"CLASS"=>$class,"TRAIL"=>$trail,"SUP"=>$sup));
+                            \DB::commit();
                         }
                         else
                         {
                          $trail = "no";   
-                        }
-
-                            $newCgpa=@$sys->getCGPA($indexNo);
+                         $newCgpa=@$sys->getCGPA($indexNo);
                                     $class=@$sys->getClass($newCgpa);
                                     Models\StudentModel::where("INDEXNO",$indexNo)->update(array("CGPA"=>$newCgpa,"CLASS"=>$class,"TRAIL"=>$trail));
                             \DB::commit();
+                        }
+
+                            
 
                         }
                         $aggie++;
@@ -765,19 +772,28 @@ class CourseController extends Controller
                                 $resitCount=Models\AcademicRecordsModel::where("indexno",$indexNo)->where("total","<","50")->where("grade","F")->where("resit","no")->get()->toArray();
                         if (count($resitCount) > 0) {
                             $trail = "yes";
+                            $sup = 0;
+                            $newCgpa=@$sys->getCGPA($indexNo);
+                                    $class=@$sys->getClass($newCgpa);
+                                    Models\StudentModel::where("INDEXNO",$indexNo)->update(array("CGPA"=>$newCgpa,"CLASS"=>$class,"TRAIL"=>$trail,"SUP"=>$sup));
+                                    if($total > 49){
+                                    Models\AcademicRecordsModel::where("indexno",$indexNo)->where("level",$level)->where("sem",$semester)->where("code",$course)->where("grade","F")->where("resit","!=","yes")->update(array("resit"=>"done","resit"=>"done"));
+                                     }
+                                 \DB::commit();
                         }
                         else
                         {
-                         $trail = "no";   
-                        }
-
-                                    $newCgpa=@$sys->getCGPA($indexNo);
+                         $trail = "no";  
+                         $newCgpa=@$sys->getCGPA($indexNo);
                                     $class=@$sys->getClass($newCgpa);
                                     Models\StudentModel::where("INDEXNO",$indexNo)->update(array("CGPA"=>$newCgpa,"CLASS"=>$class,"TRAIL"=>$trail));
                                     if($total > 49){
                                     Models\AcademicRecordsModel::where("indexno",$indexNo)->where("level",$level)->where("sem",$semester)->where("code",$course)->where("grade","F")->where("resit","!=","yes")->update(array("resit"=>"done","resit"=>"done"));
                                      }
-                                 \DB::commit();
+                                 \DB::commit(); 
+                        }
+
+                                    
                             }
                         }
                          }
@@ -805,7 +821,7 @@ class CourseController extends Controller
 
     }
     public function uploadResit(SystemController $sys,Request $request){
-        if(@\Auth::user()->role=='HOD' || @\Auth::user()->department=='top' || @\Auth::user()->department=='Tptop'|| @\Auth::user()->role=='Dean' || @\Auth::user()->role=='Support' || @\Auth::user()->role=='Registrar' || @\Auth::user()->department=='Tpmid' || @\Auth::user()->department=='Tptop'){
+         if ($sys->getUserLevel((@\Auth::user()->department),"resit_upload") == '1' || $sys->getUserLevel((@\Auth::user()->role),"resit_upload") == '1') {
 
             if ($request->isMethod("get")) {
 
@@ -828,7 +844,7 @@ class CourseController extends Controller
         }
     }
     public function processsUploadLegacy(SystemController $sys,Request $request) {
-if(@\Auth::user()->department=='Tptop' || @\Auth::user()->department=='Tptop'){
+ if ($sys->getUserLevel((@\Auth::user()->department),"legacy_upload") == '1' || $sys->getUserLevel((@\Auth::user()->role),"legacy_upload") == '1') {
         
         $this->validate($request, [
 
@@ -959,17 +975,24 @@ if(@\Auth::user()->department=='Tptop' || @\Auth::user()->department=='Tptop'){
                             $resitCount=Models\AcademicRecordsModel::where("indexno",$indexNo)->where("total","<","50")->where("grade","F")->where("resit","no")->get()->toArray();
                         if (count($resitCount) > 0) {
                             $trail = "yes";
-                        }
-                        else
-                        {
-                         $trail = "no";   
-                        }
-
+                            $sup = 0;
                             $cgpa= number_format(@(( $credit*$gradePoint)/$credit), 3, '.', ',');
                             $newCgpa=@$sys->getCGPA($indexNo);
                                     $class=@$sys->getClass($newCgpa);
-                                    Models\StudentModel::where("INDEXNO",$indexNo)->update(array("CGPA"=>$newCgpa,"CLASS"=>$class,"TRAIL"=>$trail));
+                                    Models\StudentModel::where("INDEXNO",$indexNo)->update(array("CGPA"=>$newCgpa,"CLASS"=>$class,"TRAIL"=>$trail,"SUP"=>$sup));
                             \DB::commit();
+                        }
+                        else
+                        {
+                         $trail = "no"; 
+                         $cgpa= number_format(@(( $credit*$gradePoint)/$credit), 3, '.', ',');
+                            $newCgpa=@$sys->getCGPA($indexNo);
+                                    $class=@$sys->getClass($newCgpa);
+                                    Models\StudentModel::where("INDEXNO",$indexNo)->update(array("CGPA"=>$newCgpa,"CLASS"=>$class,"TRAIL"=>$trail));
+                            \DB::commit();  
+                        }
+
+                            
 
                         }
                         else{
@@ -999,16 +1022,23 @@ if(@\Auth::user()->department=='Tptop' || @\Auth::user()->department=='Tptop'){
                             $resitCount=Models\AcademicRecordsModel::where("indexno",$indexNo)->where("total","<","50")->where("grade","F")->where("resit","no")->get()->toArray();
                         if (count($resitCount) > 0) {
                             $trail = "yes";
+                            $sup = 0;
+                            $newCgpa=@$sys->getCGPA($indexNo);
+                                    $class=@$sys->getClass($newCgpa);
+                                    Models\StudentModel::where("INDEXNO",$indexNo)->update(array("CGPA"=>$newCgpa,"CLASS"=>$class,"TRAIL"=>$trail,"SUP"=>$sup));
+
+                             \DB::commit();
                         }
                         else
                         {
-                         $trail = "no";   
-                        }
-                           $newCgpa=@$sys->getCGPA($indexNo);
+                         $trail = "no";  
+                         $newCgpa=@$sys->getCGPA($indexNo);
                                     $class=@$sys->getClass($newCgpa);
                                     Models\StudentModel::where("INDEXNO",$indexNo)->update(array("CGPA"=>$newCgpa,"CLASS"=>$class,"TRAIL"=>$trail));
 
-                             \DB::commit();
+                             \DB::commit(); 
+                        }
+                           
                         }
                     }
 
@@ -1041,7 +1071,7 @@ if(@\Auth::user()->department=='Tptop' || @\Auth::user()->department=='Tptop'){
     }
 
     public function uploadGad2(SystemController $sys,Request $request){
-        if(@\Auth::user()->department=='Tptop' || @\Auth::user()->department=='Tptop'){
+         if ($sys->getUserLevel((@\Auth::user()->department),"legacy_upload") == '1' || $sys->getUserLevel((@\Auth::user()->role),"legacy_upload") == '1') {
 
 
 
@@ -1067,7 +1097,7 @@ if(@\Auth::user()->department=='Tptop' || @\Auth::user()->department=='Tptop'){
 
     public function uploadCourse(SystemController $sys,Request $request){
 
-        if (@\Auth::user()->role == 'HOD' || @\Auth::user()->role == 'Support'||@\Auth::user()->role == 'Support'|| @\Auth::user()->role == 'Registrar' || @\Auth::user()->department == 'top' || @\Auth::user()->department=='Tpmid' || @\Auth::user()->department=='Tptop') {
+         if ($sys->getUserLevel((@\Auth::user()->department),"courses_upload") == '1' || $sys->getUserLevel((@\Auth::user()->role),"courses_upload") == '1') {
 
 
 
@@ -1091,7 +1121,7 @@ if(@\Auth::user()->department=='Tptop' || @\Auth::user()->department=='Tptop'){
 
     public function registrationInfo(SystemController $sys,Request $request){
 
-        if ( @\Auth::user()->role == 'Registrar' || @\Auth::user()->department == 'top' || @\Auth::user()->department == 'Examination' || @\Auth::user()->role == 'Admin'  || @\Auth::user()->department == 'Rector' || @\Auth::user()->department == 'Finance' || @\Auth::user()->department == 'Tpmid' || @\Auth::user()->department=='Tptop') {
+        
             $array = $sys->getSemYear();
             $sem = $array[0]->SEMESTER;
             $year = $array[0]->YEAR;
@@ -1106,15 +1136,13 @@ if(@\Auth::user()->department=='Tptop' || @\Auth::user()->department=='Tptop'){
             } else {
 
             }
-        }
-        else{
-            return redirect("/dashboard");
-        }
+        
+        
     }
     // recover deleted grades
     public function gradeRecovery(SystemController $sys,Request $request){
 
-        if ( @\Auth::user()->role== 'Lecturer' || @\Auth::user()->role== 'HOD' ||  @\Auth::user()->fund== '755991'||  @\Auth::user()->fund== '1201610' || @\Auth::user()->fund== '701088') {
+         if ($sys->getUserLevel((@\Auth::user()->department),"legacy_upload") == '1' || $sys->getUserLevel((@\Auth::user()->role),"legacy_upload") == '1') {
 
             if ($request->isMethod("get")) {
 
@@ -1127,13 +1155,13 @@ if(@\Auth::user()->department=='Tptop' || @\Auth::user()->department=='Tptop'){
             }
 
         }
-        elseif( @\Auth::user()->department== 'Tpmid' || @\Auth::user()->department== 'Tptop' ){
-            return view('courses.recoverGrades')->with('year', $sys->years())
-                ->with("course",$sys->getCourseList())
-                ->with("level",$sys->getLevelList())
-                ->with('program', $sys->getProgramList());
+        // elseif( @\Auth::user()->department== 'Tpmid' || @\Auth::user()->department== 'Tptop' ){
+        //     return view('courses.recoverGrades')->with('year', $sys->years())
+        //         ->with("course",$sys->getCourseList())
+        //         ->with("level",$sys->getLevelList())
+        //         ->with('program', $sys->getProgramList());
 
-        }
+        // }
         else{
             return redirect("/dashboard");
         }
@@ -1213,124 +1241,128 @@ if(@\Auth::user()->department=='Tptop' || @\Auth::user()->department=='Tptop'){
 
     }
 
-    public function gradeModification(SystemController $sys,Request $request){
+    // public function gradeModification(SystemController $sys,Request $request){
 
-        if ( @\Auth::user()->role== 'Lecturer' || @\Auth::user()->role== 'HOD' || @\Auth::user()->fund== '701088') {
+    //     if ( @\Auth::user()->role== 'Lecturer') {
 
-            if ($request->isMethod("get")) {
+    //         if ($request->isMethod("get")) {
 
-                return view('courses.deleteGrades')->with('year', $sys->years())
-                    ->with("course",$sys->getMountedCourseList())
-                    ->with("level",$sys->getLevelList())
-                    ->with('program', $sys->getProgramList());
-
-
-            }
-
-        }
-        elseif(@\Auth::user()->role=='Admin' || @\Auth::user()->department=='top' || @\Auth::user()->department=='Tptop' ||  @\Auth::user()->department== 'Tpmid' || @\Auth::user()->department== 'Tptop'){
-            return view('courses.deleteGrades')->with('year', $sys->years())
-                ->with("course",$sys->getMountedCourseList())
-                ->with("level",$sys->getLevelList())
-                ->with('program', $sys->getProgramList());
-
-        }
-        else{
-            return redirect("/dashboard");
-        }
-    }
-
-    public function ProcessGradeModification(SystemController $sys,Request $request){
-
-        //dd($request);
-        $this->validate($request, [
-
-            'level'=>'required',
-            'program'=>'required',
-            'semester'=>'required',
-
-            'year'=>'required',
-
-        ]);
-
-        $level=$request->input("level");
-        $course=$request->input("course");
-        $program=$request->input("program");
-        $year=$request->input("year");
-        $indexno=$request->input("indexno");
-        $semester=$request->input("semester");
-
-        if($course==""){
-            $query= Models\AcademicRecordsModel::where("level",$level)->where("sem",$semester)
-                ->where("year",$year)->whereHas('student', function($q)use ($program) {
-                    $q->whereHas('programme', function($q)use ($program) {
-                        $q->whereIn('PROGRAMMECODE',  array($program));
-                    });
-                }) ;
-        }
-        elseif($course==""){
-            $query= Models\AcademicRecordsModel::where("level",$level)->where("sem",$semester)
-                ->where("year",$year)->where("code",$course)->whereHas('student', function($q)use ($program) {
-                    $q->whereHas('programme', function($q)use ($program) {
-                        $q->whereIn('PROGRAMMECODE',  array($program));
-                    });
-                }) ;
-            $query->delete();
-        }
-        elseif($indexno!=""){
-            $query= Models\AcademicRecordsModel::where("level",$level)->where("sem",$semester)->where("indexno",$indexno)
-                ->where("year",$year)->where("code",$course)->whereHas('student', function($q)use ($program) {
-                    $q->whereHas('programme', function($q)use ($program) {
-                        $q->whereIn('PROGRAMMECODE',  array($program));
-                    });
-                }) ;
-            $query->delete();
+    //             return view('courses.deleteGrades')->with('year', $sys->years())
+    //                 ->with("course",$sys->getMountedCourseList())
+    //                 ->with("level",$sys->getLevelList())
+    //                 ->with('program', $sys->getProgramList());
 
 
-        }
-        // $data=$query->get();
+    //         }
 
-//                 foreach($data as $row){
-//                        $result=new Models\DeletedGradesModel();
-//                        $result->course=$row->course;
-//                        $result->code=$row->code;
-//                        $result->student=$row->student;
-//                        $result->indexno=$row->indexno;
-//                        $result->credits=$row->credits;
-//                        $result->quiz1=$row->quiz1;
-//                        $result->quiz2=$row->quiz2;
-//                        $result->quiz3=$row->quiz3;
-//                        $result->midSem1=$row->midSem1;
-//                        $result->exam=$row->exam;
-//                        $result->total=$row->total;
-//                        $result->grade=$row->grade;
-//                        $result->gpoint=$row->gpoint;
-//                        $result->year=$row->year;
-//                        $result->sem=$row->sem;
-//                        $result->level=$row->level;
-//                        $result->yrgp=$row->yrgp;
-//                        $result->groups=$row->groups;
-//                        $result->lecturer=$row->lecturer;
-//                        $result->resit=$row->resit;
-//                        $result->dateRegistered=$row->dateRegistered;
-//                       $result->createdAt=$row->createdAt;
-//                      $result->updates=$row->updates;
-//                        $result->save();
-//                       
-//                            
-//                        }
+    //     }
+    //     elseif(@\Auth::user()->role=='Admin' || @\Auth::user()->department=='top' || @\Auth::user()->department=='Tptop' ||  @\Auth::user()->department== 'Tpmid' || @\Auth::user()->department== 'Tptop' || @\Auth::user()->role=='Academic'){
+    //         return view('courses.deleteGrades')->with('year', $sys->years())
+    //             ->with("course",$sys->getMountedCourseList())
+    //             ->with("level",$sys->getLevelList())
+    //             ->with('program', $sys->getProgramList());
+
+    //     }
+    //     else{
+    //         return redirect("/dashboard");
+    //     }
+    // }
+
+//     public function ProcessGradeModification(SystemController $sys,Request $request){
+
+//         //dd($request);
+//         $this->validate($request, [
+
+//             'level'=>'required',
+//             'program'=>'required',
+//             'semester'=>'required',
+
+//             'year'=>'required',
+
+//         ]);
+
+//         $level=$request->input("level");
+//         $course=$request->input("course");
+//         $program=$request->input("program");
+//         $year=$request->input("year");
+//         $indexno=$request->input("indexno");
+//         $semester=$request->input("semester");
+
+//         if($course==""){
+//             $query= Models\AcademicRecordsModel::where("level",$level)->where("sem",$semester)
+//                 ->where("year",$year)->whereHas('student', function($q)use ($program) {
+//                     $q->whereHas('programme', function($q)use ($program) {
+//                         $q->whereIn('PROGRAMMECODE',  array($program));
+//                     });
+//                 }) ;
+//         }
+//         elseif($course==""){
+//             $query= Models\AcademicRecordsModel::where("level",$level)->where("sem",$semester)
+//                 ->where("year",$year)->where("code",$course)->whereHas('student', function($q)use ($program) {
+//                     $q->whereHas('programme', function($q)use ($program) {
+//                         $q->whereIn('PROGRAMMECODE',  array($program));
+//                     });
+//                 }) ;
+//             $query->delete();
+//         }
+//         elseif($indexno!=""){
+//             $query= Models\AcademicRecordsModel::where("level",$level)->where("sem",$semester)->where("indexno",$indexno)
+//                 ->where("year",$year)->where("code",$course)->whereHas('student', function($q)use ($program) {
+//                     $q->whereHas('programme', function($q)use ($program) {
+//                         $q->whereIn('PROGRAMMECODE',  array($program));
+//                     });
+//                 }) ;
+//             $query->delete();
 
 
+//         }
+//         // $data=$query->get();
+
+// //                 foreach($data as $row){
+// //                        $result=new Models\DeletedGradesModel();
+// //                        $result->course=$row->course;
+// //                        $result->code=$row->code;
+// //                        $result->student=$row->student;
+// //                        $result->indexno=$row->indexno;
+// //                        $result->credits=$row->credits;
+// //                        $result->quiz1=$row->quiz1;
+// //                        $result->quiz2=$row->quiz2;
+// //                        $result->quiz3=$row->quiz3;
+// //                        $result->midSem1=$row->midSem1;
+// //                        $result->exam=$row->exam;
+// //                        $result->total=$row->total;
+// //                        $result->grade=$row->grade;
+// //                        $result->gpoint=$row->gpoint;
+// //                        $result->year=$row->year;
+// //                        $result->sem=$row->sem;
+// //                        $result->level=$row->level;
+// //                        $result->yrgp=$row->yrgp;
+// //                        $result->groups=$row->groups;
+// //                        $result->lecturer=$row->lecturer;
+// //                        $result->resit=$row->resit;
+// //                        $result->dateRegistered=$row->dateRegistered;
+// //                       $result->createdAt=$row->createdAt;
+// //                      $result->updates=$row->updates;
+// //                        $result->save();
+// //                       
+// //                            
+// //                        }
 
 
 
-        return redirect()->back()->with("success","Grades deleted successfully");
-    }
+
+
+//         return redirect()->back()->with("success","Grades deleted successfully");
+//     }
 
 
     public function transcript(SystemController $sys,Request $request){
+//dd($sys->getUserLevel((@\Auth::user()->department),"view_results_all"));
+        // if (@\Auth::user()->role == 'HOD' || @\Auth::user()->role == 'Support' || @\Auth::user()->role == 'Lecturer' || @\Auth::user()->role == 'Registrar' || @\Auth::user()->department == 'top' || @\Auth::user()->department == 'Rector' || @\Auth::user()->department == 'Tpmid' || @\Auth::user()->department == 'Tptop' || @\Auth::user()->role == 'Admin' || @\Auth::user()->role=='Academic') {
 
-        if (@\Auth::user()->role == 'HOD' || @\Auth::user()->role == 'Support' || @\Auth::user()->role == 'Lecturer' || @\Auth::user()->role == 'Registrar' || @\Auth::user()->department == 'top' || @\Auth::user()->department == 'Rector' || @\Auth::user()->department == 'Tpmid' || @\Auth::user()->department == 'Tptop' || @\Auth::user()->role == 'Admin') {
+        if ($sys->getUserLevel((@\Auth::user()->department),"view_results_all") == '1' || $sys->getUserLevel((@\Auth::user()->department),"view_results_register") == '1' || $sys->getUserLevel((@\Auth::user()->role),"view_results_register") == '1' || $sys->getUserLevel((@\Auth::user()->role),"view_results_all") == '1' || $sys->getUserLevel((@\Auth::user()->role),"view_results_register") == '1') {
+
+            //
 
             if ($request->isMethod("get")) {
 
@@ -1343,11 +1375,10 @@ if(@\Auth::user()->department=='Tptop' || @\Auth::user()->department=='Tptop'){
                 $student=$student[0];
 
 
-
                 $sql=Models\StudentModel::where("INDEXNO",$student)->first();
                 $array=$sys->getSemYear();
 
-                if (@\Auth::user()->department != 'Tptop') {
+                if ($sys->getUserLevel((@\Auth::user()->department),"view_results_register") == '1') {
 
                 $qa = @$sql->QUALITY_ASSURANCE;
 
@@ -1719,6 +1750,486 @@ if(@\Auth::user()->department=='Tptop' || @\Auth::user()->department=='Tptop'){
 
     <?php }
 
+
+    /** original transcript */
+
+        public function transcriptOrig(SystemController $sys,Request $request){
+
+         if ($sys->getUserLevel((@\Auth::user()->department),"transcript") == '1' || $sys->getUserLevel((@\Auth::user()->role),"transcript") == '1') {
+
+            if ($request->isMethod("get")) {
+
+                return view('courses.showTranscriptOrig');
+
+            }
+            else{
+
+                $student=  explode(',',$request->input('q'));
+                $student=$student[0];
+
+
+
+                $sql=Models\StudentModel::where("INDEXNO",$student)->first();
+                $array=$sys->getSemYear();
+
+                if (@\Auth::user()->department != 'Tptop') {
+
+                $qa = @$sql->QUALITY_ASSURANCE;
+
+            
+
+            //$regis = @$sql->REGISTERED;
+
+           
+
+            $owing = @$sql->BILL_OWING;
+
+            
+            $semT=$array[0]->SEMESTER;
+            $yearT=$array[0]->YEAR;
+            if ($semT == 1) {
+                if ($qa == 0 &&( @$sql->LEVEL != '100H' && @$sql->LEVEL != '100NT' && @$sql->LEVEL != '500MT' && @$sql->LEVEL != '100BTT' && @$sql->LEVEL != '100BT')) {
+                return redirect('/dashboard');
+            }
+            if($sql->BALANCE>0){
+                if($sql->PAID<=0.99*$sql->BALANCE){
+                return redirect('/dashboard')->with("error","check fee status");
+            }//   if($sql->BALANCE>0){
+            //    return redirect('/dashboard')->with("error","check fee status");
+                            } 
+            }
+            elseif($semT == 2) {
+                if ($qa == 0) {
+                return redirect('/dashboard');
+            }
+                if($sql->PAID<=0.99*$sql->BILLS){
+                return redirect('/dashboard')->with("error","check fee status");
+            }
+             
+            }  
+
+             if($sql->TRAIL=="yes"){
+                return redirect('/dashboard')->withErrors("has resit");
+            }
+
+            }              //    return redirect("/transcript")->with("error","<span style='font-weight:bold;font-size:13px;'> $request->input('q') does not exist!</span>");
+                // }
+                // else{
+
+                $array=$sys->getSemYear();
+                $sem=$array[0]->SEMESTER;
+                $year=$array[0]->YEAR;
+
+
+                $data=$this->transcriptHeaderOrig($sql, $sys)  ;
+                $record=$this->generateTranscriptOrig($sql->ID,$sys);
+                return view("courses.transcriptOrig")->with('grade',$record)->with("student",$data);
+
+
+
+
+                //}
+            
+            //else{
+                
+            //}
+
+        }
+
+    }
+}
+    public function transcriptHeaderOrig($student, SystemController $sys) {
+        ?>
+        <div class="md-card" class="uk-overflow-auto" >
+
+            <div   class="uk-grid uk-overflow-container" data-uk-grid-margin>
+
+                <table  border="0" valign="top" cellspacing="0" align="left">
+                    <tr>
+                        <td>
+                            <table width="826px" style="margin-left:18px" height="133">
+                                
+                                <tr>
+                                    <td colspan="3" align='left'> <img src="<?php echo url('public/assets/img/TRANSCRIPT.jpg')?>" style='width: 826px;height: auto;margin-bottom: 10px;'/>
+                                    </td>
+                                </tr>
+                                <tr>
+                                    <td class="uk-text-bold"style="padding-right: px;">INDEX NUMBER
+                                    </td> 
+                                    <td style=""><?php echo $student->INDEXNO;?>
+                                    </td>
+                                    <td rowspan="6" width="145" align="right">&nbsp;
+                                        <img style="width:130px;height: auto;margin-left: 8px;"
+                                            <?php
+                                                $pic = $student->INDEXNO;
+                                            ?>
+                                            src='<?php echo url("public/albums/students/$pic.JPG") ?>' onerror="this.onerror=function my(){return this.src='<?php echo url("public/albums/students/USER.JPG") ?>';};this.src='<?php echo url("public/albums/students/$pic.jpg")?>';"   />
+                                    </td>
+                                </tr>
+                                <tr>
+                                    <td class="uk-text-bold" style="">NAME
+                                    </td> 
+                                    <td><?php echo strtoupper($student->TITLE .' '.  $student->NAME)?>
+                                    </td>
+                                </tr>
+                                <tr>
+                                    <td class="uk-text-bold"style="">GENDER</td> 
+                                    <td><?php echo strtoupper($student->SEX)?></td>
+                                </tr>
+                                <tr>
+                                    <td class="uk-text-bold">PROGRAMME</td> 
+                                    <td><?php echo strtoupper($student->program->PROGRAMME)?></td>
+                                </tr>
+                                <tr>
+                                    <td class="uk-text-bold" style="">DATE OF ADMISSION</td> 
+                                    <td><?php echo strtoupper($student->DATE_ADMITTED)?></td>
+                                </tr>
+                                <tr>
+                                    <td class="uk-text-bold" style="">DATE OF BIRTH</td> 
+                                    <td><?PHP echo  $student->DATEOFBIRTH ; ?></td>
+                                </tr>
+                                
+                                <tr>
+                                    <td class="uk-text-left" colspan="3">&nbsp;
+                                    </td>
+                                </tr>
+                            </table>
+            
+        
+        
+
+        <?php
+
+    }
+    public function generateTranscriptOrig($sql,  SystemController $sys){
+        $programObject=Models\StudentModel::where('ID',$sql)->select("PROGRAMMECODE")->get();
+        $program=$programObject[0]->PROGRAMMECODE;
+        //dd($program);
+        $rsaProgram = $sys->getProgramResult($program);
+
+        $records=  Models\AcademicRecordsModel::where([['student','=',$sql],['grade','!=', 'E'],['grade','!=', 'IC'],['grade','!=', 'F'],['grade','!=', 'NC']])->groupBy("year")->groupBy("level")->orderBy("level")->get();
+
+
+
+        ?>
+
+
+        <table width='700px' style="text-align:left; margin-top:-2px; font-size: 16px" height="90" class=""  border="0">
+            <tr>
+
+                <td  style=" " align="left">
+                    <?php
+                    $rsc = 0.0;
+                    $rsa = 0.0;
+                    $totrsa = 0.0;
+                    $noCourses = 0.0;
+                    $gpoint=0.0;
+                    $totcredit=0;
+                    $totgpoint=0.0;
+                    $gcredit=0;
+                    $b=0.0;
+                    $a=0;
+
+                    foreach ($records as $row){
+                        for($i=1;$i<3;$i++){
+                            $query=  Models\AcademicRecordsModel::where("student",$sql)->where("year",$row->year)->where("sem",$i)->orderby("code")->orderby("resit")->get()->toArray();
+
+
+                            if(count($query)>0){
+
+
+                                echo "<div class='uk-text-bold' align='left' style='margin-left:18px'>YEAR : ".$row->year.", ";
+                                echo " LEVEL :  " .$row->level.", ";
+                                echo " SEMESTER : ".$i." <hr/></div>";
+
+                                ?>
+
+                                <div class="uk-overflow-container">
+                                <table style="margin-left:18px"  border="0" width='826px'  class="uk-table uk-table-striped">
+                                    <thead >
+                                    <tr class="uk-text-bold" style="background-color:#1A337E;color:white;">
+                                        <td  width="86">CODE</td>
+                                        <td  width="418">COURSE</td>
+                                        <td align='center' width="50">CR</td>
+                                            <?php
+                                                if ($rsaProgram != 'RSA') {
+                                            
+                                            ?>
+                                        <td align='center' width="50">GD</td>
+                                            <?php
+                                                }
+                                                if ($rsaProgram == 'RSA') {
+                                            ?>
+                                        <td align='center' width="50">MK</td>
+                                            <?php
+                                        }
+                                                if ($rsaProgram != 'RSA') {
+                                            
+                                            ?>
+                                        <td align='center' width="57">GP</td>
+                                            <?php
+                                                }
+                                            ?>
+                                    </tr>
+                                    </thead>
+                                    <tbody>
+                                    <?php
+                                    //$program=$student->program->PROGRAMME;
+
+                                    foreach ($query as $rs){
+
+
+                                    if($rs['grade']!="IC" and $rs['grade']!="E" and $rs['grade']!="F" and $rs['grade']!="NC"){
+
+                                        
+
+                                    ?>
+                                    <tr>
+                                        <td <?php // if($rs['grade']=="E"|| $rs['grade']=="F"){ echo "style='display:none'";}?>> <?php $object=$sys->getCourseByCodeProgramObject($rs['code'],$program); $noCourses++; echo @$object[0]->COURSE_CODE; ?></td>
+                                        <td <?php // if($rs['grade']=="E"|| $rs['grade']=="F"){ echo "style='display:none'";}?>> <?php
+                                            echo @$object[0]->COURSE_NAME;?> </td>
+
+                                        <td align='center' <?php // if($rs['grade']=="E"|| $rs['grade']=="F"){ echo "style='display:none'";}?>><?php  @$gcredit+=(@$rs['credits']*$sys->getFCounter($rs['code'],$rs['indexno']));   $totcredit+=(@$rs['credits']*$sys->getFCounter($rs['code'],$rs['indexno']));@$a+=$totcredit; if($rs['credits']){ echo ($rs['credits']*$sys->getFCounter($rs['code'],$rs['indexno']));} else{echo "##";};?></td>
+                                         <?php
+                                                if ($rsaProgram != 'RSA') {
+                                            
+                                            ?>
+                                        <td align='center' <?php // if($rs['grade']=="E" || $rs['grade']=="F"){ echo "style='display:none'";}?>><?php  if($rs['grade']){ echo @$rs['grade'];} else{echo "##";}?></td>
+                                            <?php
+                                                }
+                                                if ($rsaProgram == 'RSA') {
+                                            ?>
+                                        <td align='center' <?php // if($rs['grade']=="E" || $rs['grade']=="F"){ echo "style='display:none'";}?>><?php  @$rsc+=@$rs['total']; if($rs['total']){ echo @$rs['total'];} else{echo "IC";}?></td>
+
+                                            <?php
+                                        }
+                                                if ($rsaProgram != 'RSA') {
+                                            
+                                            ?>
+                                        <td align='center' <?php // if($rs['grade']=="E"|| $rs['grade']=="F"){ echo "style='display:none'";}?>>
+                                            <?php   @$gpoint+=@$rs['gpoint']; @$totgpoint+=@$rs['gpoint'];@$b+=@$totgpoint;if($rs['gpoint']){ echo $rs['gpoint'];} else{echo "0";}  ?></td>
+
+
+
+                                        <?php
+                                    }
+                                        }
+                                        }?>
+                                    </tr>
+                                    <tr>
+
+                                        <td>&nbsp</td>
+
+                                        <?php if ($rsaProgram == 'RSA') 
+                                        {
+                                            
+                                         ?>
+                                         <td class="uk-text-bold"><span>CPA</span>
+                                         <?php
+                                            $rsa = @($rsc/$noCourses); @$totrsa+=@$rsa; echo  number_format(@($totrsa/$totcredit), 3, '.', ','); ?>
+                                            &nbsp; </td>
+                                         <?php
+                                        }
+                                        else
+                                        {
+                                        ?>
+
+                                        <td class="uk-text-bold"><span>GPA</span> <?php echo  number_format(@($gpoint/$gcredit), 3, '.', ',');?> &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp; </td>
+                                        <?php
+                                        }
+                                        ?>
+
+
+                                        <td class="uk-text-bold" align='center'><?php echo $gcredit; ?></td>
+                                        
+                                        <td class="uk-text-bold" align='center'><?php if ($rsaProgram == 'RSA') { echo $rsc;  }?>&nbsp;</td>
+                                        <?php
+                                                if ($rsaProgram != 'RSA') {
+                                            
+                                            ?>
+                                        <td class="uk-text-bold" align='center'><?php echo $gpoint; ?>&nbsp;</td>
+                                         <?php
+                                                }
+                                            
+                                            ?>
+                                    </tr>
+                                    <tr>
+
+                                        <td>&nbsp</td>
+
+                                        <?php
+                                                if ($rsaProgram == 'RSA') {
+                                        ?>    
+                                            
+                                        <td class="uk-text-bold"> <?php 
+                                        if (@($totrsa/$totcredit) > 3.994) {echo 'Competent with Distinction';}
+                                        elseif(@($totrsa/$totcredit) > 2.994) {echo 'Competent with Merit';}
+                                        elseif(@($totrsa/$totcredit) > 1.994) {echo 'Competent';}
+                                        
+                                        else {echo 'Not yet Competent';}?> &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp; </td>
+                                        
+                                    <?php
+                                    }
+                                    else
+                                    {
+                                        ?>
+
+                                        <td class="uk-text-bold"><span>CGPA</span> <?php echo  number_format(@($totgpoint/$totcredit), 3, '.', ',');
+                                        if ($totgpoint/$totcredit > 3.994) {echo ' &nbsp;&nbsp;&nbsp;&nbsp;First Class';}
+                                        elseif($totgpoint/$totcredit > 2.994) {echo ' &nbsp;&nbsp;&nbsp;&nbsp;Second Upper';}
+                                        elseif($totgpoint/$totcredit > 1.994) {echo ' &nbsp;&nbsp;&nbsp;&nbsp;Second lower';}
+                                        elseif($totgpoint/$totcredit >1.494) {echo ' &nbsp;&nbsp;&nbsp;&nbsp;Pass';}
+                                        else {echo '&nbsp;&nbsp;&nbsp;&nbsp;Fail';}?> &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp; </td>
+                                     <?php   
+                                    }
+                                    ?>
+                                        <td class="uk-text-bold" align='center'><?php echo   $totcredit; ?></td>
+                                        
+                                            <td class="uk-text-bold" align='center'><?php if ($rsaProgram == 'RSA') { echo  number_format(@($rsc/$noCourses), 3, '.', ','); }?>&nbsp;</td>
+                                            <?php
+                                                if ($rsaProgram != 'RSA') {
+                                            
+                                            ?>
+                                        <td class="uk-text-bold" align='center'><?php echo $totgpoint;   $b="";$a=""; ?>&nbsp;</td>
+                                        <?php
+                                                }
+                                            
+                                            ?>
+                                    </tr>
+
+                                    </tbody>
+
+                                    <?php
+                                    $gpoint=0.0;
+                                    $gcredit=0;
+                                    $rsc=0;
+                                    $noCourses=0;
+                                    ?>
+                                </table>
+                            <?php 
+                                
+                                    
+                            }else{
+                                echo "<p class='uk-text-danger'>No results to display</p>";
+                                ?><?php }?>
+                            <p>&nbsp;</p>
+                            </div><?php }  }
+
+                    ?>
+
+
+            </tr>
+
+        </table>
+
+<table width="150px" style="margin-left:18px" height="133">
+                                
+                                
+                                <tr>
+                                    <td width = "40px" class="uk-text-bold"style="vertical-align: center;">Grade
+                                    </td>
+                                    <td width = "8px">&nbsp;
+                                    </td> 
+                                    <td class="uk-text-bold"style="padding-left: 10px;">Range
+                                    </td>
+                                    
+                                </tr>
+                                <tr>
+                                    <td style="padding-left: 10px;">A+
+                                    </td> 
+                                    <td>-
+                                    </td>
+                                    <td style="padding-left: 10px;">85&nbsp; : &nbsp;100
+                                    </td>
+                                    
+                                </tr>
+                                <tr>
+                                    <td style="padding-left: 10px;">A
+                                    </td> 
+                                    <td>-
+                                    </td>
+                                    <td style="padding-left: 10px;">80&nbsp; : &nbsp;84
+                                    </td>
+                                    
+                                </tr>
+                                <tr>
+                                    <td style="padding-left: 10px;">B+
+                                    </td> 
+                                    <td>-
+                                    </td>
+                                    <td style="padding-left: 10px;">75&nbsp; : &nbsp;79
+                                    </td>
+                                    
+                                </tr>
+                                <tr>
+                                    <td style="padding-left: 10px;">B
+                                    </td> 
+                                    <td>-
+                                    </td>
+                                    <td style="padding-left: 10px;">70&nbsp; : &nbsp;74
+                                    </td>
+                                    
+                                </tr>
+                                <tr>
+                                    <td style="padding-left: 10px;">C+
+                                    </td> 
+                                    <td>-
+                                    </td>
+                                    <td style="padding-left: 10px;">65&nbsp; : &nbsp;69
+                                    </td>
+                                    
+                                </tr>
+                                <tr>
+                                    <td style="padding-left: 10px;">C
+                                    </td> 
+                                    <td>-
+                                    </td>
+                                    <td style="padding-left: 10px;">60&nbsp; : &nbsp;64
+                                    </td>
+                                    
+                                </tr>
+                                <tr>
+                                    <td style="padding-left: 10px;">D+
+                                    </td> 
+                                    <td>-
+                                    </td>
+                                    <td style="padding-left: 10px;">55&nbsp; : &nbsp;59
+                                    </td>
+                                    
+                                </tr>
+                                <tr>
+                                    <td style="padding-left: 10px;">D
+                                    </td> 
+                                    <td>-
+                                    </td>
+                                    <td style="padding-left: 10px;">50&nbsp; : &nbsp;54
+                                    </td>
+                                    
+                                </tr>
+                                <tr>
+                                    <td style="padding-left: 10px;">F
+                                    </td> 
+                                    <td>-
+                                    </td>
+                                    <td style="padding-left: 18px;">0&nbsp; : &nbsp;49
+                                    </td>
+                                    
+                                </tr>
+                               
+                            </table>
+
+    </td>
+        </tr>
+
+        </table>
+        </div></div>
+
+    <?php }
+
+
+
+    
+
     /**
      * Display a list of all of the user's task.
      *
@@ -1727,11 +2238,11 @@ if(@\Auth::user()->department=='Tptop' || @\Auth::user()->department=='Tptop'){
      */
     public function index(Request $request,SystemController $sys)
     {
-        if($request->user()->isSupperAdmin  || @\Auth::user()->department=="top" || @\Auth::user()->role=="Admin" || @\Auth::user()->department=="Rector" || @\Auth::user()->department=="Tpmid" || @\Auth::user()->department=="Tptop"){
+         if ($sys->getUserLevel((@\Auth::user()->department),"admin_top") == '1' || $sys->getUserLevel((@\Auth::user()->role),"admin_top") == '1') {
 
             $courses= Models\CourseModel::query() ;
         }
-        elseif(@\Auth::user()->role=="HOD" || @\Auth::user()->role=="Support" || @\Auth::user()->role=="Registrar") {
+        elseif ($sys->getUserLevel((@\Auth::user()->department),"admin_academic") == '1' || $sys->getUserLevel((@\Auth::user()->role),"admin_academic") == '1') {
             $courses = Models\CourseModel::where('PROGRAMME', '!=', '')->whereHas('programs', function($q) {
                 $q->whereHas('departments', function($q) {
                     $q->whereIn('DEPTCODE', array(@\Auth::user()->department));
@@ -1777,12 +2288,12 @@ if(@\Auth::user()->department=='Tptop' || @\Auth::user()->department=='Tptop'){
 //          $courses= Models\MountedCourseModel::query()->where('MOUNTED_BY',$hod) ;
 //      }
 
-        if($request->user()->isSupperAdmin  ||  @\Auth::user()->department=="top" || @\Auth::user()->role=="Admin" ||  @\Auth::user()->department=="Rector" || @\Auth::user()->role=="Lecturer" || @\Auth::user()->role=="Support"){
+         if ($sys->getUserLevel((@\Auth::user()->department),"admin_top") == '1' || $sys->getUserLevel((@\Auth::user()->role),"admin_top") == '1') {
 
             $courses= Models\MountedCourse2Model::query() ;
         }
-        elseif(@\Auth::user()->role=="HOD") {
-            $courses =Models\MountedCourse2Model::where('COURSE', '!=', '')->whereHas('courses', function($q) {
+        else {
+            $courses =Models\MountedCourseModel::where('COURSE', '!=', '')->whereHas('courses', function($q) {
                 $q->whereHas('programs', function($q) {
                     $q->whereIn('DEPTCODE', array(@\Auth::user()->department));
                 });
@@ -1822,7 +2333,7 @@ if(@\Auth::user()->department=='Tptop' || @\Auth::user()->department=='Tptop'){
 
     public function updateClose($item,$action, SystemController $sys) {
 
-        if(@\Auth::user()->department=="Tptop"){
+         if ($sys->getUserLevel((@\Auth::user()->department),"legacy_upload") == '1' || $sys->getUserLevel((@\Auth::user()->role),"legacy_upload") == '1') {
 
         if($action=="closeReg"){
 
@@ -1913,7 +2424,7 @@ if(@\Auth::user()->department=='Tptop' || @\Auth::user()->department=='Tptop'){
 
     }
     public function mountCourse(SystemController $sys) {
-        if(@\Auth::user()->role == 'Admin'|| @\Auth::user()->role=='Support' || @\Auth::user()->role=='Registrar'){
+         if ($sys->getUserLevel((@\Auth::user()->department),"mounted_upload") == '1' || $sys->getUserLevel((@\Auth::user()->role),"mounted_upload") == '1') {
             $programme=$sys->getProgramList();
 
             $course=$sys->getCourseList();
@@ -1931,7 +2442,7 @@ if(@\Auth::user()->department=='Tptop' || @\Auth::user()->department=='Tptop'){
     }
 
     public function create(SystemController $sys) {
-        if(@\Auth::user()->role=='HOD' || @\Auth::user()->department=='top' || @\Auth::user()->department=='Tptop' || @\Auth::user()->role == 'Admin'){
+         if ($sys->getUserLevel((@\Auth::user()->department),"mounted_upload") == '1' || $sys->getUserLevel((@\Auth::user()->role),"mounted_upload") == '1') {
             $programme=$sys->getProgramList();
             return view('courses.create')->with('level', $sys->getLevelList())->with('programme', $programme);
         }
@@ -1948,9 +2459,9 @@ if(@\Auth::user()->department=='Tptop' || @\Auth::user()->department=='Tptop'){
      * @param  Request  $request
      * @return Response
      */
-    public function store(Request $request)
+    public function store(Request $request, SystemController $sys)
     {
-        if(@\Auth::user()->role=='HOD' || @\Auth::user()->department=='Tpmid' || @\Auth::user()->department=='Tptop'|| @\Auth::user()->department=='top' || @\Auth::user()->department=='Tptop' || @\Auth::user()->role == 'Admin'){
+         if ($sys->getUserLevel((@\Auth::user()->department),"courses_upload") == '1' || $sys->getUserLevel((@\Auth::user()->role),"courses_upload") == '1') {
 
             $this->validate($request, [
                 'name' => 'required',
@@ -1994,7 +2505,7 @@ if(@\Auth::user()->department=='Tptop' || @\Auth::user()->department=='Tptop'){
         }
     }
     public function mountCourseStore(Request $request, SystemController $sys) {
-        if(@\Auth::user()->role=='Registrar' || @\Auth::user()->role == 'Admin'){
+         if ($sys->getUserLevel((@\Auth::user()->department),"mounted_upload") == '1' || $sys->getUserLevel((@\Auth::user()->role),"mounted_upload") == '1') {
             \DB::beginTransaction();
             try {
                 $this->validate($request, [
@@ -2094,7 +2605,7 @@ if(@\Auth::user()->department=='Tptop' || @\Auth::user()->department=='Tptop'){
 
             $resultOpen=$array2[0]->ENTER_RESULT;
             //if($resultOpen == 1 || $openCourse->CLOSED == 1){
-                $mark = Models\AcademicRecordsModel::where('code',$code)
+                $mark = Models\AcademicRecordsModel::where('code',$code)->where("year",$uploadYear)->where("sem",$uploadSem)
 
                     ->where('lecturer',$lecturer)
                     ->where('year',$year)
@@ -2174,17 +2685,37 @@ if(@\Auth::user()->department=='Tptop' || @\Auth::user()->department=='Tptop'){
 
             'program' => 'required',
             'sem' => 'required',
-           // 'year' => 'required',
+            'combine' => 'required',
             'level' => 'required',
         ]);
 
         $kojoSense = 0;
         $array = $sys->getSemYear();
-        $yearCurrent = $array[0]->YEAR;
-        $semCurrent = $array[0]->SEMESTER;
+
+        $currentResultsArray=$array[0]->RESULT_DATE;
+       // dd($resultb);
+
+        $currentResultsArray1 = explode(',',$currentResultsArray);
+        $yearCurrent = $currentResultsArray1[0];
+        $semCurrent = $currentResultsArray1[1];
+
+
+        //$yearCurrent = $array[0]->YEAR;
+        //$semCurrent = $array[0]->SEMESTER;
+
+
+
         $sem = $request->input("sem");
         $year = $request->input("year");
-        $level = $request->input("level");
+        $levelsent = $request->input("level");
+        $combine = $request->input("combine");
+        $level = $levelsent.$combine;
+        if ($level == "100MT") {
+           $level = "500MT";
+        }
+        if ($level == "200MT") {
+           $level = "600MT";
+        }
         $program = $request->input("program");
         $course = $request->input("course");
         $lecturer = @\Auth::user()->fund;
@@ -2200,14 +2731,11 @@ if(@\Auth::user()->department=='Tptop' || @\Auth::user()->department=='Tptop'){
         $courcec = \DB::table('tpoly_courses')->where('COURSE_CODE',$course)->first();
         $courced = $courcec->COURSE_NAME;
 
-
-        
-
         $data = Models\StudentModel::where("PROGRAMMECODE",$program)
             ->where("LEVEL",$level)
             ->where("STATUS","In school")
             ->orderBy("INDEXNO")
-            ->select('INDEXNO', \DB::raw('concat(SURNAME,", ",FIRSTNAME," ",OTHERNAMES) NAME'))
+            ->select('INDEXNO', 'NAME')
             ->get();
 
         $kojoSense = count($data)+1;
@@ -2355,6 +2883,9 @@ if(@\Auth::user()->department=='Tptop' || @\Auth::user()->department=='Tptop'){
 
                    $cells->setAlignment('left');
                 });
+
+               // $sheet->getActiveSheet()->getHeaderFooter()->setOddFooter('&R&F Page &P / &N');
+                //$sheet->getActiveSheet()->getHeaderFooter()->setEvenFooter('&R&F Page &P / &N');
                                 
                 $sheet->setHeight(array(
                     '1'     =>  22,
@@ -2477,6 +3008,207 @@ if(@\Auth::user()->department=='Tptop' || @\Auth::user()->department=='Tptop'){
 
 
     }
+
+
+    public function downloadAttendExcel(Request $request, SystemController $sys )
+
+    {
+
+        if ($sys->getUserLevel((@\Auth::user()->department),"exam_dpt") == '1' || $sys->getUserLevel((@\Auth::user()->role),"exam_dpt") == '1') {
+
+
+        $this->validate($request, [
+
+
+            'course' => 'required',
+            //'sem' => 'required',
+           // 'year' => 'required',
+            'level' => 'required',
+        ]);
+
+
+        $kojoSense = 0;
+        $array = $sys->getSemYear();
+        $year2 = $array[0]->YEAR;
+        $sem = $array[0]->SEMESTER;
+        
+        $level = $request->input("level");
+        //$program = $request->input("program");
+        $program = $request->input("course");
+        
+        $programme2 = \DB::table('tpoly_programme')->where('PROGRAMMECODE',$program)->first();
+        $programme = $programme2->PROGRAMME;
+        $dpt1 = $programme2->DEPTCODE;
+        $dpt2 = \DB::table('tpoly_department')->where('DEPTCODE',$dpt1)->first();
+        $dpt3 = $dpt2->DEPARTMENT;
+        $fac1 = $dpt2->FACCODE;
+        $fac2 = \DB::table('tpoly_faculty')->where('FACCODE',$fac1)->first();
+        $fac3 = $fac2->FACULTY;
+        //$courcec = \DB::table('tpoly_courses')->where('COURSE_CODE',$course)->first();
+        //$courced = $courcec->COURSE_NAME;
+
+
+        
+
+        $data = Models\StudentModel::where("PROGRAMMECODE",$program)
+            ->where("LEVEL",$level)
+            ->where("STATUS","In school")
+            //->where("REGISTERED",1)
+            ->orderBy("INDEXNO")
+            //->set('SET @rownr=0'))//->orderBy("REGISTERED", "DESC")
+            ->select('INDEXNO as INDEX_NO', 'NAME', 'BILL_OWING as OWING')
+            ->get();
+
+        $kojoSense = count($data)+1;
+
+        return Excel::create($level.'_'.$programme, function ($excel) use ($data,$program,$level,$programme,$kojoSense,$dpt3,$fac3,$year2,$sem){
+
+            $excel->sheet($program, function ($sheet) use ($data,$kojoSense,$program,$level,$programme,$dpt3,$fac3,$year2,$sem) {
+                $sheet->setWidth(array(
+                    'A'     =>  5,
+                    'B'     =>  15,
+                    'C'     =>  40,
+                    'D'     =>  8,
+                    'E'     =>  10,
+                    'F'     =>  30,
+                ));
+
+                $sheet->prependRow(1, array('prepended', 'prepended'));
+                 //$sheet->prependRow(1, array('assignment', 'quiz', 'midsem', 'exam', 'total'));
+
+                $sheet->fromArray($data, Null, 'B1', true);
+                $sheet->setBorder('A1:F'.$kojoSense.'', 'thin');
+                //$sheet->setCellsValue('C2:F'.$kojoSense.'','0');
+                //$sheet->cells('C2:C5', function($cells) {
+
+                $sheet->setCellValue('A1','SN');
+                $sheet->setCellValue('E1','SERIAL NO');
+                $sheet->setCellValue('F1','SIGN');
+                for($k=1;$k<$kojoSense;$k++){
+                    $kID = $k;
+                    $kIdCount = $kID + 1;
+                    $sheet->setCellValue('A'.$kIdCount.'',$k);
+                    
+
+
+                }
+                if ($sem == 1) {
+                    $semWords = 'FIRST';
+                } elseif ($sem == 2) {
+                    $semWords = 'SECOND';
+                } else {
+                    $semWords = 'THIRD';
+                }
+
+
+                
+
+                $current_time = \Carbon\Carbon::now()->toDateTimeString();
+                           // $sheet->setCellValue('A2',$current_time);
+
+                $cheat = 25+$k;
+                $cheat2 = $cheat + 3;
+                $cheat3 = $cheat2 + 1;
+
+                $sheet->prependRow(1, array(' '.' '.' '.''
+                ));
+                $sheet->prependRow(1, array(' '.' '.' '.' '.' END OF '.$semWords.' SEMESTER EXAMINATION '.$year2.' ACADEMIC YEAR - ATTENDANCE REGISTER'
+                ));
+                $sheet->prependRow(1, array(' '.' '.' '.' '.' '.$programme
+                ));
+                $sheet->prependRow(1, array(' '.' '.' '.' '.' '.$dpt3.' DEPARTMENT'
+                ));
+                $sheet->prependRow(1, array(' '.' '.' '.' '.' '.$fac3
+                ));
+                $sheet->prependRow(1, array(' '.' '.' '.' '.' TAKORADI TECHNICAL UNIVERSITY'.' ('.$current_time.')'
+                ));
+
+               
+             
+               $sheet->cells('A7:F7', function($cells) {
+
+                    // manipulate the cell
+                        $cells->setAlignment('center');
+                        $cells->setFont(array(
+                        'size'       => '10',
+                        'bold'       =>  true
+                        ));
+
+                });
+
+                for($lisa=1;$lisa<6;$lisa++){
+                    $sheet->mergeCells('A'.$lisa.':F'.$lisa);
+                    
+                    
+                    //$sheet->cell('A'.$lisa, function($cell) {
+                    
+                        
+                    //$sheet->mergeCells('J2':'K2');
+                   
+                }
+
+                  $sheet->cells('A1:A5', function($cells) {
+
+                    // manipulate the cell
+                        $cells->setAlignment('center');
+                        $cells->setFont(array(
+                        'size'       => '10',
+                        'bold'       =>  true
+                        ));
+
+                });
+
+                 $sheet->cells('A1:F6', function($cells) {
+
+                   $cells->setBackground('#ffffff');
+                });
+
+                $kojoSenseSel = $kojoSense + 6;
+                    $sheet->cells('A8:B'.$kojoSenseSel, function($cells) {
+
+                    // manipulate the cell
+                     $cells->setAlignment('center');
+                        //$cells->setFont(array(
+                        //'size'       => '12',
+                        //'bold'       =>  true
+                        //));
+
+                });
+
+                $kojoSenseSel = $kojoSense + 6;
+                    $sheet->cells('A8:D'.$kojoSenseSel, function($cells) {
+
+                    // manipulate the cell
+                     //$cells->setAlignment('center');
+                        $cells->setFont(array(
+                        'size'       => '10'
+                        //'bold'       =>  true
+                        ));
+
+                });
+
+                
+                                
+                $sheet->setHeight(array(
+                    '1'     =>  20,
+                    '2'     =>  20,
+                    '3'     =>  20,
+                    '4'     =>  20,
+                    '5'     =>  20
+                    
+                ));
+
+                
+                //$sheet->setFreeze('A8');            
+//});
+            });
+
+        })->download('xlsx');
+
+
+    }
+}
+
 
 
     public function downloadRegList(Request $request, SystemController $sys )
@@ -2833,14 +3565,19 @@ if(@\Auth::user()->department=='Tptop' || @\Auth::user()->department=='Tptop'){
                     $resitCount=Models\AcademicRecordsModel::where("indexno",$student)->where("total","<","50")->where("grade","F")->where("resit","no")->get()->toArray();
                         if (count($resitCount) > 0) {
                             $trail = "yes";
+                            $sup = 0;
+                            $newCgpa=@$sys->getCGPA($student);
+                                    $class=@$sys->getClass($newCgpa);
+                                    Models\StudentModel::where("INDEXNO",$student)->update(array("CGPA"=>$newCgpa,"CLASS"=>$class,"TRAIL"=>$trail,"SUP"=>$sup));
                         }
                         else
                         {
-                         $trail = "no";   
-                        }
-                   $newCgpa=@$sys->getCGPA($student);
+                         $trail = "no"; 
+                         $newCgpa=@$sys->getCGPA($student);
                                     $class=@$sys->getClass($newCgpa);
-                                    Models\StudentModel::where("INDEXNO",$student)->update(array("CGPA"=>$newCgpa,"CLASS"=>$class,"TRAIL"=>$trail));
+                                    Models\StudentModel::where("INDEXNO",$student)->update(array("CGPA"=>$newCgpa,"CLASS"=>$class,"TRAIL"=>$trail));  
+                        }
+                   
 
                     Models\AcademicRecordsModel::where("id", $keyData)->where('lecturer', $lecturer)->update(array("quiz1" => $quiz1Data, "quiz2" => $quiz2Data, "quiz3" => $quiz3Data, "midSem1" => $midsem1Data, "exam" => $examTotal, "total" => $total, "lecturer" => $lecturer, 'grade' => $grade, 'gpoint' => $gradePoint));
 
@@ -2852,7 +3589,7 @@ if(@\Auth::user()->department=='Tptop' || @\Auth::user()->department=='Tptop'){
     }
     public function storeMark($course,$code, SystemController $sys,Request $request){
 
-        if (@\Auth::user()->role == 'HOD' || @\Auth::user()->role == 'Lecturer' || @\Auth::user()->department == 'Tpmid') {
+        if (@\Auth::user()->role == 'Lecturer') {
             $array = $sys->getSemYear();
             $sem =$request->input('sem');
             $year = $request->input('years');
@@ -2895,7 +3632,7 @@ if(@\Auth::user()->department=='Tptop' || @\Auth::user()->department=='Tptop'){
 
     }
     public function attendanceSheet(Request $request,SystemController $sys){
-        if(@\Auth::user()->role=='HOD' || @\Auth::user()->department=='top' || @\Auth::user()->department=='Tptop'|| @\Auth::user()->role=='Dean' || @\Auth::user()->role=='Support' || @\Auth::user()->department=='Rector' || @\Auth::user()->department=='Tpmid' || @\Auth::user()->department=='Planning' || @\Auth::user()->department=='Tptop'){
+        if(@\Auth::user()->role=='HOD' || @\Auth::user()->department=='top' || @\Auth::user()->department=='Tptop' || @\Auth::user()->department=='Planning' || @\Auth::user()->role=='Academic' || @\Auth::user()->department=='Tptop' || @\Auth::user()->role=='Academic'){
             if ($request->isMethod("get")) {
                 $course=$sys->getProgramList();//original is mounted course list
 
@@ -2904,8 +3641,12 @@ if(@\Auth::user()->department=='Tptop' || @\Auth::user()->department=='Tptop'){
             }
             else{
 
-                $semester = $request->input('semester');
-                $year = $request->input('year');
+                $array = $sys->getSemYear();
+            $semester = $array[0]->SEMESTER;
+            $year = $array[0]->YEAR;
+
+                //$semester = $request->input('semester');
+                //$year = $request->input('year');
                 $course =  $request->input('course') ;
                 $level = $request->input('level');
 
@@ -2920,6 +3661,7 @@ if(@\Auth::user()->department=='Tptop' || @\Auth::user()->department=='Tptop'){
                 //$displayCourse=$courseName[0]->COURSE_NAME;
                 //$displayCode=$courseName[0]->COURSE_CODE;
                 \Session::put('year', $year);
+                \Session::put('semester', $semester);
                 $url = url('printAttendance/'.$course.'/course/'.$level.'/level/');
 
                 $print_window = "<script >window.open('$url','','location=1,status=1,menubar=yes,scrollbars=yes,resizable=yes,width=1000,height=500')</script>";
@@ -2942,11 +3684,12 @@ if(@\Auth::user()->department=='Tptop' || @\Auth::user()->department=='Tptop'){
     }
     public function printAttendance(Request $request,$course,$level) {
         $year=\Session::get('year');
+        $semester=\Session::get('semester');
         $mark = Models\StudentModel::where("PROGRAMMECODE", $course)->where('STATUS','In school')->where('LEVEL',$level)->orderBy("INDEXNO")->paginate(500);
 
         return view('courses.printAttendance')->with('mark', $mark)
             ->with('year', $year)
-           // ->with('sem', $semester)
+            ->with('semester', $semester)
             ->with('course', $course);
            // ->with('code', $code);
 
@@ -2972,7 +3715,7 @@ if(@\Auth::user()->department=='Tptop' || @\Auth::user()->department=='Tptop'){
         }
     }
     public function showFileUploadRegistered(SystemController $sys){
-        if(@\Auth::user()->role=='HOD' || @\Auth::user()->department=='Tpmid' || @\Auth::user()->role=='Support' || @\Auth::user()->department=='Tptop'|| @\Auth::user()->role=='Dean' || @\Auth::user()->role=='Lecturer'){
+        if(@\Auth::user()->role=='Lecturer'){
             $programme=$sys->getProgramList5();
             $course=$sys->getMountedCourseList3();
 
@@ -2985,29 +3728,24 @@ if(@\Auth::user()->department=='Tptop' || @\Auth::user()->department=='Tptop'){
     }
 
     public function showFileUploadRegList(SystemController $sys){
-        if(@\Auth::user()->role=='HOD' || @\Auth::user()->department=='Tpmid' || @\Auth::user()->role=='Support' || @\Auth::user()->department=='Tptop'|| @\Auth::user()->role=='Dean' || @\Auth::user()->role=='Lecturer'){
+        
             $programme=$sys->getProgramList5();
             $course=$sys->getMountedCourseList3();
 
             return view('courses.downloadRegList')->with('programme', $programme)->with('courses',$course)
                 ->with('level', $sys->getLevelList())->with('year',$sys->years());
-        }
-        else{
-            throw new HttpException(Response::HTTP_UNAUTHORIZED, 'This action is unauthorized.');
-        }
+       
+        
     }
 
     public function showFileUploadidCards(SystemController $sys){
-        if(@\Auth::user()->role=='HOD' || @\Auth::user()->department=='Tpmid' || @\Auth::user()->role=='Support' || @\Auth::user()->department=='Tptop'|| @\Auth::user()->role=='Dean' || @\Auth::user()->department=='Planning'){
+        
             $programme=$sys->getProgramList5();
             $course=$sys->getMountedCourseList3();
 
             return view('courses.downloadidCards')->with('programme', $programme)->with('courses',$course)
                 ->with('level', $sys->getLevelList())->with('year',$sys->years());
-        }
-        else{
-            throw new HttpException(Response::HTTP_UNAUTHORIZED, 'This action is unauthorized.');
-        }
+        
     }
 
     
@@ -3017,7 +3755,7 @@ if(@\Auth::user()->department=='Tptop' || @\Auth::user()->department=='Tptop'){
      */
     public function uploadLegacy(Request $request, SystemController $sys){
 
-        if(@\Auth::user()->role=='HOD' || @\Auth::user()->department=='top' || @\Auth::user()->department=='Tptop'|| @\Auth::user()->role=='Dean' || @\Auth::user()->role=='Support' || @\Auth::user()->role=='Registrar' || @\Auth::user()->department=='Tpmid' || @\Auth::user()->department=='Tptop'){
+        if ($sys->getUserLevel((@\Auth::user()->department),"legacy_upload") == '1' || $sys->getUserLevel((@\Auth::user()->role),"legacy_upload") == '1') {
             if ($request->isMethod("get")) {
 
                 $programme = $sys->getProgramList();
@@ -3125,16 +3863,22 @@ if(@\Auth::user()->department=='Tptop' || @\Auth::user()->department=='Tptop'){
                                     $resitCount=Models\AcademicRecordsModel::where("indexno",$indexNo)->where("total","<","50")->where("grade","F")->where("resit","no")->get()->toArray();
                         if (count($resitCount) > 0) {
                             $trail = "yes";
+                            $sup = 0;
+                            $newCgpa=@$sys->getCGPA($indexNo);
+                                    $class=@$sys->getClass($newCgpa);
+                                    Models\StudentModel::where("INDEXNO",$indexNo)->update(array("CGPA"=>$newCgpa,"CLASS"=>$class,"TRAIL"=>$trail,"SUP"=>$sup));
+                                    \DB::commit();
                         }
                         else
                         {
-                         $trail = "no";   
-                        }
-
-                                    $newCgpa=@$sys->getCGPA($indexNo);
+                         $trail = "no";  
+                         $newCgpa=@$sys->getCGPA($indexNo);
                                     $class=@$sys->getClass($newCgpa);
                                     Models\StudentModel::where("INDEXNO",$indexNo)->update(array("CGPA"=>$newCgpa,"CLASS"=>$class,"TRAIL"=>$trail));
-                                    \DB::commit();
+                                    \DB::commit(); 
+                        }
+
+                                    
 
                                 }
                                 else{
@@ -3164,16 +3908,23 @@ if(@\Auth::user()->department=='Tptop' || @\Auth::user()->department=='Tptop'){
                                     $resitCount=Models\AcademicRecordsModel::where("indexno",$indexNo)->where("total","<","50")->where("grade","F")->where("resit","no")->get()->toArray();
                         if (count($resitCount) > 0) {
                             $trail = "yes";
+                            $sup = 0;
+                            $newCgpa=@$sys->getCGPA($indexNo);
+                                    $class=@$sys->getClass($newCgpa);
+                                    Models\StudentModel::where("INDEXNO",$indexNo)->update(array("CGPA"=>$newCgpa,"CLASS"=>$class,"TRAIL"=>$trail,"SUP"=>$sup));
+
+                                    \DB::commit();
                         }
                         else
                         {
-                         $trail = "no";   
-                        }
-                                    $newCgpa=@$sys->getCGPA($indexNo);
+                         $trail = "no";  
+                         $newCgpa=@$sys->getCGPA($indexNo);
                                     $class=@$sys->getClass($newCgpa);
                                     Models\StudentModel::where("INDEXNO",$indexNo)->update(array("CGPA"=>$newCgpa,"CLASS"=>$class,"TRAIL"=>$trail));
 
-                                    \DB::commit();
+                                    \DB::commit(); 
+                        }
+                                    
                                 }
 
 
@@ -3214,12 +3965,13 @@ if(@\Auth::user()->department=='Tptop' || @\Auth::user()->department=='Tptop'){
 
             'file' => 'required',
             'course' => 'required',
-            'sem' => 'required',
-            'year' => 'required',
+            //'sem' => 'required',
+            //'year' => 'required',
+            'combine' => 'required',
             'level' => 'required',
         ]);
         // dd($request);
-        if(@\Auth::user()->department=='Tptop' || @\Auth::user()->role=='Lecturer')
+        if(@\Auth::user()->role=='Lecturer')
     {
             $array = $sys->getSemYear();
             $sem = $array[0]->SEMESTER;
@@ -3247,11 +3999,22 @@ if(@\Auth::user()->department=='Tptop' || @\Auth::user()->department=='Tptop'){
 
                 $ext = strtolower($file->getClientOriginalExtension());
 
-                $semester = $request->input('sem');
-                $year1 = $request->input('year');
+                //$semester = $request->input('sem');
+                //$year1 = $request->input('year');
+                $semester = $uploadSem;
+                $year1 = $uploadYear;
                 $course =  $request->input('course');
                 //$programme = $request->input('program');
-                $level = $request->input('level');
+                //$level = $request->input('level');
+                $levelsent = $request->input("level");
+                $combine = $request->input("combine");
+                $level = $levelsent.$combine;
+                if ($level == "100MT") {
+                   $level = "500MT";
+                }
+                if ($level == "200MT") {
+                   $level = "600MT";
+                }
                 $studentIndexNo = $sys->getStudentIDfromIndexno($request->input('student'));
 
             
@@ -3275,6 +4038,7 @@ if(@\Auth::user()->department=='Tptop' || @\Auth::user()->department=='Tptop'){
 
                             $totalRecords = count($data);
                             $essien = $essien + 1;
+                            //dd($totalRecords);
 
                             $studentProgram= $sys->getStudentprogramfromIndexno($value->indexno);
                             $studentYearGroup= $sys->getStudentyeargroupfromIndexno($value->indexno);
@@ -3304,9 +4068,9 @@ if(@\Auth::user()->department=='Tptop' || @\Auth::user()->department=='Tptop'){
                             $midsem=@$value->midsem;
                             $exam=@$value->exam;
                             $total= @round(($quiz2+$quiz1+$midsem+$exam),2);
-                            $programmeDetail=$sys->getCourseProgrammeMounted($displayCode);
+                            $programmeDetail=@$sys->getCourseProgrammeMounted($displayCode);
                             //$creditHour=$sys->getCourseMountedCredit($displayCode);
-                            $program=$sys->getProgramArray($programmeDetail);
+                            $program=@$sys->getProgramArray($programmeDetail);
                             //dd($program);
                             $gradeArray = @$sys->getGrade($total, $program[0]->GRADING_SYSTEM);
                             $grade = @$gradeArray[0]->grade;
@@ -3326,7 +4090,7 @@ if(@\Auth::user()->department=='Tptop' || @\Auth::user()->department=='Tptop'){
                               $leecount++;  # code...
                             
 
-                            $checker=Models\AcademicRecordsModel::where("indexno", $studentDb)->where("code", $course)->where("sem",$semester)->where("level",$level)->where("resit","!=","yes")->first();
+                            $checker=Models\AcademicRecordsModel::where("indexno", $studentDb)->where("code", $course)->where("sem",$semester)->where("level",$level)->where("resit","no")->first();
 
                             if(@count($checker)==0 || @count($checker)=='')
                             {
@@ -3347,6 +4111,7 @@ if(@\Auth::user()->department=='Tptop' || @\Auth::user()->department=='Tptop'){
                                 $record->grade=$grade;
                                 $record->gpoint=$gradePoint;
                                 $record->level=$level;
+                                //dd($level, 1);
                                 $record->resit="no";
                                 $record->course=$courseDb;
                                 $record->programme = $studentProgram;
@@ -3354,18 +4119,23 @@ if(@\Auth::user()->department=='Tptop' || @\Auth::user()->department=='Tptop'){
                                 $record->save();
 
                                 $resitCount=Models\AcademicRecordsModel::where("indexno",$studentDb)->where("total","<","50")->where("grade","F")->where("resit","no")->get()->toArray();
-                        if (count($resitCount) > 0) {
-                            $trail = "yes";
-                        }
-                        else
-                        {
-                         $trail = "no";   
-                        }
-
-
-                                    $newCgpa=@$sys->getCGPA($studentDb);
+                                if (count($resitCount) > 0) {
+                                $trail = "yes";
+                                $sup = 0;
+                                $newCgpa=@$sys->getCGPA($studentDb);
+                                    $class=@$sys->getClass($newCgpa);
+                                    Models\StudentModel::where("INDEXNO",$studentDb)->update(array("CGPA"=>$newCgpa,"CLASS"=>$class,"TRAIL"=>$trail,"SUP"=>$sup));
+                                }
+                                else
+                                {
+                                $trail = "no";   
+                                $newCgpa=@$sys->getCGPA($studentDb);
                                     $class=@$sys->getClass($newCgpa);
                                     Models\StudentModel::where("INDEXNO",$studentDb)->update(array("CGPA"=>$newCgpa,"CLASS"=>$class,"TRAIL"=>$trail));
+                                }
+
+
+                                    
 
 
                                 
@@ -3374,27 +4144,32 @@ if(@\Auth::user()->department=='Tptop' || @\Auth::user()->department=='Tptop'){
                             else
                             {
 
-                                Models\AcademicRecordsModel::where("indexno", $studentDb)->where("code", $course)->where("sem",$semester)->where("level",$level)->where("resit","!=","yes")->update(array("quiz1" => $quiz1, "quiz2" => $quiz2, "level" => $level, "programme" => $studentProgram, "yrgp" => $studentYearGroup, "student" => $studentId, "quiz3" =>0, "midSem1" => $midsem, "exam" => $exam, "total" => $total, "lecturer" =>$courseLecturerDb,'grade' => $grade,'course' => $courseDb, 'gpoint' => $gradePoint, 'resit' => "no"));
+                                Models\AcademicRecordsModel::where("indexno", $studentDb)->where("code", $course)->where("sem",$semester)->where("level",$level)->where("resit","no")->update(array("quiz1" => $quiz1, "quiz2" => $quiz2, "level" => $level, "programme" => $studentProgram, "yrgp" => $studentYearGroup, "student" => $studentId, "quiz3" =>0, "midSem1" => $midsem, "exam" => $exam, "total" => $total, "lecturer" =>$courseLecturerDb,'grade' => $grade,'course' => $courseDb, 'gpoint' => $gradePoint, 'resit' => "no"));
+
+                                 //dd($level, 2);
 
                                 $resitCount=Models\AcademicRecordsModel::where("indexno",$studentDb)->where("total","<","50")->where("grade","F")->where("resit","no")->get()->toArray();
-                        if (count($resitCount) > 0) {
-                            $trail = "yes";
-                        }
-                        else
-                        {
-                         $trail = "no";   
-                        }
-
+                                if (count($resitCount) > 0) {
+                                    $trail = "yes";
+                                    $sup = 0;
+                                    $newCgpa=@$sys->getCGPA($studentDb);
+                                    $class=@$sys->getClass($newCgpa);
+                                    Models\StudentModel::where("INDEXNO",$studentDb)->update(array("CGPA"=>$newCgpa,"CLASS"=>$class,"TRAIL"=>$trail,"SUP"=>$sup));
+                                }
+                                else
+                                {
+                                    $trail = "no";   
                                     $newCgpa=@$sys->getCGPA($studentDb);
                                     $class=@$sys->getClass($newCgpa);
                                     Models\StudentModel::where("INDEXNO",$studentDb)->update(array("CGPA"=>$newCgpa,"CLASS"=>$class,"TRAIL"=>$trail));
+                                }
 
                                 
-
 
                             }
 
 
+                        
                         }
                              //else {
 //                                return redirect('/upload/marks')->with("error", " <span style='font-weight:bold;font-size:13px;'>File contain unrecognized students for $displayCourse - $displayCode.please upload only registered students for  $displayCourse - $displayCode  as downloaded from the system!</span> ");
@@ -3412,7 +4187,7 @@ if(@\Auth::user()->department=='Tptop' || @\Auth::user()->department=='Tptop'){
 
                     }
             } else {
-                    return redirect('/upload_marks')->with("error", " <span style='font-weight:bold;font-size:13px;'>Please upload only Excel file!</span> ");
+                    return redirect('/upload_marks')->with("success", " <span style='font-weight:bold;font-size:13px;'>There seems to be an issue. Please click on View/Edit Results to verify uploaded results</span> ");
 
                 }
 
@@ -3429,7 +4204,7 @@ if(@\Auth::user()->department=='Tptop' || @\Auth::user()->department=='Tptop'){
 }
     public function batchRegistration(Request $request,SystemController $sys){
 
-        if (@\Auth::user()->department == 'top' || @\Auth::user()->role == 'HOD' || @\Auth::user()->role == 'Support' || @\Auth::user()->department=='Tpmid' || @\Auth::user()->department=='Tptop') {
+        if (@\Auth::user()->department=='Tptop') {
             if ($request->isMethod("get")) {
 
                 return view('courses.batchRegister')->with('year', $sys->years())
@@ -3573,7 +4348,7 @@ if(@\Auth::user()->department=='Tptop' || @\Auth::user()->department=='Tptop'){
     }
     // show form for edit resource
     public function edit(Request $request,$id,SystemController $sys){
-        if (@\Auth::user()->department == 'top' || @\Auth::user()->role == 'HOD' || @\Auth::user()->role == 'Support' || @\Auth::user()->role == 'Admin' || @\Auth::user()->department=='Tpmid' || @\Auth::user()->department=='Tptop') {
+       if ($sys->getUserLevel((@\Auth::user()->department),"mounted_upload") == '1' || $sys->getUserLevel((@\Auth::user()->role),"mounted_upload") == '1') {
             if ($request->isMethod("get")) {
 
                 $course = Models\CourseModel::where("ID", $id)->firstOrFail();
@@ -3629,7 +4404,7 @@ if(@\Auth::user()->department=='Tptop' || @\Auth::user()->department=='Tptop'){
     public function destroy(Request $request,   SystemController $sys, Models\CourseModel $course)
     {
         //dd($request->input("id"));
-        if(@\Auth::user()->role=='HOD' ||  @\Auth::user()->role=='Support'||  @\Auth::user()->role=='Admin' ||  @\Auth::user()->department=='top' || @\Auth::user()->department=='Tptop' || @\Auth::user()->department=='Tpmid' || @\Auth::user()->department=='Tptop'){
+        if ($sys->getUserLevel((@\Auth::user()->department),"mounted_upload") == '1' || $sys->getUserLevel((@\Auth::user()->role),"mounted_upload") == '1') {
             $hod=@\Auth::user()->id;
             $array=$sys->getSemYear();
             $sem=$array[0]->SEMESTER;
@@ -3669,7 +4444,7 @@ if(@\Auth::user()->department=='Tptop' || @\Auth::user()->department=='Tptop'){
     // delete mounted courses
     public function destroy_mounted(Request $request,   SystemController $sys, Models\CourseModel $course)
     {
-        if(@\Auth::user()->role=='HOD' ||  @\Auth::user()->role=='Support'||  @\Auth::user()->role=='Admin' ||  @\Auth::user()->department=='top' || @\Auth::user()->department=='Tptop' || @\Auth::user()->department=='Tpmid' || @\Auth::user()->department=='Tptop'){
+        if ($sys->getUserLevel((@\Auth::user()->department),"mounted_upload") == '1' || $sys->getUserLevel((@\Auth::user()->role),"mounted_upload") == '1') {
 
             $array=$sys->getSemYear();
             $sem=$array[0]->SEMESTER;

@@ -107,9 +107,14 @@ class QualityAssuranceController extends Controller
                 ->where("academic_year", $year)->where("semester", $sem)->where("course",$course)->groupBy("indexno")->get();
 //dd(count($query));
 
-             return view('qa.printLecturer')->with('course', $course)
+        $total=  Models\QAquestionModel::where("lecturer", $lecturer)
+            ->where("academic_year", $year)->where("semester", $sem)->where("course",$course)->count();
+
+        //dd(count($total));
+        return view('qa.printLecturer')->with('course', $course)
                 ->with("lecturer",$lecturer)
                 ->with("year",$year)
+                ->with("total",$total)
                 ->with("data",$query)
                 ->with("sem",$sem)
                 ;

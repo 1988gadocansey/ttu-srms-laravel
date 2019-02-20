@@ -267,4 +267,84 @@ class LiaisonController extends Controller
 
     }
 
+    public function bulkPrint(Request $request, SystemController $sys)
+    {
+
+        if($request->method()=="GET"){
+
+
+            $yearList=$sys->years();
+            $program=$sys->getProgramList();
+
+            return view ("liaison.bulkPrintForm")->with("years", $yearList)->with("program",$program)
+                ->with("levels",$sys->getLevelList());
+        }
+
+        else {
+
+            $program=$request->input("program");
+            $level=$request->input("level");
+            $semester=$request->input("semester");
+            $year=$request->input("year");
+            $type=$request->input("type");
+
+            if($type==1) {
+
+                $data = Models\LiaisonModel::where("level",$level)
+                                            ->where("terms",$semester)
+                                            ->where("year",$year)
+
+
+
+                    ->whereHas('studentDetials', function($q)use($program) {
+
+                            $q->where('PROGRAMMECODE',  $program);
+
+                    })
+
+                    ->get();
+                return view("liaison.printBulk")->with("datas", $data);
+
+            }
+            elseif($type==2){
+
+                $data = Models\AssumptionDutyModel::where("level",$level)
+
+                    ->where("year",$year)
+
+
+                    ->whereHas('studentDetials', function($q)use($program) {
+
+                        $q->where('PROGRAMMECODE',  $program);
+
+                    })
+
+                    ->get();
+                return view("liaison.bulkAssumptionPrint")->with("datas", $data);
+
+            }
+            else{
+
+                $data = Models\SemesterOutModel::where("level",$level)
+
+                    ->where("year",$year)
+                    ->where("terms",$semester)
+
+
+                    ->whereHas('studentDetials', function($q)use($program) {
+
+                        $q->where('PROGRAMMECODE',  $program);
+
+                    })
+
+                    ->get();
+                return view("liaison.bulkSemesterPrint")->with("datas", $data);
+
+            }
+
+
+        }
+
+    }
+
 }

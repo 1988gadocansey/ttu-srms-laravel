@@ -42,6 +42,7 @@ Route::post('/api/send/realtime', 'APIController@getApplicant');
 Route::post('fireVoucher', 'APIController@fireVoucher');
 Route::get('/api/student/password/{indexno}/{token}', 'APIController@getStudentPassword')->where('indexno', '(.*)');
 Route::get('/api/students/password/{token}', 'APIController@getAllStudentPassword');
+Route::get('/api/get/fees/{program}/program/{level}/level/{year}/year', 'APIController@getFees')->where('year', '(.*)');
 
 
 Route::get('/api/staffs/password/{token}', 'APIController@getStaffPassword');
@@ -93,6 +94,7 @@ Route::group(['middleware' => ['web']], function () {
     Route::match(array("get", "post"), '/liaison/units/create','LiaisonController@createUnit');
 
     Route::get('/liaison/units', 'LiaisonController@units');
+    Route::match(array("get", "post"),'/liaison/print/bulk', 'LiaisonController@bulkPrint');
 
     Route::delete('/unit/delete', 'LiaisonController@destroyAddress');
     Route::delete('/zone/delete', 'LiaisonController@destroyZones');

@@ -1274,6 +1274,7 @@
                                     <ul class="uk-nav uk-nav-dropdown">
                                         <li><a href='{!! url("/students") !!}'>View Students</a></li>
 
+                                        <li><a href='{!! url("/liaison/print/bulk") !!}'>Bulk Printing</a></li>
                                         <li><a href='{!! url("/liaison/assumption") !!}'>Assumption of duty Data</a></li>
 
                                         <li><a href='{!! url("liaison/data") !!}'>Industrial Attachment Data</a></li>

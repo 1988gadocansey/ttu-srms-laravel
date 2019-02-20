@@ -24,6 +24,19 @@ class APIController extends Controller
     {
         // $this->middleware('auth');
     }
+    public function getFees(Request $request,$program,$level,$year){
+        header('Content-Type: application/json');
+        $data=Models\BillModel::where("PROGRAMME",$program)
+                ->where("YEAR",$year)
+                ->where("LEVEL",$level)
+                ->select("AMOUNT")->first();
+        if($data) {
+            return response()->json($data->AMOUNT);
+        }
+        else{
+            return response()->json(0.00);
+        }
+    }
     public function generateBulkPassword(Request $request, SystemController $sys){
 
 

@@ -574,7 +574,7 @@ class SystemController extends Controller
         $total=Models\QAquestionModel::
             where("$table_field","$Yes_or_No")
             ->where("lecturer",$lecturer)
-            ->where("coursecode",$coursecode)
+            ->where("course",$coursecode)
             ->where("academic_year",$year)
             ->where("semester",$sem)
             ->count("$table_field");

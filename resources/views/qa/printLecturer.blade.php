@@ -124,6 +124,10 @@
         $created_friendly_atmosphere='created_friendly_atmosphere';
         $programmecode='programmecode';
 
+        //$arr=Request;
+
+       // dd(Request::get('lecturer'));
+
         ?>
 @if($data!="")
 
@@ -142,13 +146,14 @@
                     <p></p>
 
                     <?php
-                        $arr=$help->getCourseName($course);
+                        $name=$help->getCourseName($course);
+                        $arr=$course;
                     ?>
                     <div style='text-align:justify;  '>NAME OF LECTURER: &nbsp; &nbsp; <b>  <?php echo $help->getLectureName($lecturer);?></b></div>
                     <div style="text-align:justify;  ">ACADEMIC YEAR: &nbsp; &nbsp; <b><?php echo @$year;?> </b></div>
-                    <div style='text-align:justify;  '>NUMBER OF STUDENTS:&nbsp; &nbsp; <b> <?php echo @count(@$data); ?></b> </div>
-                    <div style='text-align:justify;  '>COURSE:&nbsp; &nbsp; <b>  <?php echo @$arr[0]->COURSE_NAME;?></b></div>
-                    <div style='text-align:justify;  '>DEPARTMENT:&nbsp; &nbsp; <b>  <?php echo  @$help->getDepartmentProgramme(@$arr[0]->PROGRAMME);?></b></div>
+                    <div style='text-align:justify;  '>NUMBER OF STUDENTS:&nbsp; &nbsp; <b> <?php echo $total; ?></b> </div>
+                    <div style='text-align:justify;  '>COURSE:&nbsp; &nbsp; <b>  <?php echo @$name[0]->COURSE_NAME;?></b></div>
+                    <div style='text-align:justify;  '>DEPARTMENT:&nbsp; &nbsp; <b>  <?php echo  @$help->getDepartmentProgramme(@$name[0]->PROGRAMME);?></b></div>
 
                     <div>
                         <p><center><b><h5><center>ASSESSMENT REPORT</center></h5></b></center></p>
@@ -178,13 +183,13 @@
                                     <tbody>
                                     <tr>
                                         <td style="width: 280px">1)The lecturer provided a comprehensive outline of the course  at the beginning of the semester</td>
-                                        <td><?php echo $comprehensive_outline_1= @@$help->selectcount($comprehensive_outline, '1', $lecturer,  @$arr[0]->COURSE_CODE, @$sem, @$year);  ?></td>
-                                        <td><?php echo $comprehensive_outline_2= @@$help->selectcount($comprehensive_outline, '2', $lecturer,  $arr[0]->COURSE_CODE, $sem, $year);  ?></td>
-                                        <td><?php echo $comprehensive_outline_3= @@$help->selectcount($comprehensive_outline, '3', $lecturer,  $arr[0]->COURSE_CODE, $sem, $year);  ?></td>
-                                        <td><?php echo $comprehensive_outline_4= @@$help->selectcount($comprehensive_outline, '4', $lecturer,  $arr[0]->COURSE_CODE, $sem, $year);  ?></td>
-                                        <td><?php echo $comprehensive_outline_5= @@$help->selectcount($comprehensive_outline, '5', $lecturer,  $arr[0]->COURSE_CODE, $sem, $year);  ?></td>
-                                        <td><?php echo $comprehensive_outline_6= @@$help->selectcount($comprehensive_outline, '6', $lecturer,  $arr[0]->COURSE_CODE, $sem, $year);  ?></td>
-                                        <td><?php echo $comprehensive_outline_7= @@$help->selectcount($comprehensive_outline, '7', $lecturer,  $arr[0]->COURSE_CODE, $sem, $year);  ?></td>
+                                        <td><?php echo $comprehensive_outline_1= @@$help->selectcount($comprehensive_outline, '1', $lecturer,  @$arr, @$sem, @$year);  ?></td>
+                                        <td><?php echo $comprehensive_outline_2= @@$help->selectcount($comprehensive_outline, '2', $lecturer,  $arr, $sem, $year);  ?></td>
+                                        <td><?php echo $comprehensive_outline_3= @@$help->selectcount($comprehensive_outline, '3', $lecturer,  $arr, $sem, $year);  ?></td>
+                                        <td><?php echo $comprehensive_outline_4= @@$help->selectcount($comprehensive_outline, '4', $lecturer,  $arr, $sem, $year);  ?></td>
+                                        <td><?php echo $comprehensive_outline_5= @@$help->selectcount($comprehensive_outline, '5', $lecturer,  $arr, $sem, $year);  ?></td>
+                                        <td><?php echo $comprehensive_outline_6= @@$help->selectcount($comprehensive_outline, '6', $lecturer,  $arr, $sem, $year);  ?></td>
+                                        <td><?php echo $comprehensive_outline_7= @@$help->selectcount($comprehensive_outline, '7', $lecturer,  $arr, $sem, $year);  ?></td>
 
                                         <td><?php  //echo    number_format($comprehensive_outline_yp /100,4);
                                             @$comprehensive_outline_total =@$comprehensive_outline_1 + @$comprehensive_outline_2  +  @$comprehensive_outline_3 + @$comprehensive_outline_4 + @$comprehensive_outline_5 + @$comprehensive_outline_6 + @$comprehensive_outline_7;
@@ -198,13 +203,13 @@
                                     </tr>
                                     <tr>
                                         <td style="width: 280px">2)A list of recommended textbooks was provided in the course outline</td>
-                                        <td><?php echo $outline_recommended_books_1 = @@$help->selectcount($outline_recommended_books, '1', $lecturer,  $arr[0]->COURSE_CODE, $sem, $year);  ?></td>
-                                        <td><?php echo $outline_recommended_books_2 = @@$help->selectcount($outline_recommended_books, '2', $lecturer,  $arr[0]->COURSE_CODE, $sem, $year);  ?></td>
-                                        <td><?php echo $outline_recommended_books_3 = @$help->selectcount($outline_recommended_books, '3', $lecturer,  $arr[0]->COURSE_CODE, $sem, $year);  ?></td>
-                                        <td><?php echo $outline_recommended_books_4 = @$help->selectcount($outline_recommended_books, '4', $lecturer,  $arr[0]->COURSE_CODE, $sem, $year);  ?></td>
-                                        <td><?php echo $outline_recommended_books_5 = @$help->selectcount($outline_recommended_books, '5', $lecturer,  $arr[0]->COURSE_CODE, $sem, $year);  ?></td>
-                                        <td><?php echo $outline_recommended_books_6 = @$help->selectcount($outline_recommended_books, '6', $lecturer,  $arr[0]->COURSE_CODE, $sem, $year);  ?></td>
-                                        <td><?php echo $outline_recommended_books_7 = @$help->selectcount($outline_recommended_books, '7', $lecturer,  $arr[0]->COURSE_CODE, $sem, $year);  ?></td>
+                                        <td><?php echo $outline_recommended_books_1 = @@$help->selectcount($outline_recommended_books, '1', $lecturer,  $arr, $sem, $year);  ?></td>
+                                        <td><?php echo $outline_recommended_books_2 = @@$help->selectcount($outline_recommended_books, '2', $lecturer,  $arr, $sem, $year);  ?></td>
+                                        <td><?php echo $outline_recommended_books_3 = @$help->selectcount($outline_recommended_books, '3', $lecturer,  $arr, $sem, $year);  ?></td>
+                                        <td><?php echo $outline_recommended_books_4 = @$help->selectcount($outline_recommended_books, '4', $lecturer,  $arr, $sem, $year);  ?></td>
+                                        <td><?php echo $outline_recommended_books_5 = @$help->selectcount($outline_recommended_books, '5', $lecturer,  $arr, $sem, $year);  ?></td>
+                                        <td><?php echo $outline_recommended_books_6 = @$help->selectcount($outline_recommended_books, '6', $lecturer,  $arr, $sem, $year);  ?></td>
+                                        <td><?php echo $outline_recommended_books_7 = @$help->selectcount($outline_recommended_books, '7', $lecturer,  $arr, $sem, $year);  ?></td>
                                         <td><?php @$outline_recommended_books_total =@$outline_recommended_books_1 + @$outline_recommended_books_2  +  @$outline_recommended_books_3 + @$outline_recommended_books_4 + @$outline_recommended_books_5 + @$outline_recommended_books_6 + @$outline_recommended_books_7;
                                             @$outline_recommended_books_score  =@(@($outline_recommended_books_1*1)+(@$outline_recommended_books_2*2) + (@$outline_recommended_books_3*3) + (@$outline_recommended_books_4 * 4) + (@$outline_recommended_books_5 *5) + (@$outline_recommended_books_6 * 6) + (@$outline_recommended_books_7 * 7) )/(@$outline_recommended_books_total *7);
                                             echo @ number_format(@$outline_recommended_books_score ,4);
@@ -218,13 +223,13 @@
 
                                     <tr>
                                         <td style="width: 280px">3)Lecturer provided his/her email, phone number, office hours and professional background</td>
-                                        <td><?php echo $lecturer_person_details_1 = @$help->selectcount($lecturer_person_details, '1', $lecturer, $arr[0]->COURSE_CODE, $sem, $year);  ?></td>
-                                        <td><?php echo $lecturer_person_details_2 = @$help->selectcount($lecturer_person_details, '2', $lecturer, $arr[0]->COURSE_CODE, $sem, $year);  ?></td>
-                                        <td><?php echo $lecturer_person_details_3 = @$help->selectcount($lecturer_person_details, '3', $lecturer, $arr[0]->COURSE_CODE, $sem, $year);  ?></td>
-                                        <td><?php echo $lecturer_person_details_4 = @$help->selectcount($lecturer_person_details, '4', $lecturer, $arr[0]->COURSE_CODE, $sem, $year);  ?></td>
-                                        <td><?php echo $lecturer_person_details_5 = @$help->selectcount($lecturer_person_details, '5', $lecturer, $arr[0]->COURSE_CODE, $sem, $year);  ?></td>
-                                        <td><?php echo $lecturer_person_details_6 = @$help->selectcount($lecturer_person_details, '6', $lecturer, $arr[0]->COURSE_CODE, $sem, $year);  ?></td>
-                                        <td><?php echo $lecturer_person_details_7 = @$help->selectcount($lecturer_person_details, '7', $lecturer, $arr[0]->COURSE_CODE, $sem, $year);  ?></td>
+                                        <td><?php echo $lecturer_person_details_1 = @$help->selectcount($lecturer_person_details, '1', $lecturer, $arr, $sem, $year);  ?></td>
+                                        <td><?php echo $lecturer_person_details_2 = @$help->selectcount($lecturer_person_details, '2', $lecturer, $arr, $sem, $year);  ?></td>
+                                        <td><?php echo $lecturer_person_details_3 = @$help->selectcount($lecturer_person_details, '3', $lecturer, $arr, $sem, $year);  ?></td>
+                                        <td><?php echo $lecturer_person_details_4 = @$help->selectcount($lecturer_person_details, '4', $lecturer, $arr, $sem, $year);  ?></td>
+                                        <td><?php echo $lecturer_person_details_5 = @$help->selectcount($lecturer_person_details, '5', $lecturer, $arr, $sem, $year);  ?></td>
+                                        <td><?php echo $lecturer_person_details_6 = @$help->selectcount($lecturer_person_details, '6', $lecturer, $arr, $sem, $year);  ?></td>
+                                        <td><?php echo $lecturer_person_details_7 = @$help->selectcount($lecturer_person_details, '7', $lecturer, $arr, $sem, $year);  ?></td>
                                         <td><?php @$lecturer_person_details_total =@$lecturer_person_details_1 + $lecturer_person_details_2  +  $lecturer_person_details_3 + $lecturer_person_details_4 + $lecturer_person_details_5 + $lecturer_person_details_6 + $lecturer_person_details_7;
                                             $lecturer_person_details_score  =@(@($lecturer_person_details_1*1)+($lecturer_person_details_2*2) + ($lecturer_person_details_3*3) + ($lecturer_person_details_4 * 4) + ($lecturer_person_details_5 *5) + ($lecturer_person_details_6 * 6) + ($lecturer_person_details_7 * 7) )/($lecturer_person_details_total *7);
                                             echo  @number_format(@$lecturer_person_details_score ,4);
@@ -237,13 +242,13 @@
                                     </tr>
                                     <tr>
                                         <td style="width: 280px"> 4)The course objectives and learning outcomes are clearly spelt out in the course outline</td>
-                                        <td><?php echo $course_objective_spelt_1 = @$help->selectcount($course_objective_spelt, '1', $lecturer, $arr[0]->COURSE_CODE,$sem, $year);  ?></td>
-                                        <td><?php echo $course_objective_spelt_2 = @$help->selectcount($course_objective_spelt, '2', $lecturer, $arr[0]->COURSE_CODE,$sem, $year);  ?></td>
-                                        <td><?php echo $course_objective_spelt_3 = @$help->selectcount($course_objective_spelt, '3', $lecturer, $arr[0]->COURSE_CODE,$sem, $year);  ?></td>
-                                        <td><?php echo $course_objective_spelt_4 = @$help->selectcount($course_objective_spelt, '4', $lecturer, $arr[0]->COURSE_CODE,$sem, $year);  ?></td>
-                                        <td><?php echo $course_objective_spelt_5 = @$help->selectcount($course_objective_spelt, '5', $lecturer, $arr[0]->COURSE_CODE,$sem, $year);  ?></td>
-                                        <td><?php echo $course_objective_spelt_6 = @$help->selectcount($course_objective_spelt, '6', $lecturer, $arr[0]->COURSE_CODE,$sem, $year);  ?></td>
-                                        <td><?php echo $course_objective_spelt_7 = @$help->selectcount($course_objective_spelt, '7', $lecturer, $arr[0]->COURSE_CODE,$sem, $year);  ?></td>
+                                        <td><?php echo $course_objective_spelt_1 = @$help->selectcount($course_objective_spelt, '1', $lecturer, $arr,$sem, $year);  ?></td>
+                                        <td><?php echo $course_objective_spelt_2 = @$help->selectcount($course_objective_spelt, '2', $lecturer, $arr,$sem, $year);  ?></td>
+                                        <td><?php echo $course_objective_spelt_3 = @$help->selectcount($course_objective_spelt, '3', $lecturer, $arr,$sem, $year);  ?></td>
+                                        <td><?php echo $course_objective_spelt_4 = @$help->selectcount($course_objective_spelt, '4', $lecturer, $arr,$sem, $year);  ?></td>
+                                        <td><?php echo $course_objective_spelt_5 = @$help->selectcount($course_objective_spelt, '5', $lecturer, $arr,$sem, $year);  ?></td>
+                                        <td><?php echo $course_objective_spelt_6 = @$help->selectcount($course_objective_spelt, '6', $lecturer, $arr,$sem, $year);  ?></td>
+                                        <td><?php echo $course_objective_spelt_7 = @$help->selectcount($course_objective_spelt, '7', $lecturer, $arr,$sem, $year);  ?></td>
                                         <td><?php @$course_objective_spelt_total =@$course_objective_spelt_1 + $course_objective_spelt_2  +  $course_objective_spelt_3 + $course_objective_spelt_4 + $course_objective_spelt_5 + $course_objective_spelt_6 + $course_objective_spelt_7;
                                             $course_objective_spelt_score  =@(@($course_objective_spelt_1*1)+($course_objective_spelt_2*2) + ($course_objective_spelt_3*3) + ($course_objective_spelt_4 * 4) + ($course_objective_spelt_5 *5) + ($course_objective_spelt_6 * 6) + ($course_objective_spelt_7 * 7) )/($course_objective_spelt_total *7);
                                             echo  @number_format($course_objective_spelt_score ,4);
@@ -256,13 +261,13 @@
                                     </tr>
                                     <tr>
                                         <td style="width: 280px"> 5)Lecturer provided a list of course materials needed for the course</td>
-                                        <td><?php echo $course_material_list_1 = @$help->selectcount($course_material_list , '1', $lecturer, $arr[0]->COURSE_CODE,$sem, $year);  ?></td>
-                                        <td><?php echo $course_material_list_2 = @$help->selectcount($course_material_list , '2', $lecturer, $arr[0]->COURSE_CODE,$sem, $year);  ?></td>
-                                        <td><?php echo $course_material_list_3 = @$help->selectcount($course_material_list , '3', $lecturer, $arr[0]->COURSE_CODE,$sem, $year);  ?></td>
-                                        <td><?php echo $course_material_list_4 = @$help->selectcount($course_material_list , '4', $lecturer, $arr[0]->COURSE_CODE,$sem, $year);  ?></td>
-                                        <td><?php echo $course_material_list_5 = @$help->selectcount($course_material_list , '5', $lecturer, $arr[0]->COURSE_CODE,$sem, $year);  ?></td>
-                                        <td><?php echo $course_material_list_6 = @$help->selectcount($course_material_list , '6', $lecturer, $arr[0]->COURSE_CODE,$sem, $year);  ?></td>
-                                        <td><?php echo $course_material_list_7 = @$help->selectcount($course_material_list , '7', $lecturer, $arr[0]->COURSE_CODE,$sem, $year);  ?></td>
+                                        <td><?php echo $course_material_list_1 = @$help->selectcount($course_material_list , '1', $lecturer, $arr,$sem, $year);  ?></td>
+                                        <td><?php echo $course_material_list_2 = @$help->selectcount($course_material_list , '2', $lecturer, $arr,$sem, $year);  ?></td>
+                                        <td><?php echo $course_material_list_3 = @$help->selectcount($course_material_list , '3', $lecturer, $arr,$sem, $year);  ?></td>
+                                        <td><?php echo $course_material_list_4 = @$help->selectcount($course_material_list , '4', $lecturer, $arr,$sem, $year);  ?></td>
+                                        <td><?php echo $course_material_list_5 = @$help->selectcount($course_material_list , '5', $lecturer, $arr,$sem, $year);  ?></td>
+                                        <td><?php echo $course_material_list_6 = @$help->selectcount($course_material_list , '6', $lecturer, $arr,$sem, $year);  ?></td>
+                                        <td><?php echo $course_material_list_7 = @$help->selectcount($course_material_list , '7', $lecturer, $arr,$sem, $year);  ?></td>
                                         <td><?php $course_material_list_total =$course_material_list_1 + $course_material_list_2  +  $course_material_list_3 + $course_material_list_4 + $course_material_list_5 + $course_material_list_6 + $course_material_list_7;
                                             $course_material_list_score  =@(@($course_material_list_1*1)+($course_material_list_2*2) + ($course_material_list_3*3) + ($course_material_list_4 * 4) + ($course_material_list_5 *5) + ($course_material_list_6 * 6) + ($course_material_list_7 * 7) )/($course_material_list_total *7);
                                             echo  @number_format(@$course_material_list_score ,4);
@@ -309,20 +314,20 @@
                                     <tbody>
                                     <tr>
                                         <?php
-                                        $coursecode=$arr[0]->COURSE_CODE;
+                                        $coursecode=$arr;
                                         $semester=$sem;
                                         $academic_year=$year;
 
 
                                         ?>
                                         <td style="width: 280px"> 6) Lecturer started classes in the week it was supposed to begin</td>
-                                        <td><?php echo $class_start_week_1 = @$help->selectcount($class_start_week, '1', $lecturer, $arr[0]->COURSE_CODE,$sem, $year);  ?></td>
-                                        <td><?php echo $class_start_week_2 = @$help->selectcount($class_start_week, '2', $lecturer, $arr[0]->COURSE_CODE,$sem, $year);  ?></td>
-                                        <td><?php echo $class_start_week_3 = @$help->selectcount($class_start_week, '3',$lecturer, $arr[0]->COURSE_CODE,$sem, $year);  ?></td>
-                                        <td><?php echo $class_start_week_4 = @$help->selectcount($class_start_week, '4', $lecturer, $arr[0]->COURSE_CODE,$sem, $year);  ?></td>
-                                        <td><?php echo $class_start_week_5 = @$help->selectcount($class_start_week, '5', $lecturer, $arr[0]->COURSE_CODE,$sem, $year);  ?></td>
-                                        <td><?php echo $class_start_week_6 = @$help->selectcount($class_start_week, '6', $lecturer, $arr[0]->COURSE_CODE,$sem, $year);  ?></td>
-                                        <td><?php echo $class_start_week_7 = @$help->selectcount($class_start_week, '7', $lecturer, $arr[0]->COURSE_CODE,$sem, $year);  ?></td>
+                                        <td><?php echo $class_start_week_1 = @$help->selectcount($class_start_week, '1', $lecturer, $arr,$sem, $year);  ?></td>
+                                        <td><?php echo $class_start_week_2 = @$help->selectcount($class_start_week, '2', $lecturer, $arr,$sem, $year);  ?></td>
+                                        <td><?php echo $class_start_week_3 = @$help->selectcount($class_start_week, '3',$lecturer, $arr,$sem, $year);  ?></td>
+                                        <td><?php echo $class_start_week_4 = @$help->selectcount($class_start_week, '4', $lecturer, $arr,$sem, $year);  ?></td>
+                                        <td><?php echo $class_start_week_5 = @$help->selectcount($class_start_week, '5', $lecturer, $arr,$sem, $year);  ?></td>
+                                        <td><?php echo $class_start_week_6 = @$help->selectcount($class_start_week, '6', $lecturer, $arr,$sem, $year);  ?></td>
+                                        <td><?php echo $class_start_week_7 = @$help->selectcount($class_start_week, '7', $lecturer, $arr,$sem, $year);  ?></td>
                                         <td><?php $class_start_week_total =$class_start_week_1 + $class_start_week_2  +  $class_start_week_3 + $class_start_week_4 + $class_start_week_5 + $class_start_week_6 + $class_start_week_7;
                                             $class_start_week_score  =(($class_start_week_1*1)+($class_start_week_2*2) + ($class_start_week_3*3) + ($class_start_week_4 * 4) + ($class_start_week_5 *5) + ($class_start_week_6 * 6) + ($class_start_week_7 * 7) )/($class_start_week_total *7);
                                             echo  number_format($class_start_week_score ,4);
