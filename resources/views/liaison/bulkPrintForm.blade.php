@@ -33,7 +33,7 @@
     </div>
 
     @inject('sys', 'App\Http\Controllers\SystemController')
-    <h5 class="heading_c">Liaison Office Bulk Printing Page</h5>
+    <h5 class="heading_c">Liaison Office - Assumption of duty excel download page</h5>
     <p></p>
     <div class="uk-width-xLarge-1-1">
         <div class="md-card">
@@ -48,29 +48,22 @@
                                 {!! Form::select('year',
                             (['' => 'Select academic year'] +$years ),
                               old("year",""),
-                                ['class' => 'md-input year','id'=>"parent",'placeholder'=>'select academic year','required'=>"required",'v-model'=>'year','v-form-ctrl'=>'','v-select'=>''] )  !!}
+                                ['class' => 'md-input year','required'=>"required",'placeholder'=>'select academic year', 'v-model'=>'year','v-form-ctrl'=>'','v-select'=>''] )  !!}
                                 <p class="uk-text-danger uk-text-small"  v-if="applicationForm.year.$error.required" >Academic year is required</p>
 
                             </div>
                         </div>
-                        <div class="uk-width-medium-1-5">
-                            <div class="uk-margin-small-top">
 
-                                {!!  Form::select('semester', array('1'=>'1st sem','2'=>'2nd sem','3' => '3rd sem'), null, ['placeholder' => 'select semester','id'=>'parent','class'=>'md-input semester','required'=>"required",'v-model'=>'semester','v-form-ctrl'=>'','v-select'=>''],old("semester","")); !!}
 
-                                <p class="uk-text-danger uk-text-small"  v-if="applicationForm.semester.$error.required" >Semester is required</p>
 
-                            </div>
-                        </div>
-
+{{--
                         <div class="uk-width-medium-1-5">
                             <div class="uk-margin-small-top">
                                 {!! Form::select('level',
                            (['' => 'Select level'] +$levels ),
                              old("level",""),
-                               ['class' => 'md-input parent level','id'=>"parent",'placeholder'=>'select level','required'=>"required",'v-model'=>'level','v-form-ctrl'=>'','v-select'=>''] )  !!}
+                               ['class' => 'md-input parent level','id'=>"parent",'placeholder'=>'select level', 'v-model'=>'level','v-form-ctrl'=>'','v-select'=>''] )  !!}
 
-                                <p class="uk-text-danger uk-text-small"  v-if="applicationForm.level.$error.required" >Level is required</p>
 
                             </div>
                         </div>
@@ -85,30 +78,54 @@
                                 {!! Form::select('program',
                               (['' => 'Select program'] + $program),
                                   null,
-                                  ["required"=>"required",'class' => 'md-input program','v-model'=>'program','v-form-ctrl'=>'','v-select'=>''] )  !!}
+                                  [ 'class' => 'md-input program','v-model'=>'program','v-form-ctrl'=>'','v-select'=>''] )  !!}
 
-                                <p class="uk-text-danger uk-text-small"  v-if="applicationForm.program.$error.required" >Program is required</p>
+
+                            </div>
+                        </div>--}}
+                        <div class="uk-width-medium-1-5">
+                            <div class="uk-margin-small-top">
+                                {!! Form::select('zone',
+                           (['' => 'Select zone'] +$zone ),
+                             old("zone",""),
+                               ['class' => 'md-input parent zone','id'=>"parent",'placeholder'=>'select zone','required'=>"required",'v-model'=>'zone','v-form-ctrl'=>'','v-select'=>''] )  !!}
+
+                                <p class="uk-text-danger uk-text-small"  v-if="applicationForm.zone.$error.required" >Zone is required</p>
 
                             </div>
                         </div>
 
                         <div class="uk-width-medium-1-5">
                             <div class="uk-margin-small-top">
+                                <div class="uk-input-group">
+                                    <span class="uk-input-group-addon"><i class="uk-input-group-icon uk-icon-calendar"></i></span>
+                                    <input type="text"  style="" data-uk-datepicker="{format:'YYYY-MM-DD'}" value="{{ old("from_date") }}" name="from_date" v-model="from_date" v-form-ctrl="" id="invoice_dp" class="md-input" placeholder="From date? " required>
+                                    <p class="uk-text-danger uk-text-small"  v-if="applicationForm.from_date.$error.required" >Start date is required</p>
 
-                                <select name="type" required="" class="'md-input type" v-model="type" v-form-ctrl="" v-select="">
-                                    <option value="">Select Print type</option>
-                                    <option value="1">Attachment Letter</option>
-                                    <option value="2">Assumption of Duty</option>
-                                    <option value="3">Semester Out</option>
-                                </select>
+                                </div>
+                            </div>
+                        </div>
 
-                                <p class="uk-text-danger uk-text-small"  v-if="applicationForm.type.$error.required" >Print type is required</p>
+                        <div class="uk-width-medium-1-5">
 
+                            <div class="uk-margin-small-top">
+                                <div class="uk-input-group">
+                                    <span class="uk-input-group-addon"><i class="uk-input-group-icon uk-icon-calendar"></i></span>
+                                    <input type="text" style="" data-uk-datepicker="{format:'YYYY-MM-DD'}" value="{{ old("to_date") }}" name="to_date"  v-model="to_date" v-form-ctrl="" class="md-input" placeholder="To date?" required>
+                                    <p class="uk-text-danger uk-text-small"  v-if="applicationForm.to_date.$error.required" >End date is required</p>
+
+                                </div>
                             </div>
                         </div>
 
 
+                        <div class="uk-width-medium-1-5">
+                            <div class="uk-margin-small-top">
 
+                                <button  v-show="applicationForm.$valid"  class="md-btn   md-btn-small md-btn-primary uk-margin-small-top actions" type="submit">Download Excel</button>
+
+                            </div>
+                        </div>
 
 
 
@@ -117,13 +134,7 @@
 
                     </div>
                     <center>
-                        <div class="uk-width-medium-1-5">
-                            <div class="uk-margin-small-top">
 
-                                <button  v-show="applicationForm.$valid"  class="md-btn   md-btn-small md-btn-primary uk-margin-small-top actions" type="submit">Print</button>
-
-                            </div>
-                        </div>
                     </center>
 
                 </form>

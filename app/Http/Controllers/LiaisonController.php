@@ -8,7 +8,7 @@ use App\Models;
 use Yajra\Datatables\Datatables;
 use Illuminate\Support\Collection;
 use Illuminate\Support\Str;
-
+use Excel;
 class LiaisonController extends Controller
 {
 
@@ -266,7 +266,24 @@ class LiaisonController extends Controller
 
 
     }
+    public function getZone() {
 
+
+        $zone = \DB::table('liaison_zones')
+            ->lists('sub_zone', 'id');
+        return $zone;
+
+
+    }
+    public function getZoneName($id) {
+
+
+        $zone = \DB::table('liaison_zones')
+            ->where('id', $id)->first();
+        return $zone->zones."(".$zone->sub_zone.")";
+
+
+    }
     public function bulkPrint(Request $request, SystemController $sys)
     {
 
@@ -275,72 +292,124 @@ class LiaisonController extends Controller
 
             $yearList=$sys->years();
             $program=$sys->getProgramList();
+            $zone=$this->getZone();
 
             return view ("liaison.bulkPrintForm")->with("years", $yearList)->with("program",$program)
-                ->with("levels",$sys->getLevelList());
+                ->with("levels",$sys->getLevelList())->with("zone",$zone);
         }
 
         else {
 
-            $program=$request->input("program");
+            set_time_limit(200000000);
+            $query = \Session::get('assumption');
+
+
+            $arraycc = $sys->getSemYear();
+            $yearcc = $arraycc[0]->YEAR;
+
             $level=$request->input("level");
-            $semester=$request->input("semester");
+
             $year=$request->input("year");
-            $type=$request->input("type");
+            $zone=$request->input("zone");
 
-            if($type==1) {
+            $zoneName=$this->getZoneName($zone);
 
-                $data = Models\LiaisonModel::where("level",$level)
-                                            ->where("terms",$semester)
-                                            ->where("year",$year)
+            $kojoSense = 0;
+            $array = $sys->getSemYear();
 
+            $query =Models\AssumptionDutyModel::join('tpoly_students', 'tpoly_students.INDEXNO', '=', 'liaison_assumption_duty.indexno')
+                ->join('tpoly_programme', 'tpoly_students.PROGRAMMECODE', '=', 'tpoly_programme.PROGRAMMECODE')
+                ->where("tpoly_students.STATUS","In school");
 
-
-                    ->whereHas('studentDetials', function($q)use($program) {
-
-                            $q->where('PROGRAMMECODE',  $program);
-
-                    })
-
-                    ->get();
-                return view("liaison.printBulk")->with("datas", $data);
-
-            }
-            elseif($type==2){
-
-                $data = Models\AssumptionDutyModel::where("level",$level)
-
-                    ->where("year",$year)
+                  if ($request->has('zone') && trim($request->input('zone')) != "") {
+                      $query->where("liaison_assumption_duty.company_subzone", $zone);
+                  }
 
 
-                    ->whereHas('studentDetials', function($q)use($program) {
+                     if ($request->has('level') && trim($request->input('level')) != "") {
+                         $query->where("liaison_assumption_duty.level", $level);
+                     }
 
-                        $q->where('PROGRAMMECODE',  $program);
+                    if ($request->has('from_date') && $request->has('to_date') ) {
 
-                    })
+                        $query->whereBetween(\DB::raw('liaison_assumption_duty.created_at'), array($request->input('from_date'), $request->input('to_date')));
 
-                    ->get();
-                return view("liaison.bulkAssumptionPrint")->with("datas", $data);
+                    }
 
-            }
-            else{
+                    if ($request->has('year') && trim($request->input('year')) != "") {
+                        $query->where("liaison_assumption_duty.year", $request->input("year", ""));
+                    }
+                    if ($request->has('program') && trim($request->input('program')) != "") {
+                        $query->whereHas('studentDetials', function($q)use ($request) {
+                            $q->whereHas('programme', function($q)use ($request) {
+                                $q->whereIn('tpoly_students.PROGRAMMECODE', [$request->input('program')]);
+                            });
+                        });
+                    }
+            $program=$request->input('zone');
+            $data=$query->orderBy('tpoly_students.NAME')
+                ->orderBy('tpoly_students.LEVEL')
+                ->orderBy('tpoly_students.INDEXNO')
+                ->select('tpoly_students.INDEXNO', 'tpoly_students.NAME', 'tpoly_programme.PROGRAMME', 'tpoly_students.TELEPHONENO', 'liaison_assumption_duty.company_name','liaison_assumption_duty.company_phone', 'liaison_assumption_duty.company_town','liaison_assumption_duty.company_exact_location')
+                
+                ->groupBy('tpoly_students.INDEXNO')
+                ->groupBy('liaison_assumption_duty.company_name')
+                ->get();
 
-                $data = Models\SemesterOutModel::where("level",$level)
-
-                    ->where("year",$year)
-                    ->where("terms",$semester)
 
 
-                    ->whereHas('studentDetials', function($q)use($program) {
+            return Excel::create($program."_".$yearcc, function ($excel) use ($kojoSense, $sys, $yearcc, $data,$zoneName,$program){
 
-                        $q->where('PROGRAMMECODE',  $program);
+                $excel->getProperties()
+                    ->setCreator("TTU")
+                    ->setTitle("TTU ASSUMPTION OF DUTY REPORTS")
+                    ->setLastModifiedBy("INDUSTRIAL LIAISON OFFICE")
+                    ->setDescription('Multiple sheets showing all results')
+                    ->setSubject("LIAISON OFFICE")
+                    ->setKeywords('TP, marks, rs, normal')
+                ;
 
-                    })
 
-                    ->get();
-                return view("liaison.bulkSemesterPrint")->with("datas", $data);
 
-            }
+                $excel->sheet($program, function ($sheet) use ($kojoSense, $sys, $yearcc, $data,$zoneName,$program) {
+
+
+
+                    $sheet->fromArray($data);
+
+                    $sheet->prependRow(1, array(' '.' '.' '.''
+                    ));
+                    $current_time = \Carbon\Carbon::now()->toDateTimeString();
+                    //$sheet->setCellValue('A3',$current_time);
+                    $sheet->prependRow(1, array(' '.' '. $current_time
+                    ));
+                    $sheet->prependRow(1, array('  '. $zoneName . ' For ' .$yearcc . ' Academic Year '
+                    ));
+
+                    $sheet->prependRow(1, array(' '.' TAKORADI TECHNICAL UNIVERSITY'
+                    ));
+                    $sheet->mergeCells('A1:B1');
+                    $sheet->mergeCells('A2:B2');
+                    $sheet->mergeCells('A3:B3');
+
+                    $sheet->setColumnFormat(array(
+                        'E6' => 'dd-mm-yyyy'
+                    ));
+//});
+                });
+
+
+
+
+
+
+
+
+
+
+            })->download('xlsx');
+
+
 
 
         }

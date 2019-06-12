@@ -7,6 +7,8 @@ use Illuminate\Http\Request;
 use App\Models\StudentModel;
 use App\Models\ApplicantModel;
 use App\Models;
+use PhpParser\Node\Expr\AssignOp\Mod;
+use Psy\Util\Json;
 use Yajra\Datatables\Datatables;
 use Illuminate\Support\Collection;
 use Illuminate\Support\Str;
@@ -62,38 +64,51 @@ class APIController extends Controller
 
 
     }
+
     public function getApplicant(Request $request, SystemController $sys){
+        header("Content-type:application/json");
+       // $students=json_decode($request->input(),TRUE);
+        //$student=new Request($request->input());
+        $student=json_decode($request->getContent(), true);
 
 
-        foreach ($request->all() as $student) {
             # code...
 
+            // print_r($student["program"]);
+
+            $combined = Models\ProgrammeModel::where("PROGRAMMECODE", $student["program"])->first();
+            $combinedCode = $combined->COMBINEDCODE;
 
 
-
-            $program = $student["program"];
+            $program = $student['program'];
             $ptype = $sys->getProgrammeType($program);
             if ($ptype == "NON TERTIARY") {
-                $level = "100NT";
-                $group=date("Y") + 1 . "/".(date("Y") + 2);
+
+                $group = date("Y") + 1 . "/" . (date("Y") + 2);
             } elseif ($ptype == "HND") {
-                $level = "100H";
-                $group=date("Y")+2 . "/".(date("Y") + 3);
+
+                $group = date("Y") + 2 . "/" . (date("Y") + 3);
             } elseif ($ptype == "BTECH") {
-                $level = "100BTT";
-                $group=date("Y") + 1 . "/".(date("Y") + 2);
+
+                $group = date("Y") + 1 . "/" . (date("Y") + 2);
+            } elseif ($ptype == "DEGREE") {
+
+                $group = date("Y") + 3 . "/" . (date("Y") + 4);
+            } else {
+
+                $group = date("Y") + 1 . "/" . (date("Y") + 2);
             }
-            elseif ($ptype == "DEGREE") {
-                $level = "100BT";
-                $group=date("Y") + 3 . "/".(date("Y") + 4);
-            }
-            else {
-                $level = "500MT";
-                $group=date("Y") + 1 . "/".(date("Y") + 2);
-            }
+            $array = $sys->getSemYear();
+            $level = $student['level'];
+            $sem = 1;
+            $year = $array[0]->ADMIT;
+            $feeData = Models\BillModel::where("YEAR", $year)->where("PROGRAMME", $student['program'])
+                ->where("LEVEL", $level)->first();
             /////////////////////////////////////////////////////
-            $checker=Models\StudentModel::where("STNO",$student['stno'])->get();
-            if(count($checker)==0) {
+            $checker = Models\StudentModel::where("STNO", $student['stno'])->get();
+            if (count($checker) == 0) {
+
+
                 $query = new Models\StudentModel();
                 $query->YEAR = $level;
                 $query->LEVEL = $level;
@@ -106,7 +121,7 @@ class APIController extends Controller
                 $query->NAME = $student['name'];
                 $query->AGE = $student['age'];
                 $query->MARITAL_STATUS = $student['marital'];
-                $query->DATE_ADMITTED = $student['date-admitted'];
+                $query->DATE_ADMITTED = $student['date_admitted'];
                 $query->GRADUATING_GROUP = $group;
                 $query->HAS_PASSWORD = 1;
                 $query->HALL = $student['hall'];
@@ -119,10 +134,10 @@ class APIController extends Controller
                 $query->REGION = $student['region'];
                 $query->RELIGION = $student['religion'];
                 $query->HOMETOWN = $student['hometown'];
-                $query->GUARDIAN_NAME = $student['guardian-name'];
-                $query->GUARDIAN_ADDRESS = $student['guardian-address'];
-                $query->GUARDIAN_PHONE = $student['guardian-phone'];
-                $query->GUARDIAN_OCCUPATION = $student['guardian-occupation'];
+                $query->GUARDIAN_NAME = $student['guardian_name'];
+                $query->GUARDIAN_ADDRESS = $student['guardian_address'];
+                $query->GUARDIAN_PHONE = $student['guardian_phone'];
+                $query->GUARDIAN_OCCUPATION = $student['guardian_occupation'];
                 $query->DISABILITY = $student['disable'];
                 $query->STNO = $student['stno'];
                 $query->INDEXNO = $student['stno'];
@@ -131,43 +146,44 @@ class APIController extends Controller
                 $query->ALLOW_REGISTER = 1;
                 $query->STATUS = "Admitted";
                 $query->SYSUPDATE = "1";
-                $query->BILLS = $student['fees'];
-                $query->BILL_OWING = $student['fees'];
+                $query->BILLS = $feeData->AMOUNT;
+                $query->BILL_OWING = $feeData->AMOUNT;
                 $query->PAID = 0.00;
+                $query->COMBINEDCODE = $combinedCode;
+
                 @$query->save();
                 @$sys->getPassword($student['stno']);
-            }
-            else{
-                Models\StudentModel::where("STNO",$student['stno'])->update(
-                    array("FIRSTNAME"=> $student['firstname'],
-                        "SURNAME"=> $student['lastname'],
-                        "INDEXNO"=> $student['stno'],
-                        "OTHERNAMES"=>$student['othernames'],
-                        "NAME"=>$student['name'],
-                        "LEVEL"=>$level,
-                        "YEAR"=>$level,
+            } else {
+                Models\StudentModel::where("STNO", $student['stno'])->update(
+                    array("FIRSTNAME" => $student['firstname'],
+                        "SURNAME" => $student['lastname'],
+                        "INDEXNO" => $student['stno'],
+                        "OTHERNAMES" => $student['othernames'],
+                        "NAME" => $student['name'],
+                        "LEVEL" => $level,
+                        "YEAR" => $level,
 
 
-                        "BILLS"=> $student['fees'],
-                        "SMS_SENT"=> 0,
+                        "BILLS" => $feeData->AMOUNT,
+                        "SMS_SENT" => 0,
+                        "COMBINEDCODE" => $combinedCode,
 
-                        "PROGRAMMECODE"=> $student['program'],
-                        "HALL"=> $student['hall'],
-                        "GRADUATING_GROUP"=> $group,
+                        "PROGRAMMECODE" => $student['program'],
+                        "HALL" => $student['hall'],
+                        "GRADUATING_GROUP" => $group,
                     )
                 );
                 @$sys->getPassword($student['stno']);
+
             }
-        }
         return Models\StudentModel::count();
 
     }
     public function pushToSRMS(Request $request, SystemController $sys)
     {
         ini_set('max_execution_time', 280000);
-        $data = file_get_contents("http://127.0.0.1:3030/admissions/srms/forward"); // put the contents of the file into a variable
+        $data = file_get_contents("http://45.33.4.164/admissions/srms/forward"); // put the contents of the file into a variable
         $records = json_decode($data, true, JSON_PRETTY_PRINT); // decode the JSON feed
-
 
 
         foreach ($records as $student) {
@@ -177,29 +193,37 @@ class APIController extends Controller
             $program = $student["program"];
             $ptype = $sys->getProgrammeType($program);
             if ($ptype == "NON TERTIARY") {
-                $level = "100NT";
+
                 $group=date("Y") + 1 . "/".(date("Y") + 2);
             } elseif ($ptype == "HND") {
-                $level = "100H";
+
                 $group=date("Y")+2 . "/".(date("Y") + 3);
             } elseif ($ptype == "BTECH") {
-                $level = "100BTT";
+
                 $group=date("Y") + 1 . "/".(date("Y") + 2);
             }
             elseif ($ptype == "DEGREE") {
-                $level = "100BT";
+
                 $group=date("Y") + 3 . "/".(date("Y") + 4);
             }
             else {
-                $level = "500MT";
+
                 $group=date("Y") + 1 . "/".(date("Y") + 2);
             }
+            $level=$student['level'];
+            $array = $sys->getSemYear();
+            $year = "2019/2020";
+            $feeData=Models\BillModel::where("YEAR",$year)->where("PROGRAMME",$student['program'])
+                ->where("LEVEL",$level)->first();
+            $combined=Models\ProgrammeModel::where("PROGRAMMECODE",$student['program'])->first();
+            $combinedCode=$combined->COMBINEDCODE;
+
             /////////////////////////////////////////////////////
             $checker=Models\StudentModel::where("STNO",$student['stno'])->get();
             if(count($checker)==0) {
                 $query = new Models\StudentModel();
-                $query->YEAR = $level;
-                $query->LEVEL = $level;
+                $query->YEAR = $student['level'];
+                $query->LEVEL = $student['level'];
                 $query->FIRSTNAME = $student['firstname'];
                 $query->SURNAME = $student['lastname'];
                 $query->OTHERNAMES = $student['othernames'];
@@ -234,9 +258,10 @@ class APIController extends Controller
                 $query->ALLOW_REGISTER = 1;
                 $query->STATUS = "Admitted";
                 $query->SYSUPDATE = "1";
-                $query->BILLS = $student['fees'];
-                $query->BILL_OWING = $student['fees'];
+                $query->BILLS = @$feeData->AMOUNT;
+                $query->BILL_OWING = @$feeData->AMOUNT;
                 $query->PAID = 0.00;
+                $query->COMBINEDCODE = @$combinedCode;
                 @$query->save();
                 @$sys->getPassword($student['stno']);
             }
@@ -246,10 +271,11 @@ class APIController extends Controller
                         "SURNAME"=> $student['lastname'],
                         "OTHERNAMES"=>$student['othernames'],
                         "NAME"=>$student['name'],
-                        "BILLS"=> $student['fees'],
-                        "BILL_OWING"=> $student['fees'],
+                        "BILLS"=>  @$feeData->AMOUNT,
+                        "BILL_OWING"=>  @$feeData->AMOUNT,
                         "PROGRAMMECODE"=> $student['program'],
                         "HALL"=> $student['hall'],
+                        "COMBINEDCODE" =>@$combinedCode,
                         "GRADUATING_GROUP"=> $group,
                     )
                 );
@@ -266,7 +292,7 @@ class APIController extends Controller
 
         //return response()->json(array('data'=>"Student with index number $student does not exist."));
         //$json = json_decode(file_get_contents("http://45.33.4.164/admissions/srms/forward"), true, JSON_PRETTY_PRINT);
-        $json = json_decode(file_get_contents("http://127.0.0.1:8000/admissions/srms/forward"), true, JSON_PRETTY_PRINT);
+        $json = json_decode(file_get_contents("http://45.33.4.164/admissions/srms/forward"), true, JSON_PRETTY_PRINT);
 
 
         $a[] = (array)$json;
@@ -461,7 +487,7 @@ class APIController extends Controller
 
         return str_replace('/','',$stuid);
     }
-    public function getStudentData(Request $request, $student)
+    public function getStudentData(Request $request, SystemController $sys,$student)
     {
         header('Content-Type: application/json');
         //$student=$this->indexNumFormater($student);
@@ -492,6 +518,8 @@ class APIController extends Controller
                     $data["STNO"] = $i["application_number"];
                     $data["NAME"] = $i["name"];
                     $data["PROGRAMMECODE"] = $i["programme"];
+                    //$data["PROGRAMME"] = $sys->getProgram($i["application_number"]);
+                    //$data["PASSWORD"] = $sys->getStudentPassword($i["application_number"]);
                     $data["LEVEL"] = '100';
                     $data["BILLS"] = $i["fees"];
                     $data["STATUS"] = "Applicant";
@@ -619,6 +647,21 @@ class APIController extends Controller
 
     public function payFeeLive(Request $request, SystemController $sys)
     {
+
+        $this->validate($request, [
+
+            'indexno' => 'required',
+
+            'amount' => 'required',
+            'accountNumber' => 'required',
+
+            'fee_type' => 'required',
+            'transactionId' => 'required',
+            'transactionDate' => 'required',
+            'auth' => 'required',
+        ]);
+
+
         header('Content-Type: application/json');
         $bankAuth = ["128ashbx393932", "1nm383ypmwd123"];
         $indexno = $request->input("indexno");
@@ -629,8 +672,37 @@ class APIController extends Controller
         $date = $request->input("transactionDate");
         $auth = $request->input("auth");
         $array = $sys->getSemYear();
-        $sem = $array[0]->SEMESTER;
-        $year = $array[0]->YEAR;
+
+
+        if(substr( $indexno, 0, 4 ) === "2019"){
+            $sem = 1;
+            $year = $array[0]->ADMIT;
+        }
+        else {
+            $sem = $array[0]->SEMESTER;
+            $year = $array[0]->YEAR;
+        }
+
+        if( $type=="Hostel Fees"){
+            $year = $array[0]->ADMIT;
+        }
+
+
+
+
+
+
+        $yearTry=explode("/",$array[0]->YEAR);
+        if( $yearTry[0] < substr( $indexno, 0, 4 )){
+            $status="admitted";
+        }
+        else{
+            $status="In school";
+        }
+
+        if($type=="AUF"){
+           $type="School Fees";
+        }
 
         \DB::beginTransaction();
         try {
@@ -680,7 +752,27 @@ class APIController extends Controller
                             $feeLedger->BANK_DATE = $date;
 
                             $feeLedger->LEVEL = $this->getLevel($i["ptype"]);
-                            $feeLedger->RECIEPIENT = "API_CALL";
+                             
+                            if($bank=="00511448001580") {
+                                $feeLedger->RECIEPIENT = "API_UBA";
+                            }
+                            elseif ($bank=="0189104488868901"){
+                                $feeLedger->RECIEPIENT = "API_ECB";
+                            }
+                            elseif ($bank=="1400001216327"){
+                                $feeLedger->RECIEPIENT = "API_CALL";
+                            }
+                             elseif ($bank=="401109130110"){
+                            $feeLedger->RECIEPIENT = "API_GT";
+                        }
+                            
+                            else{
+                                 $feeLedger->RECIEPIENT = "API_ZNT";
+                            }
+
+
+
+                             
                             $feeLedger->BANK = $bank;
                             $feeLedger->TRANSACTION_ID = $transactionId;
                             $feeLedger->RECEIPTNO = $receipt;
@@ -689,7 +781,8 @@ class APIController extends Controller
                             $feeLedger->SEMESTER = $sem;
                             if ($feeLedger->save()) {
 
-                                // @StudentModel::where("INDEXNO", $indexno)->orWhere("STNO", $indexno)->update(array("BILL_OWING" => $owing, "PAID" => $paid));
+
+                                @StudentModel::where("INDEXNO", $indexno)->orWhere("STNO", $indexno)->update(array("STATUS"=>$status));
                                 @$this->updateReceipt();
                                 \DB::commit();
                                 //return Response::json("Success", "01");
@@ -712,7 +805,7 @@ class APIController extends Controller
 
 
 
-
+                        $status="";
                         if ($data->BILL_OWING <= $amount) {
                             $details = "Full payment";
 
@@ -734,14 +827,41 @@ class APIController extends Controller
 
 
                         $level=mb_substr($data->INDEXNO, 0, 3);
+                        if( $type=="School Fees") {
+                            $owing = $data->BILL_OWING - $amount;
+                            $paid = $data->PAID + $amount;
 
-                        $owing=$data->BILL_OWING - $amount;
-                        $paid=$data->PAID + $amount;
-
-
+                        }
 
                         $feeLedger->LEVEL = $data->LEVEL;
-                        $feeLedger->RECIEPIENT = "API_CALL";
+                        
+
+                         if($bank=="00511448001580") {
+                                $feeLedger->RECIEPIENT = "API_UBA";
+                            }
+                            elseif ($bank=="0189104488868901"){
+                                $feeLedger->RECIEPIENT = "API_ECB";
+                            }
+                            elseif ($bank=="1400001216327"){
+                                $feeLedger->RECIEPIENT = "API_CALL";
+                            }
+                             elseif ($bank=="401109130110"){
+                            $feeLedger->RECIEPIENT = "API_GT";
+                        }
+                            
+                            else{
+                                 $feeLedger->RECIEPIENT = "API_ZNT";
+                            }
+
+
+
+
+
+
+
+
+
+
                         $feeLedger->BANK = $bank;
                         $feeLedger->TRANSACTION_ID = $transactionId;
                         $feeLedger->RECEIPTNO = $receipt;
@@ -750,7 +870,14 @@ class APIController extends Controller
                         $feeLedger->SEMESTER = $sem;
                         if ($feeLedger->save()) {
 
-                            @StudentModel::where("INDEXNO", $data->INDEXNO)->orWhere("STNO", $data->INDEXNO)->update(array("BILL_OWING" => $owing, "PAID" => $paid));
+                            if($data->STATUS=="Admitted"){
+                                $status="In school";
+                            }
+                            else{
+                                $status=$data->STATUS;
+                            }
+
+                            @StudentModel::where("INDEXNO", $data->INDEXNO)->orWhere("STNO", $data->INDEXNO)->update(array("BILL_OWING" => $owing, "PAID" => $paid,"STATUS"=>$status));
                             @$this->updateReceipt();
                             \DB::commit();
                             //return Response::json("Success", "01");
@@ -796,8 +923,23 @@ class APIController extends Controller
         $date = $request->input("transactionDate");
         $auth = $request->input("auth");
         $array = $sys->getSemYear();
-        $sem = $array[0]->SEMESTER;
-        $year = $array[0]->YEAR;
+        if(substr( $indexno, 0, 4 ) === "2019"){
+            $sem = 1;
+            $year = $array[0]->ADMIT;
+        }
+        else {
+            $sem = $array[0]->SEMESTER;
+            $year = $array[0]->YEAR;
+        }
+
+        if($type=="AUF"){
+            $type="School Fees";
+        }
+
+        if( $type=="Hostel Fees"){
+            $year = $array[0]->ADMIT;
+        }
+
 
         \DB::beginTransaction();
         try {
@@ -850,6 +992,7 @@ class APIController extends Controller
 
                         }
 
+                        $status="";
                         $receipt = $this->getReceipt();
 
                         $feeLedger = new Models\FeePaymentModel();
@@ -862,7 +1005,23 @@ class APIController extends Controller
                         $feeLedger->BANK_DATE = $date;
 
                         $feeLedger->LEVEL = $data->LEVEL;
-                        $feeLedger->RECIEPIENT = "API_CALL";
+                         if($bank=="00511448001580") {
+                                $feeLedger->RECIEPIENT = "API_UBA";
+                            }
+                            elseif ($bank=="0189104488868901"){
+                                $feeLedger->RECIEPIENT = "API_ECB";
+                            }
+                            elseif ($bank=="1400001216327"){
+                                $feeLedger->RECIEPIENT = "API_CALL";
+                            }
+                             elseif ($bank=="401109130110"){
+                            $feeLedger->RECIEPIENT = "API_GT";
+                        }
+                            
+                            else{
+                                 $feeLedger->RECIEPIENT = "API_ZNT";
+                            }
+
                         $feeLedger->BANK = $bank;
                         $feeLedger->TRANSACTION_ID = $transactionId;
                         $feeLedger->RECEIPTNO = $receipt;
@@ -871,9 +1030,23 @@ class APIController extends Controller
                         $feeLedger->SEMESTER = $sem;
                         if ($feeLedger->save()) {
 
-                            @StudentModel::where("INDEXNO", $indexno)->orWhere("STNO", $indexno)->update(array("BILL_OWING" => $owing, "PAID" => $paid));
+                            if($data->STATUS=="Admitted"){
+                                $status="In school";
+                            }
+                            else{
+                                $status=$data->STATUS;
+                            }
+
+                            @StudentModel::where("INDEXNO", $data->INDEXNO)->orWhere("STNO", $data->INDEXNO)->update(array("BILL_OWING" => $owing, "PAID" => $paid,"STATUS"=>$status));
+
+
+
                             @$this->updateReceipt();
                             \DB::commit();
+
+
+
+
                             //return Response::json("Success", "01");
                             header('Content-Type: application/json');
                             // return  json_encode(array('responseCode'=>'01','responseMessage'=>'Successfully Processed'));

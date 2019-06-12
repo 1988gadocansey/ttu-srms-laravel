@@ -40,16 +40,14 @@ class PlanningController extends Controller
     }
     
 public function showFileUploadResults(SystemController $sys){
-        if(@\Auth::user()->role=='HOD' || @\Auth::user()->department=='Tpmid' || @\Auth::user()->role=='Support' || @\Auth::user()->role=='Admin' || @\Auth::user()->department=='Tptop'|| @\Auth::user()->role=='Dean' || @\Auth::user()->role=='Lecturer' || @\Auth::user()->role=='Registrar' || @\Auth::user()->department=='Planning'){
+        
             $programme=$sys->getProgramList();
             $course=$sys->getMountedCourseList3();
 
             return view('students.downloadReports')->with('programme', $programme)->with('courses',$course)
                 ->with('level', $sys->getLevelList())->with('year',$sys->years());
-        }
-        else{
-            throw new HttpException(Response::HTTP_UNAUTHORIZED, 'This action is unauthorized.');
-        }
+        
+        
     }
 
 
@@ -90,7 +88,11 @@ public function showFileUploadResults(SystemController $sys){
 
         $currentResultsArray=$arraycc[0]->RESULT_DATE;
 
-        $partYear = date('Y');
+        $partYear1 = explode('/',$yearcc);
+        $partYear = $partYear1[0];
+
+
+       // $partYear = date('Y');
        // dd($resultb);
         //dd($partYear);
 
@@ -162,6 +164,27 @@ public function showFileUploadResults(SystemController $sys){
             ->get();
 
 
+            // $service = Models\StudentModel::join('tpoly_programme', 'tpoly_students.PROGRAMMECODE', '=', 'tpoly_programme.PROGRAMMECODE')
+            // ->where("tpoly_students.GRADUATING_GROUP",$grad)
+            // ->orderBy('tpoly_programme.PROGRAMME')
+            // ->orderBy('tpoly_students.LEVEL')
+            // ->orderBy('tpoly_students.INDEXNO')
+            // ->select('tpoly_students.INDEXNO','tpoly_students.SURNAME', \DB::raw('concat(tpoly_students.FIRSTNAME, " "  ,tpoly_students.OTHERNAMES) OTHERNAME'),'tpoly_students.NAME','tpoly_students.DATEOFBIRTH', \DB::raw('DATE_FORMAT(tpoly_students.DATEOFBIRTH, "d-m-Y") as formatted_dob'),'tpoly_programme.PROGRAMME', 'tpoly_students.TELEPHONENO')
+            // ->get();
+
+
+            $interNationDepart = Models\StudentModel::join('tpoly_programme', 'tpoly_students.PROGRAMMECODE', '=', 'tpoly_programme.PROGRAMMECODE')
+            ->where("tpoly_students.COUNTRY", "NOT LIKE", "GHANA". "%")
+            ->where("tpoly_students.STATUS", "In school")
+            ->groupBy('tpoly_students.PROGRAMMECODE')
+            ->groupBy('tpoly_students.LEVEL')
+            ->groupBy('tpoly_students.SEX')
+            ->orderBy('tpoly_students.PROGRAMMECODE')
+            ->orderBy('tpoly_students.LEVEL')
+            ->select('tpoly_programme.PROGRAMME', 'tpoly_students.LEVEL', \DB::raw('count(case when tpoly_students.SEX = "MALE" then tpoly_students.ID END) as MALE'), \DB::raw('count(case when tpoly_students.SEX = "FEMALE" then tpoly_students.ID END) as FEMALE'), \DB::raw('count(*) as TOTAL'))
+            ->get();
+
+
             $region = Models\StudentModel::where("STNO", "LIKE", $partYear. "%")
             ->where("STATUS", "In school")
             ->groupBy('REGION')           
@@ -171,6 +194,25 @@ public function showFileUploadResults(SystemController $sys){
 
             $genderAdmit = Models\StudentModel::join('tpoly_programme', 'tpoly_students.PROGRAMMECODE', '=', 'tpoly_programme.PROGRAMMECODE')->join('tpoly_department', 'tpoly_programme.DEPTCODE', '=', 'tpoly_department.DEPTCODE')->join('tpoly_faculty', 'tpoly_department.FACCODE', '=', 'tpoly_faculty.FACCODE')
             ->where("tpoly_students.STNO", "LIKE", $partYear. "%")
+            ->groupBy('tpoly_faculty.FACCODE')
+            ->groupBy('tpoly_students.LEVEL')
+            ->orderBy('tpoly_students.LEVEL')
+            ->orderBy('tpoly_faculty.FACCODE')
+            ->select('tpoly_faculty.FACULTY', 'tpoly_students.LEVEL', \DB::raw('count(case when tpoly_students.SEX = "MALE" then tpoly_students.ID END) as MALE'), \DB::raw('count(case when tpoly_students.SEX = "FEMALE" then tpoly_students.ID END) as FEMALE'), \DB::raw('count(*) as TOTAL'))
+            ->get();
+
+            $genderAdmitProgram = Models\StudentModel::join('tpoly_programme', 'tpoly_students.PROGRAMMECODE', '=', 'tpoly_programme.PROGRAMMECODE')
+            ->where("tpoly_students.STNO", "LIKE", $partYear. "%")
+            ->groupBy('tpoly_students.PROGRAMMECODE')
+            ->groupBy('tpoly_students.LEVEL')
+            ->orderBy('tpoly_students.LEVEL')
+            ->orderBy('tpoly_students.PROGRAMMECODE')
+            ->select('tpoly_programme.PROGRAMME', 'tpoly_students.LEVEL', \DB::raw('count(case when tpoly_students.SEX = "MALE" then tpoly_students.ID END) as MALE'), \DB::raw('count(case when tpoly_students.SEX = "FEMALE" then tpoly_students.ID END) as FEMALE'), \DB::raw('count(*) as TOTAL'))
+            ->get();
+
+            $genderAdmitPrevious = Models\StudentModel::join('tpoly_programme', 'tpoly_students.PROGRAMMECODE', '=', 'tpoly_programme.PROGRAMMECODE')->join('tpoly_department', 'tpoly_programme.DEPTCODE', '=', 'tpoly_department.DEPTCODE')->join('tpoly_faculty', 'tpoly_department.FACCODE', '=', 'tpoly_faculty.FACCODE')
+            ->where("tpoly_students.STATUS", "In school")
+            ->where("tpoly_students.YEAR", "2nd")
             ->groupBy('tpoly_faculty.FACCODE')
             ->groupBy('tpoly_students.LEVEL')
             ->orderBy('tpoly_students.LEVEL')
@@ -209,7 +251,17 @@ public function showFileUploadResults(SystemController $sys){
             ->select('tpoly_programme.PROGRAMME', 'tpoly_students.LEVEL', 'tpoly_students.INDEXNO', 'tpoly_students.NAME', 'tpoly_students.TELEPHONENO', 'tpoly_students.GUARDIAN_NAME','tpoly_students.GUARDIAN_ADDRESS', 'tpoly_students.GUARDIAN_PHONE')
             ->get();
 
-        return Excel::create($partYear, function ($excel) use ($kojoSense, $sys, $programPopulation, $genderProgram, $genderFaculty, $genderDepartment, $interNation, $region, $genderAdmit, $yearcc, $bestProgramme, $insure){
+            $service = Models\StudentModel::join('tpoly_programme', 'tpoly_students.PROGRAMMECODE', '=', 'tpoly_programme.PROGRAMMECODE')
+            ->where("tpoly_students.GRADUATING_GROUP",$grad)
+            ->orderBy('tpoly_programme.PROGRAMME')
+            ->orderBy('tpoly_students.LEVEL')
+            ->orderBy('tpoly_students.INDEXNO')
+            ->select('tpoly_students.INDEXNO','tpoly_students.SURNAME', \DB::raw('concat(tpoly_students.FIRSTNAME, " "  ,tpoly_students.OTHERNAMES) OTHERNAME'),'tpoly_students.NAME','tpoly_students.DATEOFBIRTH', \DB::raw('DATE_FORMAT(tpoly_students.DATEOFBIRTH, "d-m-Y") as formatted_dob'),'tpoly_programme.PROGRAMME', 'tpoly_students.TELEPHONENO')
+            ->get();
+
+           // ->select(DB::raw('DATE_FORMAT(cust.cust_dob, "%d-%b-%Y") as formatted_dob')
+
+        return Excel::create($partYear, function ($excel) use ($kojoSense, $sys, $programPopulation, $genderProgram, $genderFaculty, $genderDepartment, $interNation, $interNationDepart, $region, $genderAdmit, $genderAdmitPrevious, $yearcc, $bestProgramme, $insure ,$service, $genderAdmitProgram){
 
             $excel->getProperties()
    ->setCreator("TTU")
@@ -327,6 +379,28 @@ public function showFileUploadResults(SystemController $sys){
             });
 
 
+                $excel->sheet('Inter_Dept', function ($sheet) use ($kojoSense,$interNationDepart, $yearcc) {
+                
+
+
+                $sheet->fromArray($interNationDepart);
+
+                 $sheet->prependRow(1, array(' '.' '.' '.''
+                ));
+                 $current_time = \Carbon\Carbon::now()->toDateTimeString();
+                            //$sheet->setCellValue('A3',$current_time);
+                 $sheet->prependRow(1, array(' '.' '. $current_time
+                ));
+                $sheet->prependRow(1, array(' '.' INTERNATIONAL STUDENTS for '.$yearcc
+                ));
+                $sheet->prependRow(1, array(' '.' TAKORADI TECHNICAL UNIVERSITY'
+                ));
+           
+//});
+            });
+
+
+
                 $excel->sheet('Region', function ($sheet) use ($kojoSense,$region, $yearcc) {
                 
 
@@ -361,6 +435,50 @@ public function showFileUploadResults(SystemController $sys){
                  $sheet->prependRow(1, array(' '.' '. $current_time
                 ));
                 $sheet->prependRow(1, array(' '.' ADMISSIONS BY GENDER for '.$yearcc
+                ));
+                $sheet->prependRow(1, array(' '.' TAKORADI TECHNICAL UNIVERSITY'
+                ));
+           
+//});
+            });
+
+            //$genderAdmitProgram
+
+
+            $excel->sheet('Admit_prog', function ($sheet) use ($kojoSense,$region, $genderAdmitProgram, $yearcc) {
+                
+
+
+                $sheet->fromArray($genderAdmitProgram);
+
+                 $sheet->prependRow(1, array(' '.' '.' '.''
+                ));
+                 $current_time = \Carbon\Carbon::now()->toDateTimeString();
+                            //$sheet->setCellValue('A3',$current_time);
+                 $sheet->prependRow(1, array(' '.' '. $current_time
+                ));
+                $sheet->prependRow(1, array(' '.' ADMISSIONS BY GENDER for '.$yearcc
+                ));
+                $sheet->prependRow(1, array(' '.' TAKORADI TECHNICAL UNIVERSITY'
+                ));
+           
+//});
+            });
+
+
+            $excel->sheet('last_yr_admit', function ($sheet) use ($kojoSense,$region, $genderAdmitPrevious, $yearcc) {
+                
+
+
+                $sheet->fromArray($genderAdmitPrevious);
+
+                 $sheet->prependRow(1, array(' '.' '.' '.''
+                ));
+                 $current_time = \Carbon\Carbon::now()->toDateTimeString();
+                            //$sheet->setCellValue('A3',$current_time);
+                 $sheet->prependRow(1, array(' '.' '. $current_time
+                ));
+                $sheet->prependRow(1, array(' '.' ADMISSIONS BY GENDER - LAST YEAR '
                 ));
                 $sheet->prependRow(1, array(' '.' TAKORADI TECHNICAL UNIVERSITY'
                 ));
@@ -406,6 +524,32 @@ public function showFileUploadResults(SystemController $sys){
                 $sheet->prependRow(1, array(' '.' TAKORADI TECHNICAL UNIVERSITY'
                 ));
            
+//});
+            });
+
+            $excel->sheet('National Service', function ($sheet) use ($kojoSense,$region, $insure, $yearcc, $service) {
+                
+
+
+                $sheet->fromArray($service);
+
+                 $sheet->prependRow(1, array(' '.' '.' '.''
+                ));
+                 $current_time = \Carbon\Carbon::now()->toDateTimeString();
+                            //$sheet->setCellValue('A3',$current_time);
+                 $sheet->prependRow(1, array(' '.' '. $current_time
+                ));
+                $sheet->prependRow(1, array(' '.' NATIONAL SERVICE LIST for '.$yearcc
+                ));
+                $sheet->prependRow(1, array(' '.' TAKORADI TECHNICAL UNIVERSITY'
+                ));
+                $sheet->mergeCells('A1:B1');
+                $sheet->mergeCells('A2:B2');
+                $sheet->mergeCells('A3:B3');
+
+                $sheet->setColumnFormat(array(
+    'E6' => 'dd-mm-yyyy'
+));
 //});
             });
 

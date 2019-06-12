@@ -288,8 +288,9 @@
                         <a href="#"> <i class="sidebar-menu-icon material-icons">attach_file</i><span>File</span></a>
                         <div class="uk-dropdown uk-dropdown-scrollable">
                             <ul class="uk-nav uk-nav-dropdown">
-                                <li><a href='{!! url("/transcript") !!}'>Transcript</a></li>
-                                <li><a href='{!! url("pay_fees") !!}'>Pay Fees</a></li>
+                                <li><a href='{!! url("/students") !!}'>Students</a></li>
+                                <li><a href='{!! url("/transcript") !!}'>Results</a></li>
+                                <li><a href='{!! url("pay_fees") !!}'>Individual Payments</a></li>
 
                                 <li><a href='{!! url("banks") !!}'>View Banks</a></li>
 
@@ -301,7 +302,7 @@
 
                                 <li><a href='{!! url("view_payments_master") !!}'>Payments (sum)</a></li>
                                 <li><a href='{!! url("pay_fees_penalty") !!}'>Late Registration payment</a></li>
-                                <li><a href='{!! url("/attendanceSheet") !!}'>Exam Attendance Sheet</a></li>
+                                
                             </ul>
                         </div>
                     </li>
@@ -313,8 +314,8 @@
                         <div class="uk-dropdown uk-dropdown-scrollable">
                             <ul class="uk-nav uk-nav-dropdown">
                                 <li><a href='{!! url("/report/registration") !!}'>Registration</a></li>
-                                <li><a href='{!! url("admissions/statistics/comprehensive") !!}'>Applied/Registered</a>
-                                </li>
+                                <li><a href='{!! url("owing_excel") !!}'>Owing Excel</a></li>
+                                    <li><a href='{!! url("paid_excel") !!}'>Paid Excel</a></li>
 
                                 <li><a href='{!! url("/view_payments_master") !!}'>Fee Payment by Students Report</a>
                                 </li>
@@ -456,7 +457,7 @@
                         </div>
                     </li>
                 @else
-                    @if(@Auth::user()->department=='Planning' )
+                    @if(@Auth::user()->department=='Planning' )  
                         @if(@Auth::user()->department!='LA')
                             <li data-uk-dropdown class="uk-hidden-small">
 
@@ -470,6 +471,12 @@
                                         <li><a href='{!! url("/attendanceSheet") !!}'>Exam Attendance Sheet</a></li>
                                         <li><a href='{!! url("/student/resit") !!}'>Resit List</a></li>
                                         <li><a href='{!! url("/download_id_cards") !!}'>ID Card List</a></li>
+                                     @if(@Auth::user()->role='Academic')    
+                                        
+                                        <li><a href='{!! url("/finance/status") !!}'>Update Status / Level</a></li>
+                                    <li><a href='{!! url("/finance/chapro") !!}'>Update Program</a></li>
+                                    @endif
+                                    
                                     </ul>
                                 </div>
                             </li>
@@ -480,13 +487,17 @@
                             <a href="#"><i class="sidebar-menu-icon material-icons md-18">view_list</i><span>View</span></a>
                             <div class="uk-dropdown uk-dropdown-scrollable">
                                 <ul class="uk-nav uk-nav-dropdown">
-                                    <li><a href='{!! url("/transcript") !!}' target="_blank">Transcript</a></li>
+                                    @if(@Auth::user()->department!='LA')
+                                    <li><a href='{!! url("/transcriptOrig") !!}' target="_blank">Transcript</a></li>
+                                    @endif
+                                    <li><a href='{!! url("/transcript") !!}' target="_blank">Results</a></li>
                                     <li><a href='{!! url("/programmes") !!}'>View Programmes</a></li>
                                     <li><a href='{!! url("staff") !!}'>View Staff</a></li>
                                     <li><a href='{!! url("/groups/view") !!}'>View Class Groups</a></li>
                                     <li><a href='{!! url("/courses") !!}'>View Courses</a></li>
                                     <li><a href='{!! url("/mounted_view") !!}'>View Mounted Courses</a></li>
                                     <li><a href='{!! url("/directory") !!}'>Staff Directory</a></li>
+                                    <li><a href='{!! url("/download_regList") !!}'>Registered</a></li>
 
                                 </ul>
                             </div>
@@ -500,9 +511,9 @@
                                 <a href="#"><i class="sidebar-menu-icon material-icons md-18">view_headline</i><span>Reports</span></a>
                                 <div class="uk-dropdown uk-dropdown-scrollable">
                                     <ul class="uk-nav uk-nav-dropdown">
-                                        <li><a href='{!! url("/transcript") !!}' target="_blank">Transcript</a></li>
+                                        <li><a href='{!! url("/transcript") !!}' target="_blank">Results</a></li>
                                         {{--  <li><a href='{!! url("admissions/statistics/comprehensive") !!}'>Applied/Registered</a></li>--}}
-                                        <li><a href='{!! url("/report/registration") !!}'>Registration</a></li>
+                                        <li><a href='{!! url("/download_reports") !!}'>Excel Reports</a></li>
                                         <li><a href='{!! url("/broadsheet/noticeboard") !!}'>GPA Academic Board</a></li>
                                         <li><a href='{!! url("/broadsheet/napbtex") !!}'>Broadsheet Nabptex</a></li>
 
@@ -525,12 +536,12 @@
                                 <ul class="uk-nav uk-nav-dropdown">
                                     <li><a href='{!! url("/students") !!}'>Students</a></li>
                                     <li><a href='{!! url("/nservice") !!}'>National Service</a></li>
-                                    <li><a href='{!! url("/transcript") !!}' target="_blank">Transcript</a></li>
+                                    <li><a href='{!! url("/transcript") !!}' target="_blank">Results</a></li>
                                     <li><a href='{!! url("/search_password") !!}'>Search student password</a></li>
-                                    <li><a href='{!! url("/download_registered") !!}'>Download Excel Sheet</a></li>
+                                    
 
                                     <li><a href='{!! url("/print/password") !!}'>Print Password Receipt</a></li>
-                                    <li><a href='{!! url("/attendanceSheet") !!}'>Exam Attendance Sheet</a></li>
+                                    
                                     <li><a href='{!! url("/student/resit") !!}'>Resit List</a></li>
 
 
@@ -544,7 +555,7 @@
                             <a href="#"><i class="sidebar-menu-icon material-icons md-18">view_list</i><span>View</span></a>
                             <div class="uk-dropdown uk-dropdown-scrollable">
                                 <ul class="uk-nav uk-nav-dropdown">
-                                    <li><a href='{!! url("/transcript") !!}' target="_blank">Transcript</a></li>
+                                    <li><a href='{!! url("/transcript") !!}' target="_blank">Results</a></li>
                                     <li><a href='{!! url("/programmes") !!}'>View Programmes</a></li>
                                     <li><a href='{!! url("staff") !!}'>View Staff</a></li>
                                     <li><a href='{!! url("/grade_system") !!}'>View Grading Systems</a></li>
@@ -553,7 +564,7 @@
                                     <li><a href='{!! url("/courses") !!}'>View Courses</a></li>
                                     <li><a href='{!! url("/power_users") !!}'>View Users</a></li>
                                     <li><a href='{!! url("/mounted_view") !!}'>View Mounted Courses</a></li>
-
+                                    <li><a href='{!! url("/download_regList") !!}'>Registered</a></li>
                                     <li><a href='{!! url("/directory") !!}'>Staff Directory</a></li>
 
 
@@ -635,7 +646,7 @@
                     @endif
 
 
-                    @if( @Auth::user()->department=='Tptop' )
+                    @if( @Auth::user()->department=='Tptop' ||  @Auth::user()->department=='Tptop4' || @Auth::user()->department=='Tptop2' || @Auth::user()->department=='Tptop3' )
 
 
                         <li data-uk-dropdown class="uk-hidden-small">
@@ -648,7 +659,7 @@
                                     <li><a href='{!! url("/nservice") !!}'>National Service</a></li>
                                     <li><a href='{!! url("/download_id_cards") !!}'>ID Card List</a></li>
 
-                                    <li><a href='{!! url("/download_registered") !!}'>Download Excel Sheet</a></li>
+                                    <li><a href='{!! url("/download_reports") !!}'>Excel Reports</a></li>
                                     <li><a href='{!! url("/download_results") !!}'>Excel NABPTEX</a></li>
                                     <li><a href='{!! url("/download_error") !!}'>Error NABPTEX</a></li>
                                     <li><a href='{!! url("/attendanceSheet") !!}'>Exam Attendance Sheet</a></li>
@@ -673,7 +684,8 @@
                             <a href="#"><i class="sidebar-menu-icon material-icons md-18">view_list</i><span>View</span></a>
                             <div class="uk-dropdown uk-dropdown-scrollable">
                                 <ul class="uk-nav uk-nav-dropdown">
-                                    <li><a href='{!! url("/transcript") !!}' target="_blank">Transcript</a></li>
+                                    <li><a href='{!! url("/transcript") !!}' target="_blank">Results</a></li>
+                                    <li><a href='{!! url("/transcriptOrig") !!}' target="_blank">Transcript</a></li>
                                     <li><a href='{!! url("/programmes") !!}'>View Programmes</a></li>
                                     <li><a href='{!! url("staff") !!}'>View Staff</a></li>
                                     <li><a href='{!! url("/grade_system") !!}'>View Grading Systems</a></li>
@@ -682,7 +694,7 @@
                                     <li><a href='{!! url("/courses") !!}'>View Courses</a></li>
                                     <li><a href='{!! url("/power_users") !!}'>View Users</a></li>
                                     <li><a href='{!! url("/mounted_view") !!}'>View Mounted Courses</a></li>
-
+                                    <li><a href='{!! url("/download_regList") !!}'>Registered</a></li>
                                     <li><a href='{!! url("/directory") !!}'>Staff Directory</a></li>
 
 
@@ -706,7 +718,9 @@
 
                                     <li><a href='{!! url("view_payments_master") !!}'>Payments (sum)</a></li>
                                     <li><a href='{!! url("owing_paid") !!}'>Owing reports</a></li>
-                                    <li><a href='{!! url("pay_fees") !!}'>Pay Fees</a></li>
+                                    <li><a href='{!! url("pay_fees") !!}'>Individual Payments</a></li>
+                                    <li><a href='{!! url("owing_excel") !!}'>Owing Excel</a></li>
+                                    <li><a href='{!! url("paid_excel") !!}'>Paid Excel</a></li>
                                     <li><a href='{!! url("/print/receipt") !!}'>Print Fee Receipt</a></li>
                                     <li><a href='{!! url("/print/password") !!}'>Print Password Receipt</a></li>
 
@@ -833,7 +847,7 @@
                                 <ul class="uk-nav uk-nav-dropdown">
                                     <li><a href='{!! url("/students") !!}'>Students</a></li>
                                     <li><a href='{!! url("staff") !!}'>View Staff</a></li>
-                                    <li><a href='{!! url("/transcript") !!}' target="_blank">Transcript</a></li>
+                                    <li><a href='{!! url("/transcript") !!}' target="_blank">Results</a></li>
                                     <li><a href='{!! url("/programmes") !!}'>View Programmes</a></li>
                                     <li><a href='{!! url("/grade_system") !!}'>View Grading Systems</a></li>
 
@@ -873,7 +887,7 @@
                                 <a href="#"><i class="sidebar-menu-icon material-icons md-18">view_headline</i><span>Reports</span></a>
                                 <div class="uk-dropdown uk-dropdown-scrollable">
                                     <ul class="uk-nav uk-nav-dropdown">
-                                        <li><a href='{!! url("/transcript") !!}' target="_blank">Transcript</a></li>
+                                        <li><a href='{!! url("/transcript") !!}' target="_blank">Results</a></li>
                                         <li><a href='{!! url("/report/registration") !!}'>Registration</a></li>
 
                                         <li><a href='{!! url("admissions/statistics/comprehensive") !!}'>Applied/Registered</a>
@@ -892,7 +906,7 @@
                     @endif
 
 
-                    @if( @Auth::user()->role=='Support' || @Auth::user()->role=='Registrar')
+                    @if( @Auth::user()->role=='Support' || @Auth::user()->role=='FSupport' || @Auth::user()->role=='Degree')
 
                         @if(@Auth::user()->department!='LA')
                             <li data-uk-dropdown class="uk-hidden-small">
@@ -903,8 +917,8 @@
                                 <div class="uk-dropdown uk-dropdown-scrollable">
                                     <ul class="uk-nav uk-nav-dropdown">
 
-                                        <li><a href='{!! url("/download_registered") !!}'>Download Excel Sheet</a></li>
-                                        <li><a href='{!! url("/attendanceSheet") !!}'>Exam Attendance Sheet</a></li>
+                                        
+                                        <li><a href='{!! url("/download_regList") !!}'>Registered</a></li>
                                         <li><a href='{!! url("/download_results") !!}'>Excel NABPTEX</a></li>
                                         <li><a href='{!! url("/student/resit") !!}'>Resit List</a></li>
 
@@ -924,7 +938,7 @@
                                     <li><a href='{!! url("/students") !!}'>Students</a></li>
                                     @if( @Auth::user()->department!='LA')
                                         <li><a href='{!! url("/nservice") !!}'>National Service</a></li>
-                                        <li><a href='{!! url("/transcript") !!}' target="_blank">Transcript</a></li>
+                                        <li><a href='{!! url("/transcript") !!}' target="_blank">Results</a></li>
                                         <li><a href='{!! url("/mounted_view") !!}'>View Mounted Courses</a></li>
                                     @endif
 
@@ -940,7 +954,7 @@
                                 <a href="#"><i class="sidebar-menu-icon material-icons md-18">view_headline</i><span>Reports</span></a>
                                 <div class="uk-dropdown uk-dropdown-scrollable">
                                     <ul class="uk-nav uk-nav-dropdown">
-                                        <li><a href='{!! url("/transcript") !!}' target="_blank">Transcript</a></li>
+                                        <li><a href='{!! url("/transcript") !!}' target="_blank">Results</a></li>
                                         <li><a href='{!! url("/report/registration") !!}'>Registration</a></li>
                                         <li><a href='{!! url("admissions/statistics/comprehensive") !!}'>Applied/Registered</a>
                                         </li>
@@ -969,7 +983,7 @@
                                 <ul class="uk-nav uk-nav-dropdown">
                                     <li><a href='{!! url("/students") !!}'>Students</a></li>
 
-                                    <li><a href='{!! url("/attendanceSheet") !!}'>Exam Attendance Sheet</a></li>
+                                    <li><a href='{!! url("/download_regList") !!}'>Registered</a></li>
                                     <li><a href='{!! url("/student/resit") !!}'>Resit List</a></li>
                                 </ul>
                             </div>
@@ -981,7 +995,7 @@
                             <a href="#"><i class="sidebar-menu-icon material-icons md-18">view_list</i><span>View</span></a>
                             <div class="uk-dropdown uk-dropdown-scrollable">
                                 <ul class="uk-nav uk-nav-dropdown">
-                                    <li><a href='{!! url("/transcript") !!}' target="_blank">Transcript</a></li>
+                                    <li><a href='{!! url("/transcript") !!}' target="_blank">Results</a></li>
 
                                     <li><a href='{!! url("/mounted_view") !!}'>View Mounted Courses</a></li>
 
@@ -1000,7 +1014,7 @@
                                         class="sidebar-menu-icon material-icons md-18">view_headline</i><span>Reports</span></a>
                             <div class="uk-dropdown uk-dropdown-scrollable">
                                 <ul class="uk-nav uk-nav-dropdown">
-                                    <li><a href='{!! url("/transcript") !!}' target="_blank">Transcript</a></li>
+                                    <li><a href='{!! url("/transcript") !!}' target="_blank">Results</a></li>
                                     <li><a href='{!! url("/report/registration") !!}'>Registration</a></li>
                                     <li>
                                         <a href='{!! url("admissions/statistics/comprehensive") !!}'>Applied/Registered</a>
@@ -1027,7 +1041,7 @@
                             <div class="uk-dropdown uk-dropdown-scrollable">
                                 <ul class="uk-nav uk-nav-dropdown">
                                     <li><a href='{!! url("/students") !!}'>Students</a></li>
-                                    <li><a href='{!! url("/attendanceSheet") !!}'>Exam Attendance Sheet</a></li>
+                                    <li><a href='{!! url("/download_regList") !!}'>Registered</a></li>
                                     <li><a href='{!! url("/student/resit") !!}'>Resit List</a></li>
                                 </ul>
                             </div>
@@ -1039,7 +1053,7 @@
                             <a href="#"><i class="sidebar-menu-icon material-icons md-18">view_list</i><span>View</span></a>
                             <div class="uk-dropdown uk-dropdown-scrollable">
                                 <ul class="uk-nav uk-nav-dropdown">
-                                    <li><a href='{!! url("/transcript") !!}' target="_blank">Transcript</a></li>
+                                    <li><a href='{!! url("/transcript") !!}' target="_blank">Results</a></li>
                                     <li><a href='{!! url("/programmes") !!}'>View Programmes</a></li>
                                     <li><a href='{!! url("staff") !!}'>View Staff</a></li>
                                     <li><a href='{!! url("/grade_system") !!}'>View Grading Systems</a></li>
@@ -1077,7 +1091,7 @@
                                         class="sidebar-menu-icon material-icons md-18">view_headline</i><span>Reports</span></a>
                             <div class="uk-dropdown uk-dropdown-scrollable">
                                 <ul class="uk-nav uk-nav-dropdown">
-                                    <li><a href='{!! url("/transcript") !!}' target="_blank">Transcript</a></li>
+                                    <li><a href='{!! url("/transcript") !!}' target="_blank">Results</a></li>
                                     <li><a href='{!! url("/report/registration") !!}'>Registration</a></li>
                                     <li>
                                         <a href='{!! url("admissions/statistics/comprehensive") !!}'>Applied/Registered</a>
@@ -1098,7 +1112,7 @@
                             <a href="#"><i class="sidebar-menu-icon material-icons md-18">phone</i><span>Results</span></a>
                             <div class="uk-dropdown uk-dropdown-scrollable">
                                 <ul class="uk-nav uk-nav-dropdown">
-                                    <li><a href='{!! url("/download_registered") !!}'>Download Excel Sheet</a></li>
+                                    
 
 
                                 </ul>
@@ -1135,9 +1149,9 @@
                                 <a href="#"><i class="sidebar-menu-icon material-icons md-18">view_headline</i><span>Reports</span></a>
                                 <div class="uk-dropdown uk-dropdown-scrollable">
                                     <ul class="uk-nav uk-nav-dropdown">
-                                        <li><a href='{!! url("/transcript") !!}' target="_blank">Transcript</a></li>
-                                        <li><a href='{!! url("/broadsheet/noticeboard") !!}'>GPA Academic Board</a></li>
-                                        <li><a href='{!! url("/report/registration") !!}'>Registration</a></li>
+                                        <li><a href='{!! url("/transcript") !!}' target="_blank">Results</a></li>
+                                        
+                                        <li><a href='{!! url("/download_regList") !!}'>Registered</a></li>
                                         <li><a href='{!! url("/download_results") !!}'>Excel NABPTEX</a></li>
                                         <li><a href='{!! url("/student/resit") !!}'>Resit List</a></li>
                                     </ul>
@@ -1175,7 +1189,7 @@
                                     <ul class="uk-nav uk-nav-dropdown">
                                         <li><a href='{!! url("/students") !!}'>Students</a></li>
                                         <li><a href='{!! url("staff") !!}'>View Staff</a></li>
-                                        <li><a href='{!! url("/attendanceSheet") !!}'>Exam Attendance Sheet</a></li>
+                                        <li><a href='{!! url("/download_regList") !!}'>Registered</a></li>
                                         <li><a href='{!! url("/student/resit") !!}'>Resit List</a></li>
 
                                     </ul>
@@ -1191,7 +1205,7 @@
                             <a href="#"><i class="sidebar-menu-icon material-icons md-18">view_list</i><span>View</span></a>
                             <div class="uk-dropdown uk-dropdown-scrollable">
                                 <ul class="uk-nav uk-nav-dropdown">
-                                    <li><a href='{!! url("/transcript") !!}' target="_blank">Transcript</a></li>
+                                    <li><a href='{!! url("/transcript") !!}' target="_blank">Results</a></li>
                                     <li><a href='{!! url("/programmes") !!}'>View Programmes</a></li>
                                     <li><a href='{!! url("staff") !!}'>View Staff</a></li>
                                     <li><a href='{!! url("/grade_system") !!}'>View Grading Systems</a></li>
@@ -1212,7 +1226,7 @@
                                         class="sidebar-menu-icon material-icons md-18">view_headline</i><span>Reports</span></a>
                             <div class="uk-dropdown uk-dropdown-scrollable">
                                 <ul class="uk-nav uk-nav-dropdown">
-                                    <li><a href='{!! url("/transcript") !!}' target="_blank">Transcript</a></li>
+                                    <li><a href='{!! url("/transcript") !!}' target="_blank">Results</a></li>
                                     <li><a href='{!! url("/report/registration") !!}'>Registration</a></li>
                                     <li><a href='{!! url("/broadsheet/noticeboard") !!}'>GPA Academic Board</a></li>
                                     <li><a href='{!! url("/broadsheet/napbtex") !!}'>Broadsheet Nabptex</a></li>

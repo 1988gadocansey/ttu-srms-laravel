@@ -45,6 +45,7 @@ Route::get('/api/students/password/{token}', 'APIController@getAllStudentPasswor
 Route::get('/api/get/fees/{program}/program/{level}/level/{year}/year', 'APIController@getFees')->where('year', '(.*)');
 
 
+
 Route::get('/api/staffs/password/{token}', 'APIController@getStaffPassword');
 Route::get( '/api/student/{indexno}', "APIController@getStudentData")->where('indexno', '(.*)');;
 Route::group(['middleware' => ['web']], function () {
@@ -94,7 +95,6 @@ Route::group(['middleware' => ['web']], function () {
     Route::match(array("get", "post"), '/liaison/units/create','LiaisonController@createUnit');
 
     Route::get('/liaison/units', 'LiaisonController@units');
-    Route::match(array("get", "post"),'/liaison/print/bulk', 'LiaisonController@bulkPrint');
 
     Route::delete('/unit/delete', 'LiaisonController@destroyAddress');
     Route::delete('/zone/delete', 'LiaisonController@destroyZones');
@@ -102,7 +102,7 @@ Route::group(['middleware' => ['web']], function () {
     Route::get('/liaison/data','LiaisonController@index');
     Route::get('/liaison/assumption','AssumptionController@index');
 
-
+    Route::match(array("get", "post"),'/liaison/print/bulk', 'LiaisonController@bulkPrint')->name("export_excel");
 
     Route::get('dashboard', 'HomeController@index');
     Route::get('/change_password', 'PasswordController@showChange');
@@ -296,8 +296,13 @@ Route::group(['middleware' => ['web']], function () {
     Route::delete('/delete_mounted', 'CourseController@destroy_mounted');
     Route::get('/upload_marks','CourseController@showFileUpload');
     Route::post('/upload_marks','CourseController@uploadMarks');
-    Route::match(array("get", "post"), '/attendanceSheet', "CourseController@attendanceSheet");
+    //Route::match(array("get", "post"), '/attendanceSheet', "CourseController@attendanceSheet");
+
+    Route::get('/attendanceSheet','CourseController@attendanceSheet');
+    Route::post('/attendanceSheet','CourseController@downloadAttendExcel');
+
     Route::match(array("get", "post"), '/transcript', "CourseController@transcript");
+    Route::match(array("get", "post"), '/transcriptOrig', "CourseController@transcriptOrig");
     Route::get( '/upload/courses', "CourseController@uploadCourse");
     Route::post( '/upload_courses', "CourseController@processCourseUploads");
     Route::get('/courseDownloadExcel/{type}', 'CourseController@courseDownloadExcel');
@@ -324,6 +329,10 @@ Route::group(['middleware' => ['web']], function () {
     Route::post('/upload_resit', "CourseController@processResit");
     Route::get('/system/registration/batch', "CourseController@batchRegistration");
     Route::post( '/system/registration/batch/process', "CourseController@processBatchRegistration");
+
+    Route::get('/user_level','UserController@getIndexUserLevels');
+    //Route::post('/user_level','AcademicCalenderController@storeCalender');
+    Route::get('/fireUserLevel/{item}/id/{action}/action','UserController@updateUserLevel');
 
     Route::get('/calender','AcademicCalenderController@index');
     Route::post('/calender','AcademicCalenderController@storeCalender');
@@ -415,6 +424,12 @@ Route::group(['middleware' => ['web']], function () {
 
     Route::get('/download_reports','PlanningController@showFileUploadResults');
     Route::post('/download_reports','PlanningController@downloadResults');
+
+    Route::get('/owing_excel','FeeController@showOwing_excel');
+    Route::post('/owing_excel','FeeController@owing_excel');
+
+    Route::get('/paid_excel','FeeController@showPaid_excel');
+    Route::post('/paid_excel','FeeController@paid_excel');
 
     Route::get('/download_error','NabptexController@showFileUploadError');
     Route::post('/download_error','NabptexController@downloadError');

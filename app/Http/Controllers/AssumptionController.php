@@ -8,7 +8,7 @@ use App\Models;
 use Yajra\Datatables\Datatables;
 use Illuminate\Support\Collection;
 use Illuminate\Support\Str;
-
+use Excel;
 class AssumptionController extends Controller
 {
 
@@ -26,6 +26,12 @@ class AssumptionController extends Controller
 
 
 
+    public function exportAssumption(Request $request, SystemController $sys){
+
+
+
+    }
+
 
 
     /**
@@ -36,6 +42,7 @@ class AssumptionController extends Controller
      */
 
     public function index(Request $request, SystemController $sys) {
+
 
 
 
@@ -87,6 +94,7 @@ class AssumptionController extends Controller
 
 
 
+
         if ($request->has('level') && trim($request->input('level')) != "") {
             $data->where("level", $request->input("level", ""));
         }
@@ -116,7 +124,7 @@ class AssumptionController extends Controller
 
         $request->flashExcept("_token");
 
-        \Session::put('LA', $records);
+        \Session::put('assumption', $records);
         //dd($records);
         return view('assumption.index')->with("records", $records)
             ->with('year', $sys->years())
