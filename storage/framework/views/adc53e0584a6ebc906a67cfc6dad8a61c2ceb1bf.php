@@ -1373,38 +1373,7 @@
 <!--    <div class="footer uk-text-small"><center><?php date("Y");?> All Rights Reserved | Takoradi Technical University - Powered by Tpconnect (<span class="uk-text-primary uk-text-bold uk-text-small">Hotlines 0505284060 (Gad), 0246091283 (Kojo),0276363053 (Timo)</span>)-->
 </center></div>
 
-
-<script src="<?php echo url('public/assets/js/common.min.js'); ?>"></script>
-<script src="<?php echo url('public/assets/js/dropify.min.js'); ?>"></script>
-<script src="<?php echo url('public/assets/js/file_input.min.js'); ?>"></script>
-<!-- uikit functions -->
-<script src="<?php echo url('public/assets/js/uikit_custom.min.js'); ?>"></script>
-
-<!-- altair common functions/helpers -->
-<script src="<?php echo url('public/assets/js/altair_admin_common.min.js'); ?>"></script>
-<script src="<?php echo url('public/assets/js/uikit/uikit.min.js'); ?>"></script>
-<?php if(Request::url()==url('/groups/create')): ?>
-    <script src="<?php echo url('public/assets/js/custom/wizard_steps.min.js'); ?>"></script>
-    <script src="<?php echo url('public/assets/js/pages/forms_wizard.min.js'); ?>"></script>
-<?php endif; ?>
-<script src="<?php echo url('public/assets/js/vue.min.js'); ?>"></script>
-<script src="<?php echo url('public/assets/js/vue-form.min.js'); ?>"></script>
-<script src="<?php echo url('public/assets/js/jquery-ui.min.js'); ?>"></script>
-<script src="<?php echo url('public/assets/tableexport/tableExport.js'); ?>"></script>
-<script src="<?php echo url('public/assets/tableexport/jquery.base64.js'); ?>"></script>
-
-<script src="<?php echo url('public/assets/tableexport/html2canvas.js'); ?>"></script>
-
-<script src="<?php echo url('public/assets/tableexport/jspdf/libs/sprintf.js'); ?>"></script>
-
-<script src="<?php echo url('public/assets/tableexport/jspdf/jspdf.js'); ?>"></script>
-<script src="<?php echo url('public/assets/tableexport/jspdf/libs/base64.js'); ?>"></script>
-<script src="<?php echo url('public/datatables/js/jquery.dataTables.min.js'); ?>"></script>
-
-<script src="<?php echo url('public/datatables/js/dataTables.uikit.min.js'); ?>"></script>
-<script src="<?php echo url('public/datatables/js/plugins_datatables.min.js'); ?>"></script>
-<script src="<?php echo url('public/datatables/js/datatables_uikit.min.js'); ?>"></script>
-<script src="<?php echo url('public/assets/js/numscroller.js'); ?>"></script>
+ 
 
 <script>
     $(function () {
@@ -1754,13 +1723,7 @@
         var s = document.getElementsByTagName('script')[0];
         s.parentNode.insertBefore(wf, s);
     })();      </script>
-<script src="<?php echo url('public/assets/plugins/tablesorter/dist/js/jquery.tablesorter.min.js'); ?>"></script>
-<script src="<?php echo url('public/assets/plugins/tablesorter/dist/js/jquery.tablesorter.widgets.min.js'); ?>"></script>
-<script src="<?php echo url('public/assets/plugins/tablesorter/dist/js/widgets/widget-alignChar.min.js'); ?>"></script>
-<script src="<?php echo url('public/assets/plugins/tablesorter/dist/js/widgets/widget-columnSelector.min.js'); ?>"></script>
-<script src="<?php echo url('public/assets/plugins/tablesorter/dist/js/widgets/widget-print.min.js'); ?>"></script>
-<!--  tablesorter functions -->
-<script src="<?php echo url('public/assets/js/pages/plugins_tablesorter.min.js'); ?>"></script>
+
 
 </body>
 </html>
